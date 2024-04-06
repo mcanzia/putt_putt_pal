@@ -9,12 +9,14 @@ class GuestCirclePainter extends CustomPainter {
   final BuildContext context;
   final Animation<double>? animation;
   final List<GuestOrb> guests;
+  final String roomCode;
   final Function(int) onTap;
 
   GuestCirclePainter({
     required this.context,
     this.animation,
     required this.guests,
+    required this.roomCode,
     required this.onTap,
   }) : super(repaint: animation);
 
@@ -31,6 +33,31 @@ class GuestCirclePainter extends CustomPainter {
       ..strokeWidth = 2.0;
 
     touchableCanvas.drawCircle(center, bigCircleRadius, bigCirclePaint);
+
+    const roomCodeTextStyle = TextStyle(
+      color: Colors.black,
+      fontSize: 50,
+      fontWeight: FontWeight.bold,
+    );
+    final roomCodeTextSpan = TextSpan(
+      text: roomCode,
+      style: roomCodeTextStyle,
+    );
+    final roomCodeTextPainter = TextPainter(
+      text: roomCodeTextSpan,
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    );
+    roomCodeTextPainter.layout(
+      minWidth: 0,
+      maxWidth: size.width,
+    );
+
+    final roomCodeTextOffset = Offset(
+      center.dx - roomCodeTextPainter.width / 2,
+      center.dy - roomCodeTextPainter.height / 2,
+    );
+    roomCodeTextPainter.paint(canvas, roomCodeTextOffset);
 
     final smallCircleBorderPaint = Paint()
       ..color = Colors.black
@@ -59,26 +86,26 @@ class GuestCirclePainter extends CustomPainter {
       touchableCanvas.drawCircle(
           orbOffset, smallCircleRadius, smallCircleBorderPaint);
 
-        final textStyle = TextStyle(
-          color: guest.occupied ? CustomColors.offWhite : Colors.black,
-          fontSize: smallCircleRadius * 0.9,
-          fontWeight: FontWeight.bold,
-        );
-        final textSpan = TextSpan(
-          text: guest.occupied ? guest.name : '+',
-          style: textStyle,
-        );
-        final textPainter = TextPainter(
-          text: textSpan,
-          textDirection: TextDirection.ltr,
-          textAlign: TextAlign.center,
-        );
-        textPainter.layout();
-        final textOffset = Offset(
-          orbOffset.dx - textPainter.width / 2,
-          orbOffset.dy - textPainter.height / 2,
-        );
-        textPainter.paint(canvas, textOffset);
+      final textStyle = TextStyle(
+        color: guest.occupied ? CustomColors.offWhite : Colors.black,
+        fontSize: smallCircleRadius * 0.9,
+        fontWeight: FontWeight.bold,
+      );
+      final textSpan = TextSpan(
+        text: guest.occupied ? guest.name : '+',
+        style: textStyle,
+      );
+      final textPainter = TextPainter(
+        text: textSpan,
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+      );
+      textPainter.layout();
+      final textOffset = Offset(
+        orbOffset.dx - textPainter.width / 2,
+        orbOffset.dy - textPainter.height / 2,
+      );
+      textPainter.paint(canvas, textOffset);
     }
   }
 

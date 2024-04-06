@@ -20,6 +20,7 @@ mixin _$GameState {
   List<Player> get players => throw _privateConstructorUsedError;
   bool get allPlayersJoined => throw _privateConstructorUsedError;
   int get numberOfHoles => throw _privateConstructorUsedError;
+  String get roomCode => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GameStateCopyWith<GameState> get copyWith =>
@@ -35,7 +36,8 @@ abstract class $GameStateCopyWith<$Res> {
       {Map<int, Hole> holes,
       List<Player> players,
       bool allPlayersJoined,
-      int numberOfHoles});
+      int numberOfHoles,
+      String roomCode});
 }
 
 /// @nodoc
@@ -55,6 +57,7 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? players = null,
     Object? allPlayersJoined = null,
     Object? numberOfHoles = null,
+    Object? roomCode = null,
   }) {
     return _then(_value.copyWith(
       holes: null == holes
@@ -73,6 +76,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.numberOfHoles
           : numberOfHoles // ignore: cast_nullable_to_non_nullable
               as int,
+      roomCode: null == roomCode
+          ? _value.roomCode
+          : roomCode // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -89,7 +96,8 @@ abstract class _$$GameStateImplCopyWith<$Res>
       {Map<int, Hole> holes,
       List<Player> players,
       bool allPlayersJoined,
-      int numberOfHoles});
+      int numberOfHoles,
+      String roomCode});
 }
 
 /// @nodoc
@@ -107,6 +115,7 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? players = null,
     Object? allPlayersJoined = null,
     Object? numberOfHoles = null,
+    Object? roomCode = null,
   }) {
     return _then(_$GameStateImpl(
       holes: null == holes
@@ -125,6 +134,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value.numberOfHoles
           : numberOfHoles // ignore: cast_nullable_to_non_nullable
               as int,
+      roomCode: null == roomCode
+          ? _value.roomCode
+          : roomCode // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -136,7 +149,8 @@ class _$GameStateImpl implements _GameState {
       {final Map<int, Hole> holes = const {},
       final List<Player> players = const [],
       this.allPlayersJoined = false,
-      this.numberOfHoles = 1})
+      this.numberOfHoles = 1,
+      this.roomCode = ''})
       : _holes = holes,
         _players = players;
 
@@ -164,10 +178,13 @@ class _$GameStateImpl implements _GameState {
   @override
   @JsonKey()
   final int numberOfHoles;
+  @override
+  @JsonKey()
+  final String roomCode;
 
   @override
   String toString() {
-    return 'GameState(holes: $holes, players: $players, allPlayersJoined: $allPlayersJoined, numberOfHoles: $numberOfHoles)';
+    return 'GameState(holes: $holes, players: $players, allPlayersJoined: $allPlayersJoined, numberOfHoles: $numberOfHoles, roomCode: $roomCode)';
   }
 
   @override
@@ -180,7 +197,9 @@ class _$GameStateImpl implements _GameState {
             (identical(other.allPlayersJoined, allPlayersJoined) ||
                 other.allPlayersJoined == allPlayersJoined) &&
             (identical(other.numberOfHoles, numberOfHoles) ||
-                other.numberOfHoles == numberOfHoles));
+                other.numberOfHoles == numberOfHoles) &&
+            (identical(other.roomCode, roomCode) ||
+                other.roomCode == roomCode));
   }
 
   @override
@@ -189,7 +208,8 @@ class _$GameStateImpl implements _GameState {
       const DeepCollectionEquality().hash(_holes),
       const DeepCollectionEquality().hash(_players),
       allPlayersJoined,
-      numberOfHoles);
+      numberOfHoles,
+      roomCode);
 
   @JsonKey(ignore: true)
   @override
@@ -203,7 +223,8 @@ abstract class _GameState implements GameState {
       {final Map<int, Hole> holes,
       final List<Player> players,
       final bool allPlayersJoined,
-      final int numberOfHoles}) = _$GameStateImpl;
+      final int numberOfHoles,
+      final String roomCode}) = _$GameStateImpl;
 
   @override
   Map<int, Hole> get holes;
@@ -213,6 +234,8 @@ abstract class _GameState implements GameState {
   bool get allPlayersJoined;
   @override
   int get numberOfHoles;
+  @override
+  String get roomCode;
   @override
   @JsonKey(ignore: true)
   _$$GameStateImplCopyWith<_$GameStateImpl> get copyWith =>

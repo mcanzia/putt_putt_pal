@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
 import 'package:putt_putt_pal/models/Player.dart';
@@ -10,6 +12,22 @@ final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState>(
 
 class GameStateNotifier extends StateNotifier<GameState> {
   GameStateNotifier() : super(const GameState());
+
+  void setRandomRoomCode() {
+    state = state.copyWith(roomCode: createRandomRoomCode());
+  }
+
+  String createRandomRoomCode() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    final random = Random();
+
+    return String.fromCharCodes(
+      Iterable.generate(
+        4,
+        (_) => letters.codeUnitAt(random.nextInt(letters.length)),
+      ),
+    );
+  }
 
   void startGame(int numberOfHoles) {
     Map<int, Hole> newHoles = {};
@@ -32,18 +50,29 @@ class GameStateNotifier extends StateNotifier<GameState> {
   }
 
   void resetState() {
-    state = state.copyWith(holes: {}, players:[], allPlayersJoined: true, numberOfHoles: 1);
+    state = state.copyWith(
+        holes: {},
+        players: [],
+        allPlayersJoined: true,
+        numberOfHoles: 1,
+        roomCode: '');
   }
 
   void resetGameSamePlayers() {
-    state = state.copyWith(holes: {}, allPlayersJoined: true, numberOfHoles: 1);
+    state = state.copyWith(
+        holes: {},
+        allPlayersJoined: true,
+        numberOfHoles: 1,
+        roomCode: createRandomRoomCode());
   }
 
   void updatePlayerScore(int holeNumber, int playerNumber, int newScore) {
     var holeToUpdate = state.holes[holeNumber];
 
-    Map<int, PlayerScore> updatedPlayerScores = Map.from(holeToUpdate!.playerScores);
-    updatedPlayerScores[playerNumber] = PlayerScore(player: updatedPlayerScores[playerNumber]!.player, score: newScore);
+    Map<int, PlayerScore> updatedPlayerScores =
+        Map.from(holeToUpdate!.playerScores);
+    updatedPlayerScores[playerNumber] = PlayerScore(
+        player: updatedPlayerScores[playerNumber]!.player, score: newScore);
 
     Map<int, Hole> updatedHoles = Map.from(state.holes);
     updatedHoles[holeNumber] =

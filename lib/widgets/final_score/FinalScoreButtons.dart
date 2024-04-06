@@ -13,7 +13,6 @@ class FinalScoreButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     void playAgain() {
-      ref.read(gameStateProvider.notifier).resetGameSamePlayers();
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -23,6 +22,7 @@ class FinalScoreButtons extends ConsumerWidget {
         ),
         (Route<dynamic> route) => false,
       );
+      ref.read(gameStateProvider.notifier).resetGameSamePlayers();
     }
 
     return Container(

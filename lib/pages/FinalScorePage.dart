@@ -27,7 +27,7 @@ class FinalScorePage extends ConsumerWidget {
                 content: TitleCard(
                   backgroundColor: CustomColors.offWhite,
                   textColor: Colors.black,
-                  text: "The winner is...\n${rankings[0].player.name}",
+                  text: "The winner is...\n${rankings.isNotEmpty ? rankings[0].player.name : '' }",
                 ),
                 backgroundColor: CustomColors.offWhite,
               ),

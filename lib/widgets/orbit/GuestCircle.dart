@@ -70,6 +70,9 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
     final players = ref.watch(gameStateProvider.select((gsp) => gsp.players));
     updateGuestsList(players);
 
+    // Get Room Code
+    final roomCode = ref.watch(gameStateProvider.select((gsp) => gsp.roomCode));
+
     return Center(
       child: CanvasTouchDetector(
         gesturesToOverride: const [GestureType.onTapDown],
@@ -79,6 +82,7 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
             context: context,
             animation: _controller,
             guests: guests,
+            roomCode: roomCode,
             onTap: _handleTap,
           ),
         ),

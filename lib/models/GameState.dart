@@ -12,6 +12,7 @@ class GameState with _$GameState {
     @Default([]) List<Player> players,
     @Default(false) bool allPlayersJoined,
     @Default(1) int numberOfHoles,
+    @Default('') String roomCode,
   }) = _GameState;
 }
 

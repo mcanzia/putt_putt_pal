@@ -5,21 +5,22 @@ class ExpandedCardLink extends StatelessWidget {
       {super.key,
       required this.text,
       required this.textColor,
-      required this.backgroundColor, required this.toPage});
+      required this.backgroundColor, this.toPage, this.onPressed});
 
   final String text;
   final Color textColor;
   final Color backgroundColor;
-  final Widget toPage;
+  final VoidCallback? onPressed;
+  final Widget? toPage;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
         onTap: () {
-          Navigator.push(
+          onPressed != null ? onPressed!() : Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => toPage),
+            MaterialPageRoute(builder: (context) => toPage!),
           );
         },
         child: Container(
