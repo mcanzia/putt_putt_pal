@@ -5,6 +5,7 @@ class UppercaseTextField extends StatefulWidget {
   final String hintText;
   final Color textColor;
   final Color backgroundColor;
+  final Color borderColor;
   final bool connectedWithButton;
   final int? maxLength;
   final TextEditingController? controller;
@@ -16,6 +17,7 @@ class UppercaseTextField extends StatefulWidget {
     required this.hintText,
     required this.textColor,
     required this.backgroundColor,
+    required this.borderColor,
     this.maxLength,
     this.connectedWithButton = false,
     this.controller, this.onSubmitted, this.focusNode,
@@ -87,7 +89,7 @@ class _UppercaseTextFieldState extends State<UppercaseTextField> {
                     topRight: Radius.circular(50),
                   )
                 : const BorderRadius.all(Radius.circular(50)),
-            borderSide: BorderSide(color: widget.textColor),
+            borderSide: BorderSide(color: widget.borderColor),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: widget.connectedWithButton
@@ -96,7 +98,7 @@ class _UppercaseTextFieldState extends State<UppercaseTextField> {
                     topRight: Radius.circular(50),
                   )
                 : const BorderRadius.all(Radius.circular(50)),
-            borderSide: BorderSide(color: widget.textColor, width: 2),
+            borderSide: BorderSide(color: widget.borderColor, width: 2),
           ),
           contentPadding: const EdgeInsets.all(20),
         ),

@@ -29,5 +29,6 @@ class ExpandedCard extends StatelessWidget {
     return Flexible(
       child: cardContent,
     );
+    // return cardContent;
   }
 }

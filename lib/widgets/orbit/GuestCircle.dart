@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/GuestOrb.dart';
 import 'package:putt_putt_pal/models/Player.dart';
+import 'package:putt_putt_pal/models/Room.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/widgets/orbit/GuestCirclePainter.dart';
 import 'package:touchable/touchable.dart';
@@ -33,12 +34,15 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
   void updateGuestsList(List<Player> players) {
     setState(() {
       guests = [];
-      for (int i = 0; i <= players.length; i++) {
+      for (int i = 0; i < players.length; i++) {
         double orbAngle = 2 * pi + (i * pi / 6);
         GuestOrb guestOrb = GuestOrb(
           angle: orbAngle,
           occupied: i == players.length ? false : true,
           name: i == players.length ? null : players[i].getFirstInitial(),
+          isHost: players[i].isHost,
+          color: players[i].getPlayerBackgroundColor(),
+          textColor: players[i].getPlayerTextColor()
         );
         if (!(i == players.length && players.length == 12)) {
           guests.add(guestOrb);
@@ -54,24 +58,25 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
     super.dispose();
   }
 
-  void _handleTap(int index) {
-      ref.read(gameStateProvider.notifier).setAllPlayersJoined(false);
+  void _handleTap(Player player) {
+      final room = ref.watch(gameStateProvider.select((gsp) => gsp.room));
+      ref.read(gameStateProvider.notifier).toggleEditPlayer(ref, player);
   }
 
   @override
   Widget build(BuildContext context) {
 
     // listen for updates
-    ref.listen<List<Player>>(gameStateProvider.select((gsp) => gsp.players), (previous, next) {
+    ref.listen<List<Player>>(gameStateProvider.select((gsp) => gsp.room.players), (previous, next) {
       updateGuestsList(next);
     });
 
     // Initialize guest list
-    final players = ref.watch(gameStateProvider.select((gsp) => gsp.players));
+    final players = ref.watch(gameStateProvider.select((gsp) => gsp.room.players));
     updateGuestsList(players);
 
     // Get Room Code
-    final roomCode = ref.watch(gameStateProvider.select((gsp) => gsp.roomCode));
+    final roomCode = ref.watch(gameStateProvider.select((gsp) => gsp.room.roomCode));
 
     return Center(
       child: CanvasTouchDetector(
@@ -83,10 +88,10 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
             animation: _controller,
             guests: guests,
             roomCode: roomCode,
-            onTap: _handleTap,
+            onTap: (index) => _handleTap(players[index])),
           ),
         ),
-      ),
     );
+      
   }
 }

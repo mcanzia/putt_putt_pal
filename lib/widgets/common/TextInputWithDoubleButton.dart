@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:putt_putt_pal/widgets/common/BasicButton.dart';
 import 'package:putt_putt_pal/widgets/common/BasicTextInput.dart';
+import 'package:putt_putt_pal/widgets/common/DoubleButton.dart';
 import 'package:putt_putt_pal/widgets/common/UpperCaseTextField.dart';
 
-class TextInputWithButton extends StatefulWidget {
-  final String buttonText;
-  final Color buttonTextColor;
-  final Color buttonColor;
+class TextInputWithDoubleButton extends StatefulWidget {
+  final String buttonOneText;
+  final Color buttonOneTextColor;
+  final Color buttonOneColor;
+  final IconData buttonTwoIcon;
+  final Color buttonTwoIconColor;
+  final Color buttonTwoColor;
   final String textFieldHintText;
   final Color textFieldTextColor;
   final Color textFieldBackgroundColor;
@@ -15,15 +19,20 @@ class TextInputWithButton extends StatefulWidget {
   final bool isNumberInput;
   final TextEditingController controller;
   final int? textFieldMaxLength;
-  final Widget? toPage;
-  final Function(String text)? onButtonPressed;
+  final Widget? toPageOne;
+  final Widget? toPageTwo;
+  final Function(String text)? onButtonOnePressed;
+  final VoidCallback? onButtonTwoPressed;
   final FocusNode? focusNode;
 
-  const TextInputWithButton({
+  const TextInputWithDoubleButton({
     Key? key,
-    required this.buttonText,
-    required this.buttonTextColor,
-    required this.buttonColor,
+    required this.buttonOneText,
+    required this.buttonOneTextColor,
+    required this.buttonOneColor,
+    required this.buttonTwoIcon,
+    required this.buttonTwoIconColor,
+    required this.buttonTwoColor,
     required this.textFieldHintText,
     required this.textFieldTextColor,
     required this.textFieldBackgroundColor,
@@ -32,29 +41,47 @@ class TextInputWithButton extends StatefulWidget {
     this.textFieldBasic = true,
     this.isNumberInput = false,
     this.textFieldMaxLength,
-    this.toPage,
-    this.onButtonPressed,
+    this.toPageOne,
+    this.toPageTwo,
+    this.onButtonOnePressed,
+    this.onButtonTwoPressed,
     this.focusNode,
   }) : super(key: key);
 
   @override
-  State<TextInputWithButton> createState() => _TextInputWithButtonState();
+  State<TextInputWithDoubleButton> createState() =>
+      _TextInputWithDoubleButtonState();
 }
 
-class _TextInputWithButtonState extends State<TextInputWithButton> {
-  void _buttonReturnValueEvent() {
-    if (widget.onButtonPressed != null &&
+class _TextInputWithDoubleButtonState extends State<TextInputWithDoubleButton> {
+  void _buttonOneReturnValueEvent() {
+    if (widget.onButtonOnePressed != null &&
         widget.controller.text.isNotEmpty) {
-      widget.onButtonPressed!(widget.controller.text);
+      widget.onButtonOnePressed!(widget.controller.text);
       // widget.controller.text = '';
     }
   }
 
-  void _buttonGoToPage() {
-    if (widget.toPage != null) {
+  void _buttonOneGoToPage() {
+    if (widget.toPageOne != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => widget.toPage!),
+        MaterialPageRoute(builder: (context) => widget.toPageOne!),
+      );
+    }
+  }
+
+  void _buttonTwoReturnValueEvent() {
+    if (widget.onButtonTwoPressed != null) {
+      widget.onButtonTwoPressed!();
+    }
+  }
+
+  void _buttonTwoGoToPage() {
+    if (widget.toPageTwo != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => widget.toPageTwo!),
       );
     }
   }
@@ -90,8 +117,8 @@ class _TextInputWithButtonState extends State<TextInputWithButton> {
                   isNumberInput: widget.isNumberInput,
                   connectedWithButton: true,
                   onSubmitted: (value) {
-                    _buttonReturnValueEvent();
-                    _buttonGoToPage();
+                    _buttonOneReturnValueEvent();
+                    _buttonOneGoToPage();
                   })
               : UppercaseTextField(
                   controller: widget.controller,
@@ -102,22 +129,29 @@ class _TextInputWithButtonState extends State<TextInputWithButton> {
                   maxLength: widget.textFieldMaxLength,
                   connectedWithButton: true,
                   onSubmitted: (value) {
-                    _buttonReturnValueEvent();
-                    _buttonGoToPage();
+                    _buttonOneReturnValueEvent();
+                    _buttonOneGoToPage();
                   },
                 ),
         ),
         ConstrainedBox(
           constraints:
               BoxConstraints(minWidth: buttonWidth, maxWidth: buttonWidth),
-          child: BasicButton(
-            text: widget.buttonText,
-            textColor: widget.buttonTextColor,
-            color: widget.buttonColor,
+          child: DoubleButton(
+            buttonOneText: widget.buttonOneText,
+            buttonOneTextColor: widget.buttonOneTextColor,
+            buttonOneColor: widget.buttonOneColor,
+            buttonOneOnPressed: () {
+              _buttonOneReturnValueEvent();
+              _buttonOneGoToPage();
+            },
             connectedWithInput: true,
-            onPressed: () {
-              _buttonReturnValueEvent();
-              _buttonGoToPage();
+            buttonTwoIcon: widget.buttonTwoIcon,
+            buttonTwoColor: widget.buttonTwoColor,
+            buttonTwoIconColor: widget.buttonTwoIconColor,
+            buttonTwoOnPressed: () {
+              _buttonTwoReturnValueEvent();
+              _buttonTwoGoToPage();
             },
           ),
         ),

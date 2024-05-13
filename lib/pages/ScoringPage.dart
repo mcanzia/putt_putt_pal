@@ -1,32 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:async/async.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/GameState.dart';
+import 'package:putt_putt_pal/models/Hole.dart';
+import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/models/PlayerScore.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
+import 'package:putt_putt_pal/util/Debouncer.dart';
 import 'package:putt_putt_pal/widgets/cards/ExpandedCard.dart';
 import 'package:putt_putt_pal/widgets/cards/TitleCard.dart';
 import 'package:putt_putt_pal/widgets/scoring/PersonalScore.dart';
 
 class ScoringPage extends ConsumerWidget {
-  const ScoringPage({
+  ScoringPage({
     super.key,
-    required this.holeNumber,
+    required this.hole,
     required this.pageController,
-  });
+  }) : _debouncer = Debouncer(delay: Duration(milliseconds: 300));
 
-  final int holeNumber;
+  final Hole hole;
   final PageController pageController;
+  final Debouncer _debouncer;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Map<int, PlayerScore> playerScores = ref.watch(
-      gameStateProvider
-          .select((gsp) => gsp.holes[holeNumber]?.playerScores ?? {}),
-    );
+    final List<PlayerScore> playerScores = hole.playerScores;
     final int totalHoles =
-        ref.watch(gameStateProvider.select((gsp) => gsp.numberOfHoles));
+        ref.watch(gameStateProvider.select((gsp) => gsp.room.numberOfHoles));
     final screenHeight = MediaQuery.of(context).size.height;
+
+    void onScoreChanged(Player player, int newScore) {
+      _debouncer.run(() {
+        ref.read(gameStateProvider.notifier).updatePlayerScore(
+              hole,
+              player.playerNumber,
+              newScore,
+            );
+      });
+    }
 
     return Scaffold(
       backgroundColor: CustomColors.offWhite,
@@ -43,7 +55,7 @@ class ScoringPage extends ConsumerWidget {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.arrow_back),
-                        onPressed: holeNumber > 1
+                        onPressed: hole.holeNumber > 1
                             ? () => pageController.previousPage(
                                   duration: Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
@@ -53,11 +65,11 @@ class ScoringPage extends ConsumerWidget {
                       TitleCard(
                         backgroundColor: CustomColors.offWhite,
                         textColor: Colors.black,
-                        text: 'Hole $holeNumber',
+                        text: 'Hole ${hole.holeNumber}',
                       ),
                       IconButton(
                         icon: const Icon(Icons.arrow_forward),
-                        onPressed: holeNumber <= totalHoles
+                        onPressed: hole.holeNumber <= totalHoles
                             ? () => pageController.nextPage(
                                   duration: Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
@@ -69,28 +81,22 @@ class ScoringPage extends ConsumerWidget {
                 ),
                 Flexible(
                   child: Column(
-                    children: playerScores.entries.map((entry) {
-                      final playerScore = entry.value;
+                    children: playerScores.map((entry) {
+                      final playerScore = entry.score;
                       return ExpandedCard(
                         content: PersonalScore(
-                          key: ValueKey('${entry.key}_$holeNumber'),
-                          player: playerScore.player,
+                          key: ValueKey(
+                              '${entry.player.playerNumber}_${hole.id}'),
+                          player: entry.player,
                           currentScore: ref.watch(
                             gameStateProvider.select((state) =>
-                                state.getPlayerScore(holeNumber, entry.key)),
+                                state.getPlayerScore(
+                                    hole, entry.player.playerNumber)),
                           ),
-                          onScoreChanged: (player, newScore) {
-                            ref
-                                .read(gameStateProvider.notifier)
-                                .updatePlayerScore(
-                                  holeNumber,
-                                  player.playerNumber,
-                                  newScore,
-                                );
-                          },
+                          onScoreChanged: onScoreChanged,
                         ),
                         backgroundColor:
-                            playerScore.player.getPlayerBackgroundColor(),
+                            entry.player.getPlayerBackgroundColor(),
                       );
                     }).toList(),
                   ),

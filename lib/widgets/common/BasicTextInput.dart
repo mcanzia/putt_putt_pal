@@ -5,6 +5,7 @@ class BasicTextInput extends StatelessWidget {
   final String hintText;
   final Color textColor;
   final Color backgroundColor;
+  final Color borderColor;
   final bool isNumberInput;
   final bool connectedWithButton;
   final TextEditingController? controller;
@@ -17,6 +18,7 @@ class BasicTextInput extends StatelessWidget {
       required this.hintText,
       required this.textColor,
       required this.backgroundColor,
+      required this.borderColor,
       this.controller,
       this.maxLength,
       this.isNumberInput = false,
@@ -49,7 +51,7 @@ class BasicTextInput extends StatelessWidget {
                       topRight: Radius.circular(50),
                     )
                   : const BorderRadius.all(Radius.circular(50)),
-              borderSide: BorderSide(color: textColor),
+              borderSide: BorderSide(color: borderColor),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: connectedWithButton
@@ -58,7 +60,7 @@ class BasicTextInput extends StatelessWidget {
                       topRight: Radius.circular(50),
                     )
                   : const BorderRadius.all(Radius.circular(50)),
-              borderSide: BorderSide(color: textColor),
+              borderSide: BorderSide(color: borderColor, width: 2),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: connectedWithButton
@@ -67,7 +69,7 @@ class BasicTextInput extends StatelessWidget {
                       topRight: Radius.circular(50),
                     )
                   : const BorderRadius.all(Radius.circular(50)),
-              borderSide: BorderSide(color: textColor, width: 2),
+              borderSide: BorderSide(color: borderColor, width: 2),
             ),
             contentPadding: EdgeInsets.all(20),
           ),

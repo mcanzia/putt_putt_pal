@@ -12,6 +12,7 @@ class FinalScoreButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final room = ref.watch(gameStateProvider.select((gsp) => gsp.room));
     void playAgain() {
       Navigator.pushAndRemoveUntil(
         context,
@@ -22,7 +23,7 @@ class FinalScoreButtons extends ConsumerWidget {
         ),
         (Route<dynamic> route) => false,
       );
-      ref.read(gameStateProvider.notifier).resetGameSamePlayers();
+      ref.read(gameStateProvider.notifier).resetGameSamePlayers(ref, room);
     }
 
     return Container(

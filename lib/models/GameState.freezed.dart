@@ -16,11 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$GameState {
-  Map<int, Hole> get holes => throw _privateConstructorUsedError;
-  List<Player> get players => throw _privateConstructorUsedError;
-  bool get allPlayersJoined => throw _privateConstructorUsedError;
-  int get numberOfHoles => throw _privateConstructorUsedError;
-  String get roomCode => throw _privateConstructorUsedError;
+  Room get room => throw _privateConstructorUsedError;
+  Player? get editPlayer => throw _privateConstructorUsedError;
+  bool get colorPickerMode => throw _privateConstructorUsedError;
+  PlayerColor get currentColor => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GameStateCopyWith<GameState> get copyWith =>
@@ -33,11 +32,14 @@ abstract class $GameStateCopyWith<$Res> {
       _$GameStateCopyWithImpl<$Res, GameState>;
   @useResult
   $Res call(
-      {Map<int, Hole> holes,
-      List<Player> players,
-      bool allPlayersJoined,
-      int numberOfHoles,
-      String roomCode});
+      {Room room,
+      Player? editPlayer,
+      bool colorPickerMode,
+      PlayerColor currentColor});
+
+  $RoomCopyWith<$Res> get room;
+  $PlayerCopyWith<$Res>? get editPlayer;
+  $PlayerColorCopyWith<$Res> get currentColor;
 }
 
 /// @nodoc
@@ -53,34 +55,57 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? holes = null,
-    Object? players = null,
-    Object? allPlayersJoined = null,
-    Object? numberOfHoles = null,
-    Object? roomCode = null,
+    Object? room = null,
+    Object? editPlayer = freezed,
+    Object? colorPickerMode = null,
+    Object? currentColor = null,
   }) {
     return _then(_value.copyWith(
-      holes: null == holes
-          ? _value.holes
-          : holes // ignore: cast_nullable_to_non_nullable
-              as Map<int, Hole>,
-      players: null == players
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
-      allPlayersJoined: null == allPlayersJoined
-          ? _value.allPlayersJoined
-          : allPlayersJoined // ignore: cast_nullable_to_non_nullable
+      room: null == room
+          ? _value.room
+          : room // ignore: cast_nullable_to_non_nullable
+              as Room,
+      editPlayer: freezed == editPlayer
+          ? _value.editPlayer
+          : editPlayer // ignore: cast_nullable_to_non_nullable
+              as Player?,
+      colorPickerMode: null == colorPickerMode
+          ? _value.colorPickerMode
+          : colorPickerMode // ignore: cast_nullable_to_non_nullable
               as bool,
-      numberOfHoles: null == numberOfHoles
-          ? _value.numberOfHoles
-          : numberOfHoles // ignore: cast_nullable_to_non_nullable
-              as int,
-      roomCode: null == roomCode
-          ? _value.roomCode
-          : roomCode // ignore: cast_nullable_to_non_nullable
-              as String,
+      currentColor: null == currentColor
+          ? _value.currentColor
+          : currentColor // ignore: cast_nullable_to_non_nullable
+              as PlayerColor,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $RoomCopyWith<$Res> get room {
+    return $RoomCopyWith<$Res>(_value.room, (value) {
+      return _then(_value.copyWith(room: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlayerCopyWith<$Res>? get editPlayer {
+    if (_value.editPlayer == null) {
+      return null;
+    }
+
+    return $PlayerCopyWith<$Res>(_value.editPlayer!, (value) {
+      return _then(_value.copyWith(editPlayer: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlayerColorCopyWith<$Res> get currentColor {
+    return $PlayerColorCopyWith<$Res>(_value.currentColor, (value) {
+      return _then(_value.copyWith(currentColor: value) as $Val);
+    });
   }
 }
 
@@ -93,11 +118,17 @@ abstract class _$$GameStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Map<int, Hole> holes,
-      List<Player> players,
-      bool allPlayersJoined,
-      int numberOfHoles,
-      String roomCode});
+      {Room room,
+      Player? editPlayer,
+      bool colorPickerMode,
+      PlayerColor currentColor});
+
+  @override
+  $RoomCopyWith<$Res> get room;
+  @override
+  $PlayerCopyWith<$Res>? get editPlayer;
+  @override
+  $PlayerColorCopyWith<$Res> get currentColor;
 }
 
 /// @nodoc
@@ -111,33 +142,28 @@ class __$$GameStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? holes = null,
-    Object? players = null,
-    Object? allPlayersJoined = null,
-    Object? numberOfHoles = null,
-    Object? roomCode = null,
+    Object? room = null,
+    Object? editPlayer = freezed,
+    Object? colorPickerMode = null,
+    Object? currentColor = null,
   }) {
     return _then(_$GameStateImpl(
-      holes: null == holes
-          ? _value._holes
-          : holes // ignore: cast_nullable_to_non_nullable
-              as Map<int, Hole>,
-      players: null == players
-          ? _value._players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
-      allPlayersJoined: null == allPlayersJoined
-          ? _value.allPlayersJoined
-          : allPlayersJoined // ignore: cast_nullable_to_non_nullable
+      room: null == room
+          ? _value.room
+          : room // ignore: cast_nullable_to_non_nullable
+              as Room,
+      editPlayer: freezed == editPlayer
+          ? _value.editPlayer
+          : editPlayer // ignore: cast_nullable_to_non_nullable
+              as Player?,
+      colorPickerMode: null == colorPickerMode
+          ? _value.colorPickerMode
+          : colorPickerMode // ignore: cast_nullable_to_non_nullable
               as bool,
-      numberOfHoles: null == numberOfHoles
-          ? _value.numberOfHoles
-          : numberOfHoles // ignore: cast_nullable_to_non_nullable
-              as int,
-      roomCode: null == roomCode
-          ? _value.roomCode
-          : roomCode // ignore: cast_nullable_to_non_nullable
-              as String,
+      currentColor: null == currentColor
+          ? _value.currentColor
+          : currentColor // ignore: cast_nullable_to_non_nullable
+              as PlayerColor,
     ));
   }
 }
@@ -146,45 +172,27 @@ class __$$GameStateImplCopyWithImpl<$Res>
 
 class _$GameStateImpl implements _GameState {
   const _$GameStateImpl(
-      {final Map<int, Hole> holes = const {},
-      final List<Player> players = const [],
-      this.allPlayersJoined = false,
-      this.numberOfHoles = 1,
-      this.roomCode = ''})
-      : _holes = holes,
-        _players = players;
-
-  final Map<int, Hole> _holes;
-  @override
-  @JsonKey()
-  Map<int, Hole> get holes {
-    if (_holes is EqualUnmodifiableMapView) return _holes;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_holes);
-  }
-
-  final List<Player> _players;
-  @override
-  @JsonKey()
-  List<Player> get players {
-    if (_players is EqualUnmodifiableListView) return _players;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_players);
-  }
+      {this.room = const Room(),
+      this.editPlayer = null,
+      this.colorPickerMode = false,
+      this.currentColor = const PlayerColor()});
 
   @override
   @JsonKey()
-  final bool allPlayersJoined;
+  final Room room;
   @override
   @JsonKey()
-  final int numberOfHoles;
+  final Player? editPlayer;
   @override
   @JsonKey()
-  final String roomCode;
+  final bool colorPickerMode;
+  @override
+  @JsonKey()
+  final PlayerColor currentColor;
 
   @override
   String toString() {
-    return 'GameState(holes: $holes, players: $players, allPlayersJoined: $allPlayersJoined, numberOfHoles: $numberOfHoles, roomCode: $roomCode)';
+    return 'GameState(room: $room, editPlayer: $editPlayer, colorPickerMode: $colorPickerMode, currentColor: $currentColor)';
   }
 
   @override
@@ -192,24 +200,18 @@ class _$GameStateImpl implements _GameState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GameStateImpl &&
-            const DeepCollectionEquality().equals(other._holes, _holes) &&
-            const DeepCollectionEquality().equals(other._players, _players) &&
-            (identical(other.allPlayersJoined, allPlayersJoined) ||
-                other.allPlayersJoined == allPlayersJoined) &&
-            (identical(other.numberOfHoles, numberOfHoles) ||
-                other.numberOfHoles == numberOfHoles) &&
-            (identical(other.roomCode, roomCode) ||
-                other.roomCode == roomCode));
+            (identical(other.room, room) || other.room == room) &&
+            (identical(other.editPlayer, editPlayer) ||
+                other.editPlayer == editPlayer) &&
+            (identical(other.colorPickerMode, colorPickerMode) ||
+                other.colorPickerMode == colorPickerMode) &&
+            (identical(other.currentColor, currentColor) ||
+                other.currentColor == currentColor));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_holes),
-      const DeepCollectionEquality().hash(_players),
-      allPlayersJoined,
-      numberOfHoles,
-      roomCode);
+  int get hashCode =>
+      Object.hash(runtimeType, room, editPlayer, colorPickerMode, currentColor);
 
   @JsonKey(ignore: true)
   @override
@@ -220,22 +222,19 @@ class _$GameStateImpl implements _GameState {
 
 abstract class _GameState implements GameState {
   const factory _GameState(
-      {final Map<int, Hole> holes,
-      final List<Player> players,
-      final bool allPlayersJoined,
-      final int numberOfHoles,
-      final String roomCode}) = _$GameStateImpl;
+      {final Room room,
+      final Player? editPlayer,
+      final bool colorPickerMode,
+      final PlayerColor currentColor}) = _$GameStateImpl;
 
   @override
-  Map<int, Hole> get holes;
+  Room get room;
   @override
-  List<Player> get players;
+  Player? get editPlayer;
   @override
-  bool get allPlayersJoined;
+  bool get colorPickerMode;
   @override
-  int get numberOfHoles;
-  @override
-  String get roomCode;
+  PlayerColor get currentColor;
   @override
   @JsonKey(ignore: true)
   _$$GameStateImplCopyWith<_$GameStateImpl> get copyWith =>

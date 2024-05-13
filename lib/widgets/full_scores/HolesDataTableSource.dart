@@ -3,16 +3,15 @@ import 'package:putt_putt_pal/models/GameState.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
 
 class HolesDataTableSource extends DataTableSource {
-  final Map<int, Hole> holes;
+  final Map<String, Hole> holes;
 
   HolesDataTableSource(this.holes);
 
   @override
   DataRow? getRow(int index) {
     final holeNumber = index + 1;
-    if (!holes.containsKey(holeNumber)) return null;
-
-    Hole hole = holes[holeNumber]!;
+    Hole? hole = holes.values.firstWhere((value) => value.holeNumber == holeNumber);
+    
     List<DataCell> cells = [
       DataCell(
         Text(
@@ -21,13 +20,15 @@ class HolesDataTableSource extends DataTableSource {
       ),
     ];
 
-    cells.addAll(hole.playerScores.values.map((playerScore) {
+    cells.addAll(hole.playerScores.map((playerScore) {
       return DataCell(
         Text(
           playerScore.score.toString(),
         ),
       );
     }).toList());
+
+    return DataRow(cells: cells);
   }
 
   @override

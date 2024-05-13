@@ -2,9 +2,12 @@ import 'dart:ui';
 
 class GuestOrb {
   final double angle;
-  bool occupied;
+  final bool occupied;
   final String? name;
+  final bool? isHost;
+  final Color? color;
+  final Color? textColor;
 
-  GuestOrb({this.name,required this.angle, required this.occupied});
+  GuestOrb({this.name, this.isHost, this.color, this.textColor, required this.angle, required this.occupied});
 
 }

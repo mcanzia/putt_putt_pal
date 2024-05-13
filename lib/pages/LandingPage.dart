@@ -13,7 +13,7 @@ class LandingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     void createRoom() {
-      ref.read(gameStateProvider.notifier).setRandomRoomCode();
+      ref.read(gameStateProvider.notifier).createRoom(ref);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => WaitingRoom(isHost: true)),

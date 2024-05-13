@@ -5,6 +5,7 @@ class BasicButton extends StatelessWidget {
   final Color textColor;
   final Color color;
   final bool connectedWithInput;
+  final bool doubleButton;
   final VoidCallback onPressed;
   const BasicButton(
       {super.key,
@@ -12,7 +13,8 @@ class BasicButton extends StatelessWidget {
       required this.color,
       required this.textColor,
       required this.onPressed,
-      this.connectedWithInput = false});
+      this.connectedWithInput = false,
+      this.doubleButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +26,9 @@ class BasicButton extends StatelessWidget {
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: connectedWithInput
-                ? const BorderRadius.only(
+                ? BorderRadius.only(
                     bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
+                    bottomRight: doubleButton ? Radius.circular(0) : Radius.circular(50),
                   )
                 : const BorderRadius.all(Radius.circular(50)),
             side: BorderSide(color: color),

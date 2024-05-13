@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:putt_putt_pal/models/ColorOrb.dart';
 import 'package:putt_putt_pal/models/GuestOrb.dart';
 import 'package:putt_putt_pal/models/Room.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
@@ -7,17 +8,17 @@ import 'dart:math';
 
 import 'package:touchable/touchable.dart';
 
-class GuestCirclePainter extends CustomPainter {
+class ColorCirclePainter extends CustomPainter {
   final BuildContext context;
   final Animation<double>? animation;
-  final List<GuestOrb> guests;
+  final List<ColorOrb> colors;
   final String roomCode;
-  final Function(int) onTap;
+  final Function(int, bool) onTap;
 
-  GuestCirclePainter({
+  ColorCirclePainter({
     required this.context,
     this.animation,
-    required this.guests,
+    required this.colors,
     required this.roomCode,
     required this.onTap,
   }) : super(repaint: animation);
@@ -67,47 +68,26 @@ class GuestCirclePainter extends CustomPainter {
       ..strokeWidth = 2.0;
 
     // Draw
-    for (int i = 0; i < guests.length; i++) {
-      var guest = guests[i];
-      double updatedAngle = guest.angle + (2 * pi * animation!.value);
+    for (int i = 0; i < colors.length; i++) {
+      var color = colors[i];
+      double updatedAngle = color.angle + (2 * pi * animation!.value);
       Offset orbOffset = Offset(
         center.dx + bigCircleRadius * cos(updatedAngle),
         center.dy + bigCircleRadius * sin(updatedAngle),
       );
       final smallCircleFillPaint = Paint()
-        ..color = guest.color!
+        ..color = color.isTaken ? color.color.withOpacity(0.1) : color.color
         ..style = PaintingStyle.fill;
       touchableCanvas.drawCircle(
         orbOffset,
         smallCircleRadius,
         smallCircleFillPaint,
         onTapDown: (tapDetail) {
-          onTap(i);
+          onTap(i, color.isTaken);
         },
       );
       touchableCanvas.drawCircle(
           orbOffset, smallCircleRadius, smallCircleBorderPaint);
-
-      final textStyle = TextStyle(
-        color: guest.textColor,
-        fontSize: smallCircleRadius * 0.9,
-        fontWeight: FontWeight.bold,
-      );
-      final textSpan = TextSpan(
-        text: guest.name,
-        style: textStyle,
-      );
-      final textPainter = TextPainter(
-        text: textSpan,
-        textDirection: TextDirection.ltr,
-        textAlign: TextAlign.center,
-      );
-      textPainter.layout();
-      final textOffset = Offset(
-        orbOffset.dx - textPainter.width / 2,
-        orbOffset.dy - textPainter.height / 2,
-      );
-      textPainter.paint(canvas, textOffset);
     }
   }
 
