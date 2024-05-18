@@ -8,7 +8,7 @@ class PlayerController {
 
   PlayerController();
 
-  Future<List<Player>> getPlayers(String roomId) async {
+  Future<Map<String, Player>> getPlayers(String roomId) async {
     try {
       RequestParams getRequestParams = RequestUtil.GETRequestParams(roomId);
       final response = await http.get(
@@ -17,8 +17,8 @@ class PlayerController {
       );
       if (response.statusCode == 200) {
         print('Get players: ${response.body}');
-        Iterable json = jsonDecode(response.body);
-        return List<Player>.from(json.map((model) => Player.fromJson(model)));
+        Map<String, dynamic> json = jsonDecode(response.body);
+        return json.map((key, value) => MapEntry(key, Player.fromJson(value)));
       } else {
         throw Error();
       }
@@ -45,7 +45,7 @@ class PlayerController {
     }
   }
 
-  Future<List<Player>> addPlayer(String roomId, Player player) async {
+  Future<Map<String, Player>> addPlayer(String roomId, Player player) async {
     try {
       RequestParams postRequestParams = RequestUtil.POSTRequestParams(player, roomId);
       final response = await http.post(
@@ -55,20 +55,20 @@ class PlayerController {
       );
       if (response.statusCode == 200) {
         print('Joined room: ${response.body}');
-        Iterable json = jsonDecode(response.body);
-        return List<Player>.from(json.map((model) => Player.fromJson(model)));
+        Map<String, dynamic> json = jsonDecode(response.body);
+        return json.map((key, value) => MapEntry(key, Player.fromJson(value)));
       } else {
         throw Error();
       }
     } catch (e) {
+      print(e.toString());
       rethrow;
     }
   }
 
-  Future<List<Player>> updatePlayer(String roomId, Player player) async {
+  Future<Map<String, Player>> updatePlayer(String roomId, Player player) async {
     try {
-      RequestParams putRequestParams =
-          RequestUtil.PUTRequestParams(player, roomId);
+      RequestParams putRequestParams = RequestUtil.PUTRequestParams(player, roomId);
       final response = await http.put(
         Uri.parse('${RequestUtil.getAPIUrl()}/player/${player.id}'),
         headers: putRequestParams.headers,
@@ -76,8 +76,8 @@ class PlayerController {
       );
       if (response.statusCode == 200) {
         print('Updated player: ${response.body}');
-        Iterable json = jsonDecode(response.body);
-        return List<Player>.from(json.map((model) => Player.fromJson(model)));
+        Map<String, dynamic> json = jsonDecode(response.body);
+        return json.map((key, value) => MapEntry(key, Player.fromJson(value)));
       } else {
         throw Error();
       }
@@ -86,18 +86,19 @@ class PlayerController {
     }
   }
 
-  Future<List<Player>> removePlayer(String roomId, String playerName) async {
+  Future<Map<String, Player>> removePlayer(String roomId, Player player) async {
     try {
-      RequestParams postRequestParams = RequestUtil.DELETERequestParams({'playerName': playerName}, roomId);
+      RequestParams deleteRequestParams = RequestUtil.DELETERequestParams(player, roomId);
       final response = await http.delete(
         Uri.parse('${RequestUtil.getAPIUrl()}/player'),
-        headers: postRequestParams.headers,
-        body: postRequestParams.body
+        headers: deleteRequestParams.headers,
+        body: deleteRequestParams.body,
       );
+      print('DELETE RESPONSE ${response.statusCode}');
       if (response.statusCode == 200) {
         print('Left room: ${response.body}');
-        Iterable json = jsonDecode(response.body);
-        return List<Player>.from(json.map((model) => Player.fromJson(model)));
+        Map<String, dynamic> json = jsonDecode(response.body);
+        return json.map((key, value) => MapEntry(key, Player.fromJson(value)));
       } else {
         throw Error();
       }

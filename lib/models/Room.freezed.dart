@@ -22,7 +22,7 @@ Room _$RoomFromJson(Map<String, dynamic> json) {
 mixin _$Room {
   String get id => throw _privateConstructorUsedError;
   String get roomCode => throw _privateConstructorUsedError;
-  List<Player> get players => throw _privateConstructorUsedError;
+  Map<String, Player> get players => throw _privateConstructorUsedError;
   Map<String, Hole> get holes => throw _privateConstructorUsedError;
   bool get allPlayersJoined => throw _privateConstructorUsedError;
   int get numberOfHoles => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $RoomCopyWith<$Res> {
   $Res call(
       {String id,
       String roomCode,
-      List<Player> players,
+      Map<String, Player> players,
       Map<String, Hole> holes,
       bool allPlayersJoined,
       int numberOfHoles,
@@ -81,7 +81,7 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
       players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
+              as Map<String, Player>,
       holes: null == holes
           ? _value.holes
           : holes // ignore: cast_nullable_to_non_nullable
@@ -112,7 +112,7 @@ abstract class _$$RoomImplCopyWith<$Res> implements $RoomCopyWith<$Res> {
   $Res call(
       {String id,
       String roomCode,
-      List<Player> players,
+      Map<String, Player> players,
       Map<String, Hole> holes,
       bool allPlayersJoined,
       int numberOfHoles,
@@ -149,7 +149,7 @@ class __$$RoomImplCopyWithImpl<$Res>
       players: null == players
           ? _value._players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
+              as Map<String, Player>,
       holes: null == holes
           ? _value._holes
           : holes // ignore: cast_nullable_to_non_nullable
@@ -176,7 +176,7 @@ class _$RoomImpl extends _Room {
   const _$RoomImpl(
       {this.id = '',
       this.roomCode = '',
-      final List<Player> players = const [],
+      final Map<String, Player> players = const {},
       final Map<String, Hole> holes = const {},
       this.allPlayersJoined = false,
       this.numberOfHoles = 1,
@@ -195,13 +195,13 @@ class _$RoomImpl extends _Room {
   @override
   @JsonKey()
   final String roomCode;
-  final List<Player> _players;
+  final Map<String, Player> _players;
   @override
   @JsonKey()
-  List<Player> get players {
-    if (_players is EqualUnmodifiableListView) return _players;
+  Map<String, Player> get players {
+    if (_players is EqualUnmodifiableMapView) return _players;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_players);
+    return EqualUnmodifiableMapView(_players);
   }
 
   final Map<String, Hole> _holes;
@@ -281,7 +281,7 @@ abstract class _Room extends Room {
   const factory _Room(
       {final String id,
       final String roomCode,
-      final List<Player> players,
+      final Map<String, Player> players,
       final Map<String, Hole> holes,
       final bool allPlayersJoined,
       final int numberOfHoles,
@@ -295,7 +295,7 @@ abstract class _Room extends Room {
   @override
   String get roomCode;
   @override
-  List<Player> get players;
+  Map<String, Player> get players;
   @override
   Map<String, Hole> get holes;
   @override

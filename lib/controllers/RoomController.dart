@@ -52,6 +52,7 @@ class RoomController {
         throw Error();
       }
     } catch (e, stackTrace) {
+      print(e.toString());
       rethrow;
     }
   }

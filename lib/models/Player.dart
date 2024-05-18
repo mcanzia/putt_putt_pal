@@ -11,7 +11,6 @@ class Player with _$Player {
   const factory Player({
     @Default('') String id,
     @Default('') String name,
-    @Default(1) int playerNumber,
     @Default(false) bool isHost,
     @Default(PlayerColor()) PlayerColor color,
   }) = _Player;
@@ -31,4 +30,5 @@ class Player with _$Player {
   String getFirstInitial() {
     return name.isNotEmpty ? name[0].toUpperCase() : '';
   }
+
 }

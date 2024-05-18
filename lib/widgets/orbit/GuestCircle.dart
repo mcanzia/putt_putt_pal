@@ -31,24 +31,17 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
     )..repeat();
   }
 
-  void updateGuestsList(List<Player> players) {
+  void updateGuestsList(Map<String, Player> players) {
     setState(() {
       guests = [];
-      for (int i = 0; i < players.length; i++) {
+      int i = 0;
+      players.entries.forEach((entry) {
         double orbAngle = 2 * pi + (i * pi / 6);
-        GuestOrb guestOrb = GuestOrb(
-          angle: orbAngle,
-          occupied: i == players.length ? false : true,
-          name: i == players.length ? null : players[i].getFirstInitial(),
-          isHost: players[i].isHost,
-          color: players[i].getPlayerBackgroundColor(),
-          textColor: players[i].getPlayerTextColor()
-        );
-        if (!(i == players.length && players.length == 12)) {
-          guests.add(guestOrb);
-        }
-      }
-
+        GuestOrb guestOrb =
+            GuestOrb(angle: orbAngle, occupied: true, player: entry.value);
+        guests.add(guestOrb);
+        i++;
+      });
     });
   }
 
@@ -58,25 +51,34 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
     super.dispose();
   }
 
-  void _handleTap(Player player) {
-      final room = ref.watch(gameStateProvider.select((gsp) => gsp.room));
-      ref.read(gameStateProvider.notifier).toggleEditPlayer(ref, player);
+  void _handleTap(Player player) async {
+    final editPlayer =
+        ref.read(gameStateProvider.select((gsp) => gsp.editPlayer));
+    if (editPlayer != null && editPlayer.id == player.id) {
+      await ref.read(gameStateProvider.notifier).removePlayerFromRoom(player);
+      return;
+    }
+    ref.read(gameStateProvider.notifier).toggleEditPlayer(player);
   }
 
   @override
   Widget build(BuildContext context) {
-
     // listen for updates
-    ref.listen<List<Player>>(gameStateProvider.select((gsp) => gsp.room.players), (previous, next) {
+    ref.listen<Map<String, Player>>(
+        gameStateProvider.select((gsp) => gsp.room.players), (previous, next) {
       updateGuestsList(next);
     });
 
     // Initialize guest list
-    final players = ref.watch(gameStateProvider.select((gsp) => gsp.room.players));
+    final players =
+        ref.watch(gameStateProvider.select((gsp) => gsp.room.players));
     updateGuestsList(players);
 
     // Get Room Code
-    final roomCode = ref.watch(gameStateProvider.select((gsp) => gsp.room.roomCode));
+    final roomCode =
+        ref.watch(gameStateProvider.select((gsp) => gsp.room.roomCode));
+    final editPlayer =
+        ref.watch(gameStateProvider.select((gsp) => gsp.editPlayer));
 
     return Center(
       child: CanvasTouchDetector(
@@ -88,10 +90,11 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
             animation: _controller,
             guests: guests,
             roomCode: roomCode,
-            onTap: (index) => _handleTap(players[index])),
+            editPlayer: editPlayer,
+            onTap: (player) => _handleTap(player),
           ),
         ),
+      ),
     );
-      
   }
 }

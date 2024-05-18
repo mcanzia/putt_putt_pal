@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:putt_putt_pal/converters/jsonConverters.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
 import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/models/PlayerColor.dart';
@@ -11,7 +12,7 @@ class Room with _$Room {
   const factory Room({
     @Default('') String id,
     @Default('') String roomCode,
-    @Default([]) List<Player> players,
+    @Default({}) Map<String, Player> players,
     @Default({}) Map<String, Hole> holes,
     @Default(false) bool allPlayersJoined,
     @Default(1) int numberOfHoles,
@@ -19,6 +20,10 @@ class Room with _$Room {
   }) = _Room;
 
   const Room._();
+
+  bool hostPresent() {
+      return players.values.any((player) => player.isHost);
+  }
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 

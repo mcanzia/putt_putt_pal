@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/GameState.dart';
+import 'package:putt_putt_pal/models/PlayerRanking.dart';
 import 'package:putt_putt_pal/models/PlayerScore.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
@@ -27,9 +28,9 @@ class FinalScoreRankings extends ConsumerWidget {
       ),
     );
   }
-  Widget _buildPlayerScore(PlayerScore playerScore, double fontSize) {
+  Widget _buildPlayerScore(PlayerRanking playerRanking, double fontSize) {
     return Text(
-      '${playerScore.player.name}: ${playerScore.score}',
+      '${playerRanking.player.name}: ${playerRanking.score}',
       style: TextStyle(
         fontFamily: 'Lobster',
         fontSize: fontSize,

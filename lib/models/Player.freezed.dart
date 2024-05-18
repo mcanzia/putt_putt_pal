@@ -22,7 +22,6 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 mixin _$Player {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  int get playerNumber => throw _privateConstructorUsedError;
   bool get isHost => throw _privateConstructorUsedError;
   PlayerColor get color => throw _privateConstructorUsedError;
 
@@ -36,12 +35,7 @@ abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
       _$PlayerCopyWithImpl<$Res, Player>;
   @useResult
-  $Res call(
-      {String id,
-      String name,
-      int playerNumber,
-      bool isHost,
-      PlayerColor color});
+  $Res call({String id, String name, bool isHost, PlayerColor color});
 
   $PlayerColorCopyWith<$Res> get color;
 }
@@ -61,7 +55,6 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? playerNumber = null,
     Object? isHost = null,
     Object? color = null,
   }) {
@@ -74,10 +67,6 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      playerNumber: null == playerNumber
-          ? _value.playerNumber
-          : playerNumber // ignore: cast_nullable_to_non_nullable
-              as int,
       isHost: null == isHost
           ? _value.isHost
           : isHost // ignore: cast_nullable_to_non_nullable
@@ -105,12 +94,7 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       __$$PlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String name,
-      int playerNumber,
-      bool isHost,
-      PlayerColor color});
+  $Res call({String id, String name, bool isHost, PlayerColor color});
 
   @override
   $PlayerColorCopyWith<$Res> get color;
@@ -129,7 +113,6 @@ class __$$PlayerImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? playerNumber = null,
     Object? isHost = null,
     Object? color = null,
   }) {
@@ -142,10 +125,6 @@ class __$$PlayerImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      playerNumber: null == playerNumber
-          ? _value.playerNumber
-          : playerNumber // ignore: cast_nullable_to_non_nullable
-              as int,
       isHost: null == isHost
           ? _value.isHost
           : isHost // ignore: cast_nullable_to_non_nullable
@@ -164,7 +143,6 @@ class _$PlayerImpl extends _Player {
   const _$PlayerImpl(
       {this.id = '',
       this.name = '',
-      this.playerNumber = 1,
       this.isHost = false,
       this.color = const PlayerColor()})
       : super._();
@@ -180,9 +158,6 @@ class _$PlayerImpl extends _Player {
   final String name;
   @override
   @JsonKey()
-  final int playerNumber;
-  @override
-  @JsonKey()
   final bool isHost;
   @override
   @JsonKey()
@@ -190,7 +165,7 @@ class _$PlayerImpl extends _Player {
 
   @override
   String toString() {
-    return 'Player(id: $id, name: $name, playerNumber: $playerNumber, isHost: $isHost, color: $color)';
+    return 'Player(id: $id, name: $name, isHost: $isHost, color: $color)';
   }
 
   @override
@@ -200,16 +175,13 @@ class _$PlayerImpl extends _Player {
             other is _$PlayerImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.playerNumber, playerNumber) ||
-                other.playerNumber == playerNumber) &&
             (identical(other.isHost, isHost) || other.isHost == isHost) &&
             (identical(other.color, color) || other.color == color));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, playerNumber, isHost, color);
+  int get hashCode => Object.hash(runtimeType, id, name, isHost, color);
 
   @JsonKey(ignore: true)
   @override
@@ -229,7 +201,6 @@ abstract class _Player extends Player {
   const factory _Player(
       {final String id,
       final String name,
-      final int playerNumber,
       final bool isHost,
       final PlayerColor color}) = _$PlayerImpl;
   const _Player._() : super._();
@@ -240,8 +211,6 @@ abstract class _Player extends Player {
   String get id;
   @override
   String get name;
-  @override
-  int get playerNumber;
   @override
   bool get isHost;
   @override

@@ -1,21 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'PlayerScore.dart';
+part of 'PlayerRanking.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PlayerScoreImpl _$$PlayerScoreImplFromJson(Map<String, dynamic> json) =>
-    _$PlayerScoreImpl(
+_$PlayerRankingImpl _$$PlayerRankingImplFromJson(Map<String, dynamic> json) =>
+    _$PlayerRankingImpl(
       id: json['id'] as String,
-      playerId: json['playerId'] as String,
+      player: Player.fromJson(json['player'] as Map<String, dynamic>),
       score: (json['score'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$PlayerScoreImplToJson(_$PlayerScoreImpl instance) =>
+Map<String, dynamic> _$$PlayerRankingImplToJson(_$PlayerRankingImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'playerId': instance.playerId,
+      'player': instance.player,
       'score': instance.score,
     };

@@ -5,6 +5,7 @@ import 'package:putt_putt_pal/widgets/common/BasicIconButton.dart';
 class DoubleButton extends StatelessWidget {
   final String buttonOneText;
   final Color buttonOneTextColor;
+  final IconData? buttonOneTextIcon;
   final Color buttonOneColor;
   final bool connectedWithInput;
   final VoidCallback buttonOneOnPressed;
@@ -16,6 +17,7 @@ class DoubleButton extends StatelessWidget {
       {super.key,
       required this.buttonOneText,
       required this.buttonOneTextColor,
+      this.buttonOneTextIcon,
       required this.buttonOneColor,
       this.connectedWithInput = false,
       required this.buttonOneOnPressed,
@@ -38,6 +40,7 @@ class DoubleButton extends StatelessWidget {
             onPressed: buttonOneOnPressed,
             connectedWithInput: connectedWithInput,
             doubleButton: true,
+            textIcon: buttonOneTextIcon,
           ),
         ),
         Expanded(

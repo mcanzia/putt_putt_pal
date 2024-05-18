@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class BasicButton extends StatelessWidget {
   final String text;
+  final IconData? textIcon;
   final Color textColor;
   final Color color;
   final bool connectedWithInput;
@@ -10,6 +11,7 @@ class BasicButton extends StatelessWidget {
   const BasicButton(
       {super.key,
       required this.text,
+      this.textIcon,
       required this.color,
       required this.textColor,
       required this.onPressed,
@@ -35,9 +37,25 @@ class BasicButton extends StatelessWidget {
           ),
         ),
       ),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 30, color: textColor, fontFamily: 'Lobster'),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (textIcon != null)
+            Icon(
+              textIcon,
+              color: textColor,
+            ),
+          if (textIcon != null)
+            const SizedBox(width: 8),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 30,
+              color: textColor,
+              fontFamily: 'Lobster',
+            ),
+          ),
+        ],
       ),
     );
   }

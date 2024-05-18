@@ -22,7 +22,7 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
 
   void joinRoom(String roomCode, String playerName) async {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
-    await gameStateNotifier.joinRoom(ref, roomCode, playerName);
+    await gameStateNotifier.joinRoom(roomCode, playerName);
     // ignore: use_build_context_synchronously
     Navigator.pushAndRemoveUntil(
       context,

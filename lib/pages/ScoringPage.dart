@@ -28,13 +28,14 @@ class ScoringPage extends ConsumerWidget {
     final List<PlayerScore> playerScores = hole.playerScores;
     final int totalHoles =
         ref.watch(gameStateProvider.select((gsp) => gsp.room.numberOfHoles));
+    final Map<String, Player> players = ref.watch(gameStateProvider.select((gsp) => gsp.room.players));
     final screenHeight = MediaQuery.of(context).size.height;
 
     void onScoreChanged(Player player, int newScore) {
       _debouncer.run(() {
         ref.read(gameStateProvider.notifier).updatePlayerScore(
               hole,
-              player.playerNumber,
+              player,
               newScore,
             );
       });
@@ -86,17 +87,17 @@ class ScoringPage extends ConsumerWidget {
                       return ExpandedCard(
                         content: PersonalScore(
                           key: ValueKey(
-                              '${entry.player.playerNumber}_${hole.id}'),
-                          player: entry.player,
+                              '${entry.playerId}_${hole.id}'),
+                          player: players[entry.playerId]!,
                           currentScore: ref.watch(
                             gameStateProvider.select((state) =>
                                 state.getPlayerScore(
-                                    hole, entry.player.playerNumber)),
+                                    hole, players[entry.playerId]!)),
                           ),
                           onScoreChanged: onScoreChanged,
                         ),
                         backgroundColor:
-                            entry.player.getPlayerBackgroundColor(),
+                            players[entry.playerId]!.getPlayerBackgroundColor(),
                       );
                     }).toList(),
                   ),

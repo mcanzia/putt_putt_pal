@@ -11,6 +11,8 @@ class FullScoresPagePaginated extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final holes =
         ref.watch(gameStateProvider.select((state) => state.room.holes));
+    final players = ref.watch(gameStateProvider.select((state) => state.room.players));
+
 
     List<DataColumn> createColumns() {
       List<DataColumn> columns = [];
@@ -20,7 +22,7 @@ class FullScoresPagePaginated extends ConsumerWidget {
       Hole? tempHole = holes.values.first;
 
       columns.addAll(tempHole!.playerScores.map((playerScore) {
-        return DataColumn(label: Text(playerScore.player.name));
+        return DataColumn(label: Text(players[playerScore.playerId]!.name));
       }).toList());
 
       return columns;

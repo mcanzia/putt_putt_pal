@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
 import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/models/PlayerColor.dart';
+import 'package:putt_putt_pal/models/PlayerRanking.dart';
 import 'package:putt_putt_pal/models/PlayerScore.dart';
 import 'package:putt_putt_pal/models/Room.dart';
 
@@ -18,46 +19,43 @@ class GameState with _$GameState {
 }
 
 extension GameStateExtension on GameState {
-  int getPlayerScore(Hole hole, int playerNumber) {
-    PlayerScore playerScore = hole.playerScores.firstWhere(
-        (playerScore) => playerScore.player.playerNumber == playerNumber);
+  int getPlayerScore(Hole hole, Player player) {
+    PlayerScore playerScore = hole.playerScores
+        .firstWhere((playerScore) => playerScore.playerId == player.id);
     return playerScore.score;
   }
 
   List<PlayerColor> getTakenColors() {
     List<PlayerColor> takenColors = [];
 
-    for (Player player in room.players) {
+    for (Player player in room.players.values) {
       takenColors.add(player.color);
     }
     return takenColors;
   }
 
-  List<PlayerScore> getRankings() {
-    final Map<int, int> cumulativeScores = {};
+  List<PlayerRanking> getRankings() {
+    final Map<String, int> cumulativeScores = {};
 
     for (Hole hole in room.holes.values) {
       for (PlayerScore playerScore in hole.playerScores) {
-        int playerNumber = playerScore.player.playerNumber;
-        if (!cumulativeScores.containsKey(playerNumber)) {
-          cumulativeScores[playerNumber] = playerScore.score;
+        String playerId = playerScore.playerId;
+        if (!cumulativeScores.containsKey(playerId)) {
+          cumulativeScores[playerId] = playerScore.score;
         } else {
-          cumulativeScores[playerNumber] =
-              cumulativeScores[playerNumber]! + playerScore.score;
+          cumulativeScores[playerId] =
+              cumulativeScores[playerId]! + playerScore.score;
         }
       }
     }
 
-    final List<PlayerScore> rankings = cumulativeScores.entries.map((entry) {
-      final player =
-          room.players.firstWhere((p) => p.playerNumber == entry.key);
-      return PlayerScore(id: '', player: player, score: entry.value);
+    final List<PlayerRanking> rankings = cumulativeScores.entries.map((entry) {
+      final player = room.players[entry.key];
+      return PlayerRanking(id: '', player: player!, score: entry.value);
     }).toList();
 
     rankings.sort((a, b) => a.score.compareTo(b.score));
 
     return rankings;
   }
-
-
 }

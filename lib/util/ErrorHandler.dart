@@ -1,57 +1,73 @@
-import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:putt_putt_pal/models/NotificationType.dart";
-import "package:putt_putt_pal/models/RequestType.dart";
-import "package:putt_putt_pal/providers/NotificationProvider.dart";
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
 
 class ErrorHandler {
 
+    static void showErrorToast(String message) {
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      );
+    }
+
     static displayGenericError() {
-        print("Error occurred. Please try again.");
+        showErrorToast("Error occurred. Please try again.");
+    }
+
+    static displayCustomError(Error error) {
+        showErrorToast(error.toString());
     }
     
-    static handleGetAllError<T>(WidgetRef ref, String itemType, Error error) {
-        ref.read(notificationProvider.notifier).setMessage('Error retrieving data. Please try again.', NotificationType.error);
+    static handleGetAllError<T>() {
+        showErrorToast('Error retrieving data. Please try again.');
     }
 
-    static handleGetByIdError<T>(WidgetRef ref, String itemType, String itemId, Error error) {
-        ref.read(notificationProvider.notifier).setMessage('Error retrieving data. Please try again.', NotificationType.error);
+    static handleGetByIdError<T>() {
+        showErrorToast('Error retrieving data. Please try again.');
     }
 
-    static handleAddError<T>(WidgetRef ref, String itemType, List<T> itemsToAdd, Error error) {
-        ref.read(notificationProvider.notifier).setMessage('Error adding ${itemType}s. Please try again.', NotificationType.error);
+    static handleAddError<T>(String itemType) {
+        showErrorToast('Error adding ${itemType}s. Please try again.');
     }
 
-    static handleCreateRoomError(WidgetRef ref, Object error) {
-      ref.read(notificationProvider.notifier).setMessage('Error creating room. Please try again.', NotificationType.error);
-      print(error.toString());
+    static handleCreateRoomError() {
+      showErrorToast('Error creating room. Please try again.');
     }
 
-    static handleStartGameError(WidgetRef ref, Object error) {
-      ref.read(notificationProvider.notifier).setMessage('Error starting game. Please try again.', NotificationType.error);
-      print(error.toString());
+    static handleStartGameError() {
+      showErrorToast('Error starting game. Please try again.');
     }
 
-    static handleAddPlayerError(WidgetRef ref, Object error) {
-      ref.read(notificationProvider.notifier).setMessage('Error adding player. Please try again.', NotificationType.error);
-      print(error.toString());
+    static handleAddPlayerError() {
+      showErrorToast('Error adding player. Please try again.');
     }
 
-    static handleUpdatePlayerError(WidgetRef ref, Object error) {
-      ref.read(notificationProvider.notifier).setMessage('Error updating player. Please try again.', NotificationType.error);
-      print(error.toString());
+    static handleUpdatePlayerError() {
+      showErrorToast('Error updating player. Please try again.');
     }
 
-    static handleRemovePlayerError(WidgetRef ref, Object error) {
-      ref.read(notificationProvider.notifier).setMessage('Error removing player. Please try again.', NotificationType.error);
-      print(error.toString());
+    static handleRemovePlayerError() {
+      showErrorToast('Error removing player. Please try again.');
     }
 
-    static handleUpdateError<T>(WidgetRef ref, String itemType, T itemToUpdate, Object error) {
-        ref.read(notificationProvider.notifier).setMessage('Error updating ${itemType}s. Please try again.', NotificationType.error);
-        print(error.toString());
+    static handleUpdateError<T>(String itemType) {
+        showErrorToast('Error updating ${itemType}s. Please try again.');
     }
 
-    static handleDeleteError<T>(WidgetRef ref, String itemType, List<T> itemsToDelete, Error error) {
-        ref.read(notificationProvider.notifier).setMessage('Error deleting ${itemType}s. Please try again.', NotificationType.error);
+    static handleDeleteError<T>(String itemType) {
+        showErrorToast('Error deleting ${itemType}s. Please try again.');
+    }
+
+    static handleToggleColorModeError() {
+      showErrorToast('Error toggling color mode. Please try again');
+    }
+
+    static handleUpdatePlayerScoreError() {
+      showErrorToast('Error updating player score. Please try again');
     }
 }

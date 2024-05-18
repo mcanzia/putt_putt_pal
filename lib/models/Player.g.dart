@@ -9,7 +9,6 @@ part of 'Player.dart';
 _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
       id: json['id'] as String? ?? '',
       name: json['name'] as String? ?? '',
-      playerNumber: (json['playerNumber'] as num?)?.toInt() ?? 1,
       isHost: json['isHost'] as bool? ?? false,
       color: json['color'] == null
           ? const PlayerColor()
@@ -20,7 +19,6 @@ Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'playerNumber': instance.playerNumber,
       'isHost': instance.isHost,
       'color': instance.color,
     };

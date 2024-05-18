@@ -15,7 +15,10 @@ class ExpandedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget cardContent = Container(
-      color: backgroundColor,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: Border.all(color: backgroundColor),
+      ),
       child: Center(child: content),
     );
 

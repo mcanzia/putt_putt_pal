@@ -62,7 +62,7 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
       Player? editPlayer = ref.read(gameStateProvider.select((gsp) => gsp.editPlayer));
       PlayerColor? currentColor = ref.read(gameStateProvider.select((gsp) => gsp.currentColor));
       if (!isTaken || playerColor == editPlayer!.color) {
-        ref.read(gameStateProvider.notifier).setPlayerColor(ref, playerColor);
+        ref.read(gameStateProvider.notifier).setPlayerColor(playerColor);
       }
   }
 

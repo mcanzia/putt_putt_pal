@@ -24,6 +24,7 @@ class TextInputWithDoubleButton extends StatefulWidget {
   final Function(String text)? onButtonOnePressed;
   final VoidCallback? onButtonTwoPressed;
   final FocusNode? focusNode;
+  final IconData? buttonOneTextIcon;
 
   const TextInputWithDoubleButton({
     Key? key,
@@ -46,6 +47,7 @@ class TextInputWithDoubleButton extends StatefulWidget {
     this.onButtonOnePressed,
     this.onButtonTwoPressed,
     this.focusNode,
+    this.buttonOneTextIcon,
   }) : super(key: key);
 
   @override
@@ -141,6 +143,7 @@ class _TextInputWithDoubleButtonState extends State<TextInputWithDoubleButton> {
             buttonOneText: widget.buttonOneText,
             buttonOneTextColor: widget.buttonOneTextColor,
             buttonOneColor: widget.buttonOneColor,
+            buttonOneTextIcon: widget.buttonOneTextIcon,
             buttonOneOnPressed: () {
               _buttonOneReturnValueEvent();
               _buttonOneGoToPage();

@@ -20,54 +20,36 @@ class HostSettingsInput extends ConsumerStatefulWidget {
 }
 
 class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
-  late bool firstJoin;
   late FocusNode _focusNode;
   final TextEditingController _nameController = TextEditingController();
   final HostInputType _hostInputType = HostInputType.AddPlayer;
 
   void addPlayer(String playerName, bool isHost, PlayerColor color) async {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
-    final Room room = ref.read(gameStateProvider).room;
-    await gameStateNotifier.addPlayerToRoom(ref, room, playerName, isHost, color);
-    firstJoin = false;
-    setColorMode(false);
+    await gameStateNotifier.addPlayerToRoom(playerName, isHost, color);
     clearTextField();
   }
 
   void updatePlayer(String playerName) async {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
-    final Room room = ref.read(gameStateProvider).room;
     final Player? editPlayer = ref.read(gameStateProvider).editPlayer;
     Player updatePlayer = Player(
         id: editPlayer!.id,
         name: playerName,
-        playerNumber: editPlayer.playerNumber,
         isHost: editPlayer.isHost,
         color: editPlayer.color);
-    await gameStateNotifier.editPlayer(ref, room, updatePlayer);
-    gameStateNotifier.toggleEditPlayer(ref, null);
-    gameStateNotifier.setPlayerColor(ref, PlayerColor());
-    setColorMode(false);
+    await gameStateNotifier.editPlayer(updatePlayer);
     clearTextField();
   }
 
   void everyoneIn(bool allPlayersJoined) async {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
-    final Room updatedRoom = ref.read(gameStateProvider).room;
-    gameStateNotifier.toggleEditPlayer(ref, null);
-    await gameStateNotifier.setAllPlayersJoined(
-        ref, updatedRoom, allPlayersJoined);
-    setColorMode(false);
+    await gameStateNotifier.setAllPlayersJoined(allPlayersJoined);
   }
 
   void toggleColorMode() {
-      final gameStateNotifier = ref.read(gameStateProvider.notifier);
-      gameStateNotifier.toggleColorMode(ref);
-  }
-
-  void setColorMode(bool updatedColorMode) {
-      final gameStateNotifier = ref.read(gameStateProvider.notifier);
-      gameStateNotifier.setColorMode(ref, updatedColorMode);
+    final gameStateNotifier = ref.read(gameStateProvider.notifier);
+    gameStateNotifier.toggleColorMode();
   }
 
   void clearTextField() {
@@ -76,9 +58,7 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
 
   void startGame(int numHoles) async {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
-    final Room room = ref.read(gameStateProvider).room;
-    gameStateNotifier.toggleEditPlayer(ref, null);
-    await gameStateNotifier.startGame(ref, room, numHoles);
+    await gameStateNotifier.startGame(numHoles);
     // ignore: use_build_context_synchronously
     Navigator.pushAndRemoveUntil(
       context,
@@ -88,7 +68,9 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   }
 
   Color getPlayerColor(Player? editPlayer) {
-    return editPlayer != null ? editPlayer.getPlayerBackgroundColor() : Colors.black;
+    return editPlayer != null
+        ? editPlayer.getPlayerBackgroundColor()
+        : Colors.black;
   }
 
   Color getCurrentColor(PlayerColor currentColor) {
@@ -99,18 +81,17 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   void initState() {
     super.initState();
     _focusNode = FocusNode();
-    firstJoin = true;
   }
 
   @override
   void dispose() {
     _focusNode.dispose();
-    _nameController.dispose(); 
+    _nameController.dispose();
     super.dispose();
   }
 
   Widget _buildInputWidget(HostInputType inputType) {
-    final gameStateNotifier = ref.read(gameStateProvider.notifier);
+    final bool hostPresent = ref.read(gameStateProvider).room.hostPresent();
     final Player? editPlayer = ref.read(gameStateProvider).editPlayer;
     final PlayerColor playerColor = ref.read(gameStateProvider).currentColor;
     switch (inputType) {
@@ -133,7 +114,8 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
         );
       case HostInputType.AddPlayer:
         return TextInputWithDoubleButton(
-          buttonOneText: firstJoin ? 'Add Host' : 'Add Other Player',
+          buttonOneText: !hostPresent ? 'Add Host' : 'Add Other Player',
+          buttonOneTextIcon: !hostPresent ? Icons.stars_rounded : null,
           buttonOneColor: getCurrentColor(playerColor),
           buttonOneTextColor: CustomColors.offWhite,
           buttonTwoIcon: Icons.color_lens_outlined,
@@ -148,7 +130,7 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
           focusNode: _focusNode,
           controller: _nameController,
           onButtonOnePressed: (name) {
-            addPlayer(name, firstJoin, playerColor);
+            addPlayer(name, !hostPresent, playerColor);
           },
           onButtonTwoPressed: () {
             toggleColorMode();
@@ -156,9 +138,12 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
         );
       case HostInputType.EditPlayer:
         return TextInputWithDoubleButton(
-          buttonOneText: 'Edit Player',
+          buttonOneText: editPlayer!.isHost ? 'Edit Host' : 'Edit Player',
           buttonOneColor: getPlayerColor(editPlayer),
-          buttonOneTextColor: editPlayer != null ? editPlayer!.getPlayerTextColor() : CustomColors.offWhite,
+          buttonOneTextIcon: editPlayer!.isHost ? Icons.stars_rounded : null,
+          buttonOneTextColor: editPlayer != null
+              ? editPlayer!.getPlayerTextColor()
+              : CustomColors.offWhite,
           buttonTwoIcon: Icons.color_lens_outlined,
           buttonTwoColor: CustomColors.offWhite,
           buttonTwoIconColor: getPlayerColor(editPlayer),

@@ -9,10 +9,10 @@ part of 'Room.dart';
 _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
       id: json['id'] as String? ?? '',
       roomCode: json['roomCode'] as String? ?? '',
-      players: (json['players'] as List<dynamic>?)
-              ?.map((e) => Player.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+      players: (json['players'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, Player.fromJson(e as Map<String, dynamic>)),
+          ) ??
+          const {},
       holes: (json['holes'] as Map<String, dynamic>?)?.map(
             (k, e) => MapEntry(k, Hole.fromJson(e as Map<String, dynamic>)),
           ) ??

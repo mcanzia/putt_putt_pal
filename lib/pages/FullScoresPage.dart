@@ -11,6 +11,7 @@ class FullScoresPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final holes =
         ref.watch(gameStateProvider.select((state) => state.room.holes));
+    final players = ref.watch(gameStateProvider.select((state) => state.room.players));
 
     List<DataColumn> createColumns() {
       List<DataColumn> columns = [];
@@ -35,7 +36,7 @@ class FullScoresPage extends ConsumerWidget {
           label: Expanded(
             child: Center(
               child: Text(
-                playerScore.player.name,
+                players[playerScore.playerId]!.name,
                 textAlign: TextAlign.center,
               ),
             ),

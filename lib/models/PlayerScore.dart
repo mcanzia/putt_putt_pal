@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:putt_putt_pal/models/Player.dart';
 
 part 'PlayerScore.freezed.dart';
 part 'PlayerScore.g.dart';
@@ -8,7 +7,7 @@ part 'PlayerScore.g.dart';
 class PlayerScore with _$PlayerScore {
   const factory PlayerScore({
     required String id,
-    required Player player,
+    required String playerId,
     required int score,
   }) = _PlayerScore;
 
