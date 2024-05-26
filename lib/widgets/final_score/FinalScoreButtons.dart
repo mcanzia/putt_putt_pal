@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:putt_putt_pal/pages/FinalScorePage.dart';
 import 'package:putt_putt_pal/pages/FullScoresPage.dart';
 import 'package:putt_putt_pal/pages/WaitingRoom.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
 import 'package:putt_putt_pal/widgets/common/BasicButton.dart';
 
 class FinalScoreButtons extends ConsumerWidget {
@@ -12,17 +12,9 @@ class FinalScoreButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void playAgain() {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const WaitingRoom(
-            isHost: true,
-          ),
-        ),
-        (Route<dynamic> route) => false,
-      );
-      ref.read(gameStateProvider.notifier).resetGameSamePlayers();
+    void playAgain() async {
+      await ref.read(gameStateProvider.notifier).resetGameSamePlayers();
+      RouterHelper.handleRouteChange(const WaitingRoom());
     }
 
     return Container(
@@ -37,10 +29,7 @@ class FinalScoreButtons extends ConsumerWidget {
             color: CustomColors.offWhite,
             textColor: Colors.black,
             onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const FullScoresPage()),
-              )
+              RouterHelper.handleRouteChangeWithBack(const FullScoresPage())
             },
           ),
           BasicButton(

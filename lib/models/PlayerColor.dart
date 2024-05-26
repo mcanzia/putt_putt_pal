@@ -16,4 +16,8 @@ class PlayerColor with _$PlayerColor {
 
   factory PlayerColor.fromJson(Map<String, dynamic> json) => _$PlayerColorFromJson(json);
 
+  Color getColorObject() {
+    return Color(int.parse(color));
+  }
+
 }

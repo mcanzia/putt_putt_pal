@@ -26,7 +26,6 @@ mixin _$Room {
   Map<String, Hole> get holes => throw _privateConstructorUsedError;
   bool get allPlayersJoined => throw _privateConstructorUsedError;
   int get numberOfHoles => throw _privateConstructorUsedError;
-  List<PlayerColor> get playerColors => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,8 +43,7 @@ abstract class $RoomCopyWith<$Res> {
       Map<String, Player> players,
       Map<String, Hole> holes,
       bool allPlayersJoined,
-      int numberOfHoles,
-      List<PlayerColor> playerColors});
+      int numberOfHoles});
 }
 
 /// @nodoc
@@ -67,7 +65,6 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
     Object? holes = null,
     Object? allPlayersJoined = null,
     Object? numberOfHoles = null,
-    Object? playerColors = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -94,10 +91,6 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
           ? _value.numberOfHoles
           : numberOfHoles // ignore: cast_nullable_to_non_nullable
               as int,
-      playerColors: null == playerColors
-          ? _value.playerColors
-          : playerColors // ignore: cast_nullable_to_non_nullable
-              as List<PlayerColor>,
     ) as $Val);
   }
 }
@@ -115,8 +108,7 @@ abstract class _$$RoomImplCopyWith<$Res> implements $RoomCopyWith<$Res> {
       Map<String, Player> players,
       Map<String, Hole> holes,
       bool allPlayersJoined,
-      int numberOfHoles,
-      List<PlayerColor> playerColors});
+      int numberOfHoles});
 }
 
 /// @nodoc
@@ -135,7 +127,6 @@ class __$$RoomImplCopyWithImpl<$Res>
     Object? holes = null,
     Object? allPlayersJoined = null,
     Object? numberOfHoles = null,
-    Object? playerColors = null,
   }) {
     return _then(_$RoomImpl(
       id: null == id
@@ -162,10 +153,6 @@ class __$$RoomImplCopyWithImpl<$Res>
           ? _value.numberOfHoles
           : numberOfHoles // ignore: cast_nullable_to_non_nullable
               as int,
-      playerColors: null == playerColors
-          ? _value._playerColors
-          : playerColors // ignore: cast_nullable_to_non_nullable
-              as List<PlayerColor>,
     ));
   }
 }
@@ -179,11 +166,9 @@ class _$RoomImpl extends _Room {
       final Map<String, Player> players = const {},
       final Map<String, Hole> holes = const {},
       this.allPlayersJoined = false,
-      this.numberOfHoles = 1,
-      final List<PlayerColor> playerColors = const []})
+      this.numberOfHoles = 1})
       : _players = players,
         _holes = holes,
-        _playerColors = playerColors,
         super._();
 
   factory _$RoomImpl.fromJson(Map<String, dynamic> json) =>
@@ -219,18 +204,10 @@ class _$RoomImpl extends _Room {
   @override
   @JsonKey()
   final int numberOfHoles;
-  final List<PlayerColor> _playerColors;
-  @override
-  @JsonKey()
-  List<PlayerColor> get playerColors {
-    if (_playerColors is EqualUnmodifiableListView) return _playerColors;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_playerColors);
-  }
 
   @override
   String toString() {
-    return 'Room(id: $id, roomCode: $roomCode, players: $players, holes: $holes, allPlayersJoined: $allPlayersJoined, numberOfHoles: $numberOfHoles, playerColors: $playerColors)';
+    return 'Room(id: $id, roomCode: $roomCode, players: $players, holes: $holes, allPlayersJoined: $allPlayersJoined, numberOfHoles: $numberOfHoles)';
   }
 
   @override
@@ -246,9 +223,7 @@ class _$RoomImpl extends _Room {
             (identical(other.allPlayersJoined, allPlayersJoined) ||
                 other.allPlayersJoined == allPlayersJoined) &&
             (identical(other.numberOfHoles, numberOfHoles) ||
-                other.numberOfHoles == numberOfHoles) &&
-            const DeepCollectionEquality()
-                .equals(other._playerColors, _playerColors));
+                other.numberOfHoles == numberOfHoles));
   }
 
   @JsonKey(ignore: true)
@@ -260,8 +235,7 @@ class _$RoomImpl extends _Room {
       const DeepCollectionEquality().hash(_players),
       const DeepCollectionEquality().hash(_holes),
       allPlayersJoined,
-      numberOfHoles,
-      const DeepCollectionEquality().hash(_playerColors));
+      numberOfHoles);
 
   @JsonKey(ignore: true)
   @override
@@ -284,8 +258,7 @@ abstract class _Room extends Room {
       final Map<String, Player> players,
       final Map<String, Hole> holes,
       final bool allPlayersJoined,
-      final int numberOfHoles,
-      final List<PlayerColor> playerColors}) = _$RoomImpl;
+      final int numberOfHoles}) = _$RoomImpl;
   const _Room._() : super._();
 
   factory _Room.fromJson(Map<String, dynamic> json) = _$RoomImpl.fromJson;
@@ -302,8 +275,6 @@ abstract class _Room extends Room {
   bool get allPlayersJoined;
   @override
   int get numberOfHoles;
-  @override
-  List<PlayerColor> get playerColors;
   @override
   @JsonKey(ignore: true)
   _$$RoomImplCopyWith<_$RoomImpl> get copyWith =>

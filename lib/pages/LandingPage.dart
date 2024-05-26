@@ -2,24 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/pages/JoinRoom.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
 import 'package:putt_putt_pal/widgets/arc/CircleArc.dart';
 import 'package:putt_putt_pal/widgets/cards/ExpandedCardLink.dart';
 import 'package:putt_putt_pal/pages/WaitingRoom.dart';
 import '../styles/colors.dart';
 
-class LandingPage extends ConsumerWidget {
+class LandingPage extends ConsumerStatefulWidget {
   const LandingPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    void createRoom() {
-      ref.read(gameStateProvider.notifier).createRoom();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => WaitingRoom(isHost: true)),
-      );
-    }
+  _LandingPageState createState() => _LandingPageState();
+}
 
+class _LandingPageState extends ConsumerState<LandingPage> {
+  void createRoom() async {
+    await ref.read(gameStateProvider.notifier).createRoom();
+    RouterHelper.handleRouteChange(const WaitingRoom());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,

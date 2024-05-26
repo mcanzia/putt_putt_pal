@@ -18,8 +18,10 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GameState {
   Room get room => throw _privateConstructorUsedError;
   Player? get editPlayer => throw _privateConstructorUsedError;
+  Player? get currentUser => throw _privateConstructorUsedError;
   bool get colorPickerMode => throw _privateConstructorUsedError;
   PlayerColor get currentColor => throw _privateConstructorUsedError;
+  List<PlayerColor> get playerColors => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GameStateCopyWith<GameState> get copyWith =>
@@ -34,11 +36,14 @@ abstract class $GameStateCopyWith<$Res> {
   $Res call(
       {Room room,
       Player? editPlayer,
+      Player? currentUser,
       bool colorPickerMode,
-      PlayerColor currentColor});
+      PlayerColor currentColor,
+      List<PlayerColor> playerColors});
 
   $RoomCopyWith<$Res> get room;
   $PlayerCopyWith<$Res>? get editPlayer;
+  $PlayerCopyWith<$Res>? get currentUser;
   $PlayerColorCopyWith<$Res> get currentColor;
 }
 
@@ -57,8 +62,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
   $Res call({
     Object? room = null,
     Object? editPlayer = freezed,
+    Object? currentUser = freezed,
     Object? colorPickerMode = null,
     Object? currentColor = null,
+    Object? playerColors = null,
   }) {
     return _then(_value.copyWith(
       room: null == room
@@ -69,6 +76,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.editPlayer
           : editPlayer // ignore: cast_nullable_to_non_nullable
               as Player?,
+      currentUser: freezed == currentUser
+          ? _value.currentUser
+          : currentUser // ignore: cast_nullable_to_non_nullable
+              as Player?,
       colorPickerMode: null == colorPickerMode
           ? _value.colorPickerMode
           : colorPickerMode // ignore: cast_nullable_to_non_nullable
@@ -77,6 +88,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.currentColor
           : currentColor // ignore: cast_nullable_to_non_nullable
               as PlayerColor,
+      playerColors: null == playerColors
+          ? _value.playerColors
+          : playerColors // ignore: cast_nullable_to_non_nullable
+              as List<PlayerColor>,
     ) as $Val);
   }
 
@@ -102,6 +117,18 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
 
   @override
   @pragma('vm:prefer-inline')
+  $PlayerCopyWith<$Res>? get currentUser {
+    if (_value.currentUser == null) {
+      return null;
+    }
+
+    return $PlayerCopyWith<$Res>(_value.currentUser!, (value) {
+      return _then(_value.copyWith(currentUser: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
   $PlayerColorCopyWith<$Res> get currentColor {
     return $PlayerColorCopyWith<$Res>(_value.currentColor, (value) {
       return _then(_value.copyWith(currentColor: value) as $Val);
@@ -120,13 +147,17 @@ abstract class _$$GameStateImplCopyWith<$Res>
   $Res call(
       {Room room,
       Player? editPlayer,
+      Player? currentUser,
       bool colorPickerMode,
-      PlayerColor currentColor});
+      PlayerColor currentColor,
+      List<PlayerColor> playerColors});
 
   @override
   $RoomCopyWith<$Res> get room;
   @override
   $PlayerCopyWith<$Res>? get editPlayer;
+  @override
+  $PlayerCopyWith<$Res>? get currentUser;
   @override
   $PlayerColorCopyWith<$Res> get currentColor;
 }
@@ -144,8 +175,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
   $Res call({
     Object? room = null,
     Object? editPlayer = freezed,
+    Object? currentUser = freezed,
     Object? colorPickerMode = null,
     Object? currentColor = null,
+    Object? playerColors = null,
   }) {
     return _then(_$GameStateImpl(
       room: null == room
@@ -156,6 +189,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value.editPlayer
           : editPlayer // ignore: cast_nullable_to_non_nullable
               as Player?,
+      currentUser: freezed == currentUser
+          ? _value.currentUser
+          : currentUser // ignore: cast_nullable_to_non_nullable
+              as Player?,
       colorPickerMode: null == colorPickerMode
           ? _value.colorPickerMode
           : colorPickerMode // ignore: cast_nullable_to_non_nullable
@@ -164,6 +201,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value.currentColor
           : currentColor // ignore: cast_nullable_to_non_nullable
               as PlayerColor,
+      playerColors: null == playerColors
+          ? _value._playerColors
+          : playerColors // ignore: cast_nullable_to_non_nullable
+              as List<PlayerColor>,
     ));
   }
 }
@@ -174,8 +215,11 @@ class _$GameStateImpl implements _GameState {
   const _$GameStateImpl(
       {this.room = const Room(),
       this.editPlayer = null,
+      this.currentUser = null,
       this.colorPickerMode = false,
-      this.currentColor = const PlayerColor()});
+      this.currentColor = const PlayerColor(),
+      final List<PlayerColor> playerColors = const []})
+      : _playerColors = playerColors;
 
   @override
   @JsonKey()
@@ -185,14 +229,25 @@ class _$GameStateImpl implements _GameState {
   final Player? editPlayer;
   @override
   @JsonKey()
+  final Player? currentUser;
+  @override
+  @JsonKey()
   final bool colorPickerMode;
   @override
   @JsonKey()
   final PlayerColor currentColor;
+  final List<PlayerColor> _playerColors;
+  @override
+  @JsonKey()
+  List<PlayerColor> get playerColors {
+    if (_playerColors is EqualUnmodifiableListView) return _playerColors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_playerColors);
+  }
 
   @override
   String toString() {
-    return 'GameState(room: $room, editPlayer: $editPlayer, colorPickerMode: $colorPickerMode, currentColor: $currentColor)';
+    return 'GameState(room: $room, editPlayer: $editPlayer, currentUser: $currentUser, colorPickerMode: $colorPickerMode, currentColor: $currentColor, playerColors: $playerColors)';
   }
 
   @override
@@ -203,15 +258,25 @@ class _$GameStateImpl implements _GameState {
             (identical(other.room, room) || other.room == room) &&
             (identical(other.editPlayer, editPlayer) ||
                 other.editPlayer == editPlayer) &&
+            (identical(other.currentUser, currentUser) ||
+                other.currentUser == currentUser) &&
             (identical(other.colorPickerMode, colorPickerMode) ||
                 other.colorPickerMode == colorPickerMode) &&
             (identical(other.currentColor, currentColor) ||
-                other.currentColor == currentColor));
+                other.currentColor == currentColor) &&
+            const DeepCollectionEquality()
+                .equals(other._playerColors, _playerColors));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, room, editPlayer, colorPickerMode, currentColor);
+  int get hashCode => Object.hash(
+      runtimeType,
+      room,
+      editPlayer,
+      currentUser,
+      colorPickerMode,
+      currentColor,
+      const DeepCollectionEquality().hash(_playerColors));
 
   @JsonKey(ignore: true)
   @override
@@ -224,17 +289,23 @@ abstract class _GameState implements GameState {
   const factory _GameState(
       {final Room room,
       final Player? editPlayer,
+      final Player? currentUser,
       final bool colorPickerMode,
-      final PlayerColor currentColor}) = _$GameStateImpl;
+      final PlayerColor currentColor,
+      final List<PlayerColor> playerColors}) = _$GameStateImpl;
 
   @override
   Room get room;
   @override
   Player? get editPlayer;
   @override
+  Player? get currentUser;
+  @override
   bool get colorPickerMode;
   @override
   PlayerColor get currentColor;
+  @override
+  List<PlayerColor> get playerColors;
   @override
   @JsonKey(ignore: true)
   _$$GameStateImplCopyWith<_$GameStateImpl> get copyWith =>

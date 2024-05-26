@@ -10,7 +10,8 @@ class ScoringPageView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final room = ref.watch(gameStateProvider.select((state) => state.room));
+    final room = ref.watch(gameStateProvider.select((gsp) => gsp.room));
+    final currentUser = ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
     List<Hole> sortedHoles = room.holes.values.toList()
       ..sort((a, b) => a.holeNumber.compareTo(b.holeNumber));
 
@@ -20,7 +21,7 @@ class ScoringPageView extends ConsumerWidget {
       body: PageView.builder(
         controller: _controller,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: room.numberOfHoles + 1,
+        itemCount: currentUser!.isHost ? room.numberOfHoles + 1 : room.numberOfHoles,
         itemBuilder: (context, index) {
           return index == room.numberOfHoles
               ? EndGame(

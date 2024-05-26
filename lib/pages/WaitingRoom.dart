@@ -8,14 +8,24 @@ import 'package:putt_putt_pal/widgets/waiting_room/GuestSettings.dart';
 import 'package:putt_putt_pal/widgets/waiting_room/HostSettings.dart';
 import '../styles/colors.dart';
 
-class WaitingRoom extends ConsumerWidget {
-  final bool isHost;
-
-  const WaitingRoom({super.key, required this.isHost});
+class WaitingRoom extends ConsumerStatefulWidget {
+  const WaitingRoom({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _WaitingRoomState createState() => _WaitingRoomState();
+}
+
+class _WaitingRoomState extends ConsumerState<WaitingRoom> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isColorPickerMode = ref.watch(gameStateProvider.select((state) => state.colorPickerMode));
+    final currentUser = ref.watch(gameStateProvider.select((state) => state.currentUser));
 
     return Scaffold(
       body: Stack(
@@ -28,7 +38,7 @@ class WaitingRoom extends ConsumerWidget {
                 backgroundColor: CustomColors.offWhite,
               ),
               ExpandedCard(
-                content: isHost ? const HostSettings() : const GuestSettings(),
+                content: (currentUser != null && currentUser.isHost) ? const HostSettings() : const GuestSettings(),
                 backgroundColor: CustomColors.offWhite,
               ),
             ],

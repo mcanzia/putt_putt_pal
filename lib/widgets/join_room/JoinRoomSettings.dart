@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:putt_putt_pal/models/Room.dart';
+import 'package:putt_putt_pal/models/PlayerColor.dart';
 import 'package:putt_putt_pal/pages/WaitingRoom.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
-import 'package:putt_putt_pal/widgets/common/BasicButton.dart';
-import 'package:putt_putt_pal/widgets/common/BasicTextInput.dart';
+import 'package:putt_putt_pal/util/ExceptionHandler.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
 import 'package:putt_putt_pal/widgets/common/TextInputWithButton.dart';
+import 'package:putt_putt_pal/widgets/common/UpperCaseTextField.dart';
+import 'package:putt_putt_pal/widgets/join_room/ColorGrid.dart';
 
 class JoinRoomSettings extends ConsumerStatefulWidget {
   const JoinRoomSettings({super.key});
@@ -20,17 +22,13 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
   late TextEditingController roomCodeController;
   late FocusNode _focusNode;
 
-  void joinRoom(String roomCode, String playerName) async {
+  void joinRoom(String playerName, String roomCode) async {
+    if (roomCode.isEmpty) {
+      ExceptionHandler.handleTextFieldIsEmptyException('Room Code');
+      return;
+    }
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     await gameStateNotifier.joinRoom(roomCode, playerName);
-    // ignore: use_build_context_synchronously
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const WaitingRoom(isHost: false),
-      ),
-      (Route<dynamic> route) => false,
-    );
   }
 
   @override
@@ -53,6 +51,15 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
     double screenWidth = MediaQuery.of(context).size.width;
     double buttonWidth = screenWidth * 0.4;
 
+    final PlayerColor playerColor = ref.watch(gameStateProvider).currentColor;
+
+    Color getFillColor() {
+      if (playerColor.id == 0) {
+        return CustomColors.offWhite;
+      }
+      return playerColor.getColorObject();
+    }
+
     return Container(
       alignment: Alignment.center,
       child: Column(
@@ -62,13 +69,13 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
           ConstrainedBox(
             constraints:
                 BoxConstraints(minWidth: buttonWidth, maxWidth: buttonWidth),
-            child: BasicTextInput(
-              hintText: 'Enter Name',
+            child: UppercaseTextField(
+              hintText: 'Enter Room Code',
               textColor: CustomColors.offWhite,
               backgroundColor: Colors.black,
-              borderColor: Colors.black,
-              maxLength: 20,
-              controller: nameController,
+              borderColor: getFillColor(),
+              maxLength: 4,
+              controller: roomCodeController,
             ),
           ),
           ConstrainedBox(
@@ -76,38 +83,21 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
                 BoxConstraints(minWidth: buttonWidth, maxWidth: buttonWidth),
             child: TextInputWithButton(
               buttonText: 'Join Room',
-              buttonColor: CustomColors.offWhite,
+              buttonColor: getFillColor(),
               buttonTextColor: Colors.black,
-              textFieldHintText: 'Enter Room Code',
+              textFieldHintText: 'Enter Name',
               textFieldTextColor: CustomColors.offWhite,
               textFieldBackgroundColor: Colors.black,
-              textFieldBorderColor: Colors.black,
-              textFieldMaxLength: 4,
-              textFieldBasic: false,
-              controller: roomCodeController,
+              textFieldBorderColor: getFillColor(),
+              textFieldMaxLength: 20,
+              textFieldBasic: true,
+              controller: nameController,
               onButtonPressed: (value) {
-                joinRoom(value, nameController.text);
+                joinRoom(value, roomCodeController.text);
               },
             ),
           ),
-          const Text(
-            'or',
-            style: TextStyle(
-              fontFamily: 'Lobster',
-              fontSize: 40,
-              color: CustomColors.offWhite,
-            ),
-          ),
-          ConstrainedBox(
-            constraints:
-                BoxConstraints(minWidth: buttonWidth, maxWidth: buttonWidth),
-            child: BasicButton(
-              text: 'Scan QR Code',
-              color: CustomColors.offWhite,
-              textColor: Colors.black,
-              onPressed: () {},
-            ),
-          ),
+          const ColorGrid(),
         ],
       ),
     );

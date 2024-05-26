@@ -2,12 +2,18 @@ import 'dart:ui';
 
 class CustomError extends Error {
   final String message;
+  final int statusCode;
 
-  CustomError({required this.message});
+  CustomError({required this.message, required this.statusCode});
 
   @override
   String toString() {
     return message;
   }
 
+}
+
+class RoomNotFoundError extends CustomError {
+  RoomNotFoundError({required super.message, required super.statusCode});
+  
 }

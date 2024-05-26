@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
-import "package:putt_putt_pal/models/CustomException.dart";
 
 class ExceptionHandler {
 
@@ -9,14 +8,34 @@ class ExceptionHandler {
         msg: message,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        timeInSecForIosWeb: 2,
         textColor: Colors.white,
-        fontSize: 16.0
+        fontSize: 16.0,
+        webBgColor: "linear-gradient(to right, #8e7cc3, #8e7cc3)",
       );
     }
 
   static handleDeleteLastPlayerException() {
-    showExceptionToast('There must be at least one player in the room.');
+    showExceptionToast('There Must Be At Least One Player In The Room.');
+  }
+
+  static handleInvalidRoomCode() {
+    showExceptionToast('The Provided Room Code Is Not Valid');
+  }
+
+  static handleTextFieldIsEmptyException(String textField) {
+    showExceptionToast('Text Field Is Empty: $textField');
+  }
+
+  static handleHostPlayerMustBePresentException() {
+    showExceptionToast('Host Player Must Be Added Before Starting Game.');
+  }
+
+  static handleNumHolesMustBeGreaterThanZeroException() {
+    showExceptionToast('Number of Holes Must Be Greater Than 0');
+  }
+
+  static handleDuplicateNameException() {
+    showExceptionToast('A Player With This Name Already Exists');
   }
 }

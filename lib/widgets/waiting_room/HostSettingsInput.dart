@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/models/PlayerColor.dart';
-import 'package:putt_putt_pal/models/Room.dart';
-import 'package:putt_putt_pal/pages/ScoringPage.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
+import 'package:putt_putt_pal/util/ExceptionHandler.dart';
 import 'package:putt_putt_pal/widgets/common/TextInputWithButton.dart';
 import 'package:putt_putt_pal/widgets/common/TextInputWithDoubleButton.dart';
-import 'package:putt_putt_pal/widgets/scoring/ScoringPageView.dart';
 
 enum HostInputType { StartGame, AddPlayer, EditPlayer }
 
@@ -25,12 +23,20 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   final HostInputType _hostInputType = HostInputType.AddPlayer;
 
   void addPlayer(String playerName, bool isHost, PlayerColor color) async {
+    if (checkDuplicateName(playerName)) {
+        return;
+    }
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     await gameStateNotifier.addPlayerToRoom(playerName, isHost, color);
     clearTextField();
   }
 
   void updatePlayer(String playerName) async {
+
+    if (checkDuplicateName(playerName)) {
+        return;
+    }
+    
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     final Player? editPlayer = ref.read(gameStateProvider).editPlayer;
     Player updatePlayer = Player(
@@ -41,6 +47,15 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
     await gameStateNotifier.editPlayer(updatePlayer);
     clearTextField();
   }
+
+  bool checkDuplicateName(String playerName) {
+    final bool duplicateName = ref.read(gameStateProvider.select((gsp) => gsp.room.duplicateName(playerName)));
+    if (duplicateName) {
+      ExceptionHandler.handleDuplicateNameException();
+      return true;
+    }
+    return false;
+  } 
 
   void everyoneIn(bool allPlayersJoined) async {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
@@ -57,14 +72,17 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   }
 
   void startGame(int numHoles) async {
+    final hostPlayerJoined = ref.read(gameStateProvider.select((gsp) => gsp.room.hostPresent()));
+    if (!hostPlayerJoined) {
+      ExceptionHandler.handleHostPlayerMustBePresentException();
+      return;
+    }
+    if (numHoles <= 0) {
+      ExceptionHandler.handleNumHolesMustBeGreaterThanZeroException();
+      return;
+    }
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     await gameStateNotifier.startGame(numHoles);
-    // ignore: use_build_context_synchronously
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const ScoringPageView()),
-      (Route<dynamic> route) => false,
-    );
   }
 
   Color getPlayerColor(Player? editPlayer) {

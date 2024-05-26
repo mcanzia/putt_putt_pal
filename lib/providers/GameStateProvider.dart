@@ -1,41 +1,119 @@
-import 'dart:math';
+import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/controllers/HoleController.dart';
+import 'package:putt_putt_pal/controllers/PlayerColorController.dart';
 import 'package:putt_putt_pal/controllers/RoomController.dart';
 import 'package:putt_putt_pal/controllers/PlayerController.dart';
+import 'package:putt_putt_pal/models/CustomError.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
 import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/models/GameState.dart';
 import 'package:putt_putt_pal/models/PlayerColor.dart';
 import 'package:putt_putt_pal/models/PlayerScore.dart';
 import 'package:putt_putt_pal/models/Room.dart';
+import 'package:putt_putt_pal/pages/FinalScorePage.dart';
+import 'package:putt_putt_pal/pages/WaitingRoom.dart';
+import 'package:putt_putt_pal/services/SocketService.dart';
 import 'package:putt_putt_pal/util/ErrorHandler.dart';
 import 'package:putt_putt_pal/util/ExceptionHandler.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
+import 'package:putt_putt_pal/widgets/scoring/ScoringPageView.dart';
+import 'package:logger/logger.dart';
+
+final socketServiceProvider = ChangeNotifierProvider((ref) => SocketService());
 
 final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState>(
   (ref) => GameStateNotifier(
-      roomController: RoomController(),
-      playerController: PlayerController(),
-      holeController: HoleController()),
+    roomController: RoomController(),
+    playerController: PlayerController(),
+    holeController: HoleController(),
+    playerColorController: PlayerColorController(),
+    socketService: ref.read(socketServiceProvider),
+  ),
 );
 
 class GameStateNotifier extends StateNotifier<GameState> {
   final RoomController roomController;
   final PlayerController playerController;
   final HoleController holeController;
+  final PlayerColorController playerColorController;
+  final SocketService socketService;
+  final Logger logger = Logger();
 
-  GameStateNotifier(
-      {required this.roomController,
-      required this.playerController,
-      required this.holeController})
-      : super(const GameState());
+  GameStateNotifier({
+    required this.roomController,
+    required this.playerController,
+    required this.holeController,
+    required this.playerColorController,
+    required this.socketService,
+  }) : super(const GameState()) {
+    _initSocketListeners();
+  }
+
+  void _initSocketListeners() {
+    socketService.on('roomUpdated', (data) {
+      try {
+        Room updatedRoom = Room.fromJson(data);
+        state = state.copyWith(room: updatedRoom);
+      } catch (error) {
+        logger.e("Room Updated Error - ${error.toString()}");
+      }
+    });
+
+    socketService.on('playerListUpdated', (data) {
+      try {
+        final Map<String, dynamic> castedData = Map<String, dynamic>.from(data);
+        Map<String, Player> updatedPlayers = castedData
+            .map((key, value) => MapEntry(key, Player.fromJson(value)));
+        Room updatedRoom = state.room.copyWith(players: updatedPlayers);
+        state = state.copyWith(
+            room: updatedRoom,
+            currentColor: const PlayerColor(),
+            colorPickerMode: false,
+            editPlayer: null);
+      } catch (error) {
+        logger.e("Player List Updated Error - ${error.toString()}");
+      }
+    });
+
+    socketService.on('holeUpdated', (data) {
+      try {
+        Hole updatedHole = Hole.fromJson(data);
+        Map<String, Hole> updatedHoles = Map.from(state.room.holes);
+        updatedHoles[updatedHole.id] = updatedHole;
+        Room updatedRoom = state.room.copyWith(holes: updatedHoles);
+        state = state.copyWith(room: updatedRoom);
+      } catch (error) {
+        logger.e("Room Updated Error - ${error.toString()}");
+      }
+    });
+
+    socketService.on('startGame', (data) {
+      try {
+        RouterHelper.handleRouteChange(const ScoringPageView());
+      } catch (error) {
+        logger.e("Start Game Error - ${error.toString()}");
+      }
+    });
+
+    socketService.on('endGame', (data) {
+      try {
+        RouterHelper.handleRouteChangeWithBack(const FinalScorePage());
+      } catch (error) {
+        logger.e("End Game Error - ${error.toString()}");
+      }
+    });
+  }
 
   Future<void> createRoom() async {
     try {
       Room newRoom = await roomController.createRoom();
-      state = state.copyWith(room: newRoom);
+      Player tempHost = const Player(isHost: true);
+      state = state.copyWith(room: newRoom, currentUser: tempHost);
+      socketService.joinRoom(state.room.id);
     } catch (error) {
+      logger.e("End Game Error - ${error.toString()}");
       ErrorHandler.handleCreateRoomError();
     }
   }
@@ -43,46 +121,41 @@ class GameStateNotifier extends StateNotifier<GameState> {
   Future<void> startGame(int numberOfHoles) async {
     try {
       toggleEditPlayer(null);
-      Room startDetails = Room(
-        id: state.room.id,
-        roomCode: state.room.roomCode,
-        players: state.room.players,
-        holes: state.room.holes,
-        allPlayersJoined: state.room.allPlayersJoined,
-        numberOfHoles: numberOfHoles,
-        playerColors: state.room.playerColors,
-      );
-      Room updatedRoom = await roomController.startGame(state.room.id, startDetails);
-      state = state.copyWith(room: updatedRoom);
+      Room startDetails = state.room.copyWith(numberOfHoles: numberOfHoles);
+      await roomController.startGame(state.room.id, startDetails);
     } catch (error) {
+      logger.e("Start Game Error - ${error.toString()}");
       ErrorHandler.handleStartGameError();
+    }
+  }
+
+  Future<void> endGame() async {
+    try {
+      socketService.emit('callEndGame', {
+        'roomId': state.room.id,
+      });
+      RouterHelper.handleRouteChangeWithBack(const FinalScorePage());
+    } catch (error) {
+      logger.e("End Game Error - ${error.toString()}");
+      ErrorHandler.handleEndGameError();
     }
   }
 
   Future<void> resetState() async {
     try {
-      Room resetRoom = await roomController.updateRoom(state.room.id, const Room());
-
-      state = state.copyWith(room: resetRoom);
+      await roomController.updateRoom(state.room.id, const Room());
     } catch (error) {
+      logger.e("Reset State Error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
   }
 
   Future<void> resetGameSamePlayers() async {
     try {
-      Room updatedRoom = Room(
-        id: state.room.id,
-        roomCode: state.room.roomCode,
-        holes: {},
-        players: state.room.players,
-        numberOfHoles: 1,
-        allPlayersJoined: true,
-        playerColors: state.room.playerColors,
-      );
-      Room resetRoom = await roomController.updateRoom(state.room.id, updatedRoom);
-      state = state.copyWith(room: resetRoom);
+      Room updatedRoom = state.room.copyWith(holes: {}, numberOfHoles: 1, allPlayersJoined: true);
+      await roomController.updateRoom(state.room.id, updatedRoom);
     } catch (error) {
+      logger.e("Reset Game Error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
   }
@@ -90,36 +163,20 @@ class GameStateNotifier extends StateNotifier<GameState> {
   Future<void> setAllPlayersJoined(bool joined) async {
     try {
       toggleEditPlayer(null);
-      Room roomDetails = Room(
-        id: state.room.id,
-        roomCode: state.room.roomCode,
-        holes: state.room.holes,
-        players: state.room.players,
-        numberOfHoles: state.room.numberOfHoles,
-        allPlayersJoined: joined,
-        playerColors: state.room.playerColors,
-      );
-      Room updatedRoom = await roomController.updateRoom(state.room.id, roomDetails);
-      state = state.copyWith(room: updatedRoom);
+      Room roomDetails = state.room.copyWith(allPlayersJoined: joined);
+      await roomController.updateRoom(state.room.id, roomDetails);
     } catch (error) {
-      print(error.toString());
+      logger.e("Set AllPlayersJoined error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
   }
 
   Future<void> setNumberOfHoles(int holes) async {
     try {
-      Room roomDetails = Room(
-        id: state.room.id,
-        holes: state.room.holes,
-        players: state.room.players,
-        numberOfHoles: holes,
-        allPlayersJoined: state.room.allPlayersJoined,
-        playerColors: state.room.playerColors,
-      );
-      Room updatedRoom = await roomController.updateRoom(state.room.id, roomDetails);
-      state = state.copyWith(room: updatedRoom);
+      Room roomDetails = state.room.copyWith(numberOfHoles: holes);
+      await roomController.updateRoom(state.room.id, roomDetails);
     } catch (error) {
+      logger.e("Set NumberOfHoles error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
   }
@@ -131,35 +188,34 @@ class GameStateNotifier extends StateNotifier<GameState> {
         List<PlayerScore> updatedPlayerScores =
             holeToUpdate.playerScores.map((playerScore) {
           if (playerScore.playerId == player.id) {
-            return PlayerScore(
-                id: playerScore.id,
-                playerId: playerScore.playerId,
-                score: newScore);
+            return playerScore.copyWith(score: newScore);
           }
           return playerScore;
         }).toList();
 
-        Hole updatedHole = Hole(
-            id: holeToUpdate.id,
-            holeNumber: holeToUpdate.holeNumber,
-            playerScores: updatedPlayerScores);
-
-        Map<String, Hole> updatedHoles =
-            await holeController.updateHole(state.room.id, updatedHole);
-
-        state = state.copyWith(room: state.room.copyWith(holes: updatedHoles));
+        Hole updatedHole = holeToUpdate.copyWith(playerScores: updatedPlayerScores);
+        await holeController.updateHole(state.room.id, updatedHole);
       }
     } catch (error) {
+      logger.e("Update PlayerScore error - ${error.toString()}");
       ErrorHandler.handleUpdatePlayerScoreError();
     }
   }
 
   Future<void> joinRoom(String roomCode, String playerName) async {
     try {
-      Room updatedRoom =
-          await roomController.joinRoom(roomCode, playerName, false);
-      state = state.copyWith(room: updatedRoom, currentColor: PlayerColor());
+      Room updatedRoom = await roomController.joinRoom(
+          roomCode, playerName, false, state.currentColor);
+      Player currentUser = updatedRoom.players.values
+          .firstWhere((player) => player.name == playerName);
+      state = state.copyWith(room: updatedRoom, currentUser: currentUser);
+      socketService.joinRoom(updatedRoom.id);
+      RouterHelper.handleRouteChange(const WaitingRoom());
+    } on RoomNotFoundError catch (error) {
+      logger.e(error.toString());
+      ExceptionHandler.handleInvalidRoomCode();
     } catch (error) {
+      logger.e("Join Room error - ${error.toString()}");
       ErrorHandler.handleAddPlayerError();
     }
   }
@@ -172,11 +228,13 @@ class GameStateNotifier extends StateNotifier<GameState> {
       }
       Player newPlayer =
           Player(id: '', name: playerName, isHost: isHost, color: color);
-      Map<String, Player> updatedPlayers =
+      Player addedPlayer =
           await playerController.addPlayer(state.room.id, newPlayer);
-      Room updatedRoom = state.room.copyWith(players: updatedPlayers);
-      state = state.copyWith(room: updatedRoom, currentColor: PlayerColor(), colorPickerMode: false);
+      if (addedPlayer.isHost) {
+        state = state.copyWith(currentUser: addedPlayer);
+      }
     } catch (error) {
+      logger.e("Add Player error - ${error.toString()}");
       ErrorHandler.handleAddPlayerError();
     }
   }
@@ -184,15 +242,13 @@ class GameStateNotifier extends StateNotifier<GameState> {
   Future<void> removePlayerFromRoom(Player player) async {
     try {
       if (state.room.players.length > 1) {
-        Map<String, Player> updatedPlayers =
-            await playerController.removePlayer(state.room.id, player);
-        Room updatedRoom = state.room.copyWith(players: updatedPlayers);
-        state = state.copyWith(room: updatedRoom);
+        await playerController.removePlayer(state.room.id, player);
         toggleEditPlayer(null);
       } else {
         ExceptionHandler.handleDeleteLastPlayerException();
       }
     } catch (error) {
+      logger.e("Remove Player error - ${error.toString()}");
       ErrorHandler.handleRemovePlayerError();
     }
   }
@@ -202,20 +258,17 @@ class GameStateNotifier extends StateNotifier<GameState> {
       state = state.copyWith(editPlayer: player);
       setColorMode(false);
     } catch (error) {
+      logger.e("Toggle Edit Player error - ${error.toString()}");
       ErrorHandler.handleUpdatePlayerError();
     }
   }
 
   Future<void> editPlayer(Player player) async {
     try {
-      Map<String, Player> updatedPlayers =
-          await playerController.updatePlayer(state.room.id, player);
-
-      Room updatedRoom = state.room.copyWith(players: updatedPlayers);
-      state = state.copyWith(room: updatedRoom);
+      await playerController.updatePlayer(state.room.id, player);
       toggleEditPlayer(null);
-      setPlayerColor(PlayerColor());
     } catch (error) {
+      logger.e("Edit Player error - ${error.toString()}");
       ErrorHandler.handleUpdatePlayerError();
     }
   }
@@ -224,6 +277,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     try {
       state = state.copyWith(colorPickerMode: !state.colorPickerMode);
     } catch (error) {
+      logger.e("Toggle ColorMode error - ${error.toString()}");
       ErrorHandler.handleToggleColorModeError();
     }
   }
@@ -232,6 +286,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     try {
       state = state.copyWith(colorPickerMode: updatedColorMode);
     } catch (error) {
+      logger.e("Set ColorMode error - ${error.toString()}");
       ErrorHandler.handleToggleColorModeError();
     }
   }
@@ -239,19 +294,27 @@ class GameStateNotifier extends StateNotifier<GameState> {
   void setPlayerColor(PlayerColor color) {
     try {
       if (state.editPlayer != null) {
-        Player updatedEditPlayer = Player(
-          id: state.editPlayer!.id,
-          name: state.editPlayer!.name,
-          color: color,
-          isHost: state.editPlayer!.isHost,
-        );
+        Player updatedEditPlayer = state.editPlayer!.copyWith(color: color);
         state =
             state.copyWith(editPlayer: updatedEditPlayer, currentColor: color);
       } else {
         state = state.copyWith(currentColor: color);
       }
     } catch (error) {
+      logger.e("Set PlayerColor error - ${error.toString()}");
       ErrorHandler.handleUpdatePlayerError();
     }
   }
+
+  Future<void> getPlayerColors() async {
+    try {
+      List<PlayerColor> playerColors =
+          await playerColorController.getPlayerColors();
+      state = state.copyWith(playerColors: playerColors);
+    } catch (error) {
+      logger.e("Get PlayerColors error - ${error.toString()}");
+      ErrorHandler.handleCreateRoomError();
+    }
+  }
+
 }

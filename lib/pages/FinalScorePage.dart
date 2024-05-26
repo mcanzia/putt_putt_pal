@@ -6,9 +6,6 @@ import 'package:putt_putt_pal/widgets/cards/ExpandedCard.dart';
 import 'package:putt_putt_pal/widgets/cards/TitleCard.dart';
 import 'package:putt_putt_pal/widgets/final_score/FinalScoreButtons.dart';
 import 'package:putt_putt_pal/widgets/final_score/FinalScoreRankings.dart';
-import 'package:putt_putt_pal/widgets/orbit/GuestCircle.dart';
-import 'package:putt_putt_pal/widgets/waiting_room/GuestSettings.dart';
-import 'package:putt_putt_pal/widgets/waiting_room/HostSettings.dart';
 import '../styles/colors.dart';
 
 class FinalScorePage extends ConsumerWidget {

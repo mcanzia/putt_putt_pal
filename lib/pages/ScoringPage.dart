@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:async/async.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/GameState.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
@@ -29,6 +28,7 @@ class ScoringPage extends ConsumerWidget {
     final int totalHoles =
         ref.watch(gameStateProvider.select((gsp) => gsp.room.numberOfHoles));
     final Map<String, Player> players = ref.watch(gameStateProvider.select((gsp) => gsp.room.players));
+    Player? currentUser = ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
     final screenHeight = MediaQuery.of(context).size.height;
 
     void onScoreChanged(Player player, int newScore) {
@@ -39,6 +39,13 @@ class ScoringPage extends ConsumerWidget {
               newScore,
             );
       });
+    }
+
+    int getCurrentScore(String playerId) {
+      return ref.read(
+                            gameStateProvider.select((state) =>
+                                state.getPlayerScore(
+                                    hole, players[playerId]!)));
     }
 
     return Scaffold(
@@ -89,11 +96,8 @@ class ScoringPage extends ConsumerWidget {
                           key: ValueKey(
                               '${entry.playerId}_${hole.id}'),
                           player: players[entry.playerId]!,
-                          currentScore: ref.watch(
-                            gameStateProvider.select((state) =>
-                                state.getPlayerScore(
-                                    hole, players[entry.playerId]!)),
-                          ),
+                          currentUser: currentUser!,
+                          currentScore: getCurrentScore(entry.playerId),
                           onScoreChanged: onScoreChanged,
                         ),
                         backgroundColor:

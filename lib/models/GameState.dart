@@ -13,8 +13,10 @@ class GameState with _$GameState {
   const factory GameState({
     @Default(Room()) Room room,
     @Default(null) Player? editPlayer,
+    @Default(null) Player? currentUser,
     @Default(false) bool colorPickerMode,
     @Default(PlayerColor()) PlayerColor currentColor,
+    @Default([]) List<PlayerColor> playerColors,
   }) = _GameState;
 }
 

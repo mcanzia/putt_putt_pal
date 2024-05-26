@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:putt_putt_pal/widgets/common/BasicButton.dart';
+import 'package:putt_putt_pal/util/ExceptionHandler.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
 import 'package:putt_putt_pal/widgets/common/BasicTextInput.dart';
 import 'package:putt_putt_pal/widgets/common/DoubleButton.dart';
 import 'package:putt_putt_pal/widgets/common/UpperCaseTextField.dart';
@@ -57,19 +58,18 @@ class TextInputWithDoubleButton extends StatefulWidget {
 
 class _TextInputWithDoubleButtonState extends State<TextInputWithDoubleButton> {
   void _buttonOneReturnValueEvent() {
-    if (widget.onButtonOnePressed != null &&
-        widget.controller.text.isNotEmpty) {
+    if (widget.controller.text.isEmpty) {
+      ExceptionHandler.handleTextFieldIsEmptyException(widget.textFieldHintText);
+      return;
+    }
+    if (widget.onButtonOnePressed != null) {
       widget.onButtonOnePressed!(widget.controller.text);
-      // widget.controller.text = '';
     }
   }
 
   void _buttonOneGoToPage() {
     if (widget.toPageOne != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => widget.toPageOne!),
-      );
+      RouterHelper.handleRouteChangeWithBack(widget.toPageOne!);
     }
   }
 
@@ -81,10 +81,7 @@ class _TextInputWithDoubleButtonState extends State<TextInputWithDoubleButton> {
 
   void _buttonTwoGoToPage() {
     if (widget.toPageTwo != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => widget.toPageTwo!),
-      );
+      RouterHelper.handleRouteChangeWithBack(widget.toPageTwo!);
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:putt_putt_pal/util/ExceptionHandler.dart';
 import 'package:putt_putt_pal/widgets/common/BasicButton.dart';
 import 'package:putt_putt_pal/widgets/common/BasicTextInput.dart';
 import 'package:putt_putt_pal/widgets/common/UpperCaseTextField.dart';
@@ -43,10 +44,12 @@ class TextInputWithButton extends StatefulWidget {
 
 class _TextInputWithButtonState extends State<TextInputWithButton> {
   void _buttonReturnValueEvent() {
-    if (widget.onButtonPressed != null &&
-        widget.controller.text.isNotEmpty) {
-      widget.onButtonPressed!(widget.controller.text);
-      // widget.controller.text = '';
+    if (widget.controller.text.isEmpty) {
+      ExceptionHandler.handleTextFieldIsEmptyException(widget.textFieldHintText);
+      return;
+    }
+    if (widget.onButtonPressed != null) {
+        widget.onButtonPressed!(widget.controller.text);
     }
   }
 

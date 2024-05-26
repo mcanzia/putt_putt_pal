@@ -9,9 +9,9 @@ class ErrorHandler {
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.TOP,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
         textColor: Colors.white,
-        fontSize: 16.0
+        fontSize: 16.0,
+        webBgColor: "linear-gradient(to right, #990000, #990000)",
       );
     }
 
@@ -69,5 +69,9 @@ class ErrorHandler {
 
     static handleUpdatePlayerScoreError() {
       showErrorToast('Error updating player score. Please try again');
+    }
+
+    static handleEndGameError() {
+      showErrorToast('Error ending game. Please try again');
     }
 }

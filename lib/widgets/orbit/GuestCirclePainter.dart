@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/GuestOrb.dart';
 import 'package:putt_putt_pal/models/Player.dart';
-import 'package:putt_putt_pal/models/Room.dart';
-import 'package:putt_putt_pal/styles/colors.dart';
 import 'dart:math';
 
 import 'package:touchable/touchable.dart';
@@ -14,6 +11,7 @@ class GuestCirclePainter extends CustomPainter {
   final List<GuestOrb> guests;
   final String roomCode;
   final Player? editPlayer;
+  final Player? currentUser;
   final Function(Player) onTap;
 
   GuestCirclePainter({
@@ -22,6 +20,7 @@ class GuestCirclePainter extends CustomPainter {
     required this.guests,
     required this.roomCode,
     required this.onTap,
+    this.currentUser,
     this.editPlayer,
   }) : super(repaint: animation);
 
@@ -118,7 +117,9 @@ class GuestCirclePainter extends CustomPainter {
         smallCircleRadius,
         smallCircleFillPaint,
         onTapDown: (tapDetail) {
-            onTap(guest.player!);
+            if (currentUser!.isHost) {
+              onTap(guest.player!);
+            }
         },
       );
       touchableCanvas.drawCircle(

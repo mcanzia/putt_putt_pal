@@ -72,6 +72,14 @@ class FullScoresPage extends ConsumerWidget {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Center(
         child: ConstrainedBox(
           constraints:

@@ -3,14 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/ColorOrb.dart';
-import 'package:putt_putt_pal/models/GameState.dart';
-import 'package:putt_putt_pal/models/GuestOrb.dart';
-import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/models/PlayerColor.dart';
-import 'package:putt_putt_pal/models/Room.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/widgets/orbit/ColorCirclePainter.dart';
-import 'package:putt_putt_pal/widgets/orbit/GuestCirclePainter.dart';
 import 'package:touchable/touchable.dart';
 
 class ColorCircle extends ConsumerStatefulWidget {
@@ -29,6 +24,7 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
   @override
   void initState() {
     super.initState();
+    ref.read(gameStateProvider.notifier).getPlayerColors();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 30),
@@ -36,15 +32,13 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
   }
 
   void updateColorList(List<PlayerColor> playerColors) {
-    List<PlayerColor> takenColors = ref.read(gameStateProvider.select((gsp) => gsp.getTakenColors()));
     setState(() {
       colors = [];
       for (int i = 0; i < playerColors.length; i++) {
         double orbAngle = 2 * pi + (i * pi / 6);
         ColorOrb colorOrb = ColorOrb(
           angle: orbAngle,
-          color: Color(int.parse(playerColors[i].color)),
-          isTaken: takenColors.contains(playerColors[i])
+          color: playerColors[i].getColorObject(),
         );
         colors.add(colorOrb);
       }
@@ -58,24 +52,20 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
     super.dispose();
   }
 
-  void _handleTap(PlayerColor playerColor, bool isTaken) {
-      Player? editPlayer = ref.read(gameStateProvider.select((gsp) => gsp.editPlayer));
-      PlayerColor? currentColor = ref.read(gameStateProvider.select((gsp) => gsp.currentColor));
-      if (!isTaken || playerColor == editPlayer!.color) {
-        ref.read(gameStateProvider.notifier).setPlayerColor(playerColor);
-      }
+  void _handleTap(PlayerColor playerColor) {
+      ref.read(gameStateProvider.notifier).setPlayerColor(playerColor);
   }
 
   @override
   Widget build(BuildContext context) {
 
-    // listen for updates
-    ref.listen<List<PlayerColor>>(gameStateProvider.select((gsp) => gsp.room.playerColors), (previous, next) {
-      updateColorList(next);
-    });
+    // // listen for updates
+    // ref.listen<List<PlayerColor>>(gameStateProvider.select((gsp) => gsp.playerColors), (previous, next) {
+    //   updateColorList(next);
+    // });
 
     // Initialize color list
-    final playerColors = ref.watch(gameStateProvider.select((gsp) => gsp.room.playerColors));
+    final playerColors = ref.watch(gameStateProvider.select((gsp) => gsp.playerColors));
     updateColorList(playerColors);
 
     // Get Room Code
@@ -91,7 +81,7 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
             animation: _controller,
             colors: colors,
             roomCode: roomCode,
-            onTap: (index, isTaken) => _handleTap(playerColors[index], isTaken)),
+            onTap: (index) => _handleTap(playerColors[index])),
           ),
         ),
     );

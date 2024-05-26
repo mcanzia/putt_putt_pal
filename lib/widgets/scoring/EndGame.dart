@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:putt_putt_pal/pages/FinalScorePage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
 import 'package:putt_putt_pal/widgets/cards/ExpandedCard.dart';
 import 'package:putt_putt_pal/widgets/common/BasicButton.dart';
 
-class EndGame extends StatelessWidget {
+class EndGame extends ConsumerWidget {
   const EndGame({super.key, required this.pageController});
 
   final PageController pageController;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenHeight = MediaQuery.of(context).size.height;
+
+    void endGame() {
+      ref.read(gameStateProvider.notifier).endGame();
+    }
 
     return Scaffold(
       backgroundColor: CustomColors.offWhite,
@@ -40,11 +45,7 @@ class EndGame extends StatelessWidget {
                           textColor: CustomColors.offWhite,
                           text: "End Game",
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const FinalScorePage()),
-                            );
+                            endGame();
                           },
                         ),
                       ),

@@ -7,8 +7,12 @@ import 'package:putt_putt_pal/models/RequestType.dart';
 class RequestUtil {
 
   static String getAPIUrl() {
-        return 'http://localhost:7500/api';
-   }
+    return '${RequestUtil.getAPIHost()}/api';
+  }
+
+  static String getAPIHost() {
+    return 'http://localhost:7500';
+  }
 
    static GETRequestParams(String? roomToken) {
         String bearer = 'Bearer $roomToken';

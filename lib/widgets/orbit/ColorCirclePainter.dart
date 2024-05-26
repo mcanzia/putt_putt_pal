@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/ColorOrb.dart';
-import 'package:putt_putt_pal/models/GuestOrb.dart';
-import 'package:putt_putt_pal/models/Room.dart';
-import 'package:putt_putt_pal/styles/colors.dart';
 import 'dart:math';
 
 import 'package:touchable/touchable.dart';
@@ -13,7 +9,7 @@ class ColorCirclePainter extends CustomPainter {
   final Animation<double>? animation;
   final List<ColorOrb> colors;
   final String roomCode;
-  final Function(int, bool) onTap;
+  final Function(int) onTap;
 
   ColorCirclePainter({
     required this.context,
@@ -76,14 +72,14 @@ class ColorCirclePainter extends CustomPainter {
         center.dy + bigCircleRadius * sin(updatedAngle),
       );
       final smallCircleFillPaint = Paint()
-        ..color = color.isTaken ? color.color.withOpacity(0.1) : color.color
+        ..color = color.color
         ..style = PaintingStyle.fill;
       touchableCanvas.drawCircle(
         orbOffset,
         smallCircleRadius,
         smallCircleFillPaint,
         onTapDown: (tapDetail) {
-          onTap(i, color.isTaken);
+          onTap(i);
         },
       );
       touchableCanvas.drawCircle(

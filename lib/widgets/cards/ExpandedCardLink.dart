@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
 
 class ExpandedCardLink extends StatelessWidget {
   const ExpandedCardLink(
       {super.key,
       required this.text,
       required this.textColor,
-      required this.backgroundColor, this.toPage, this.onPressed});
+      required this.backgroundColor,
+      this.toPage,
+      this.onPressed});
 
   final String text;
   final Color textColor;
@@ -18,10 +21,9 @@ class ExpandedCardLink extends StatelessWidget {
     return Expanded(
       child: InkWell(
         onTap: () {
-          onPressed != null ? onPressed!() : Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => toPage!),
-          );
+          onPressed != null
+              ? onPressed!()
+              : RouterHelper.handleRouteChangeWithBack(toPage!);
         },
         child: Container(
           color: backgroundColor,

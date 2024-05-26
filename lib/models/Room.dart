@@ -16,13 +16,16 @@ class Room with _$Room {
     @Default({}) Map<String, Hole> holes,
     @Default(false) bool allPlayersJoined,
     @Default(1) int numberOfHoles,
-    @Default([]) List<PlayerColor> playerColors,
   }) = _Room;
 
   const Room._();
 
   bool hostPresent() {
       return players.values.any((player) => player.isHost);
+  }
+
+  bool duplicateName(String name) {
+    return players.values.any((player) => player.name.toUpperCase() == name.toUpperCase());
   }
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

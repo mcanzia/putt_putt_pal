@@ -5,9 +5,10 @@ import 'package:putt_putt_pal/widgets/scoring/ScoreSlider.dart';
 
 class PersonalScore extends StatelessWidget {
   const PersonalScore(
-      {super.key, required this.player, required this.onScoreChanged, required this.currentScore});
+      {super.key, required this.player, required this.currentUser, required this.onScoreChanged, required this.currentScore});
 
   final Player player;
+  final Player currentUser;
   final int currentScore;
   final Function(Player player, int score) onScoreChanged;
 
@@ -30,6 +31,7 @@ class PersonalScore extends StatelessWidget {
             child: ScoreSlider(
               key: ValueKey('slider_$key'),
               currentScore: currentScore,
+              currentUser: currentUser,
               player: player,
               onScoreChanged: onScoreChanged,
             ),
