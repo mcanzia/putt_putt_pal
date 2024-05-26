@@ -69,6 +69,22 @@ class RoomController {
     }
   }
 
+  Future<void> resetRoom(String roomId, Room resetRoomDetails) async {
+    try {
+      RequestParams putRequestParams = RequestUtil.PUTRequestParams(resetRoomDetails, null);
+      final response = await http.put(
+        Uri.parse('${RequestUtil.getAPIUrl()}/room/reset/$roomId'),
+        headers: putRequestParams.headers,
+        body: putRequestParams.body,
+      );
+      if (response.statusCode != 200) {
+        throw CustomError(message: response.body, statusCode: response.statusCode);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> updateRoom(String roomId, Room updatedRoom) async {
     try {
       RequestParams putRequestParams = RequestUtil.PUTRequestParams(updatedRoom, null);
@@ -114,6 +130,9 @@ class RoomController {
         }
         case 404: {
           throw RoomNotFoundError(message: response.body, statusCode: response.statusCode);
+        }
+        case 303: {
+          throw DuplicateNameError(message: response.body, statusCode: response.statusCode);
         }
         default: {
           throw CustomError(message: response.body, statusCode: response.statusCode);

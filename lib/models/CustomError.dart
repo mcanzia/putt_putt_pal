@@ -15,5 +15,8 @@ class CustomError extends Error {
 
 class RoomNotFoundError extends CustomError {
   RoomNotFoundError({required super.message, required super.statusCode});
-  
+}
+
+class DuplicateNameError extends CustomError {
+  DuplicateNameError({required super.message, required super.statusCode});
 }

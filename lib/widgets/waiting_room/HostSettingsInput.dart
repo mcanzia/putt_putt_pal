@@ -32,13 +32,12 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   }
 
   void updatePlayer(String playerName) async {
-
-    if (checkDuplicateName(playerName)) {
-        return;
-    }
     
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     final Player? editPlayer = ref.read(gameStateProvider).editPlayer;
+    if (editPlayer!.name != playerName && checkDuplicateName(playerName)) {
+        return;
+    }
     Player updatePlayer = Player(
         id: editPlayer!.id,
         name: playerName,

@@ -104,6 +104,16 @@ class GameStateNotifier extends StateNotifier<GameState> {
         logger.e("End Game Error - ${error.toString()}");
       }
     });
+
+    socketService.on('resetRoom', (data) {
+      try {
+        Room updatedRoom = Room.fromJson(data);
+        state = state.copyWith(room: updatedRoom);
+        RouterHelper.handleRouteChange(const WaitingRoom());
+      } catch (error) {
+        logger.e("Play Again Error - ${error.toString()}");
+      }
+    });
   }
 
   Future<void> createRoom() async {
@@ -152,8 +162,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
 
   Future<void> resetGameSamePlayers() async {
     try {
-      Room updatedRoom = state.room.copyWith(holes: {}, numberOfHoles: 1, allPlayersJoined: true);
-      await roomController.updateRoom(state.room.id, updatedRoom);
+      Room resetRoomDetails = state.room.copyWith(holes: {}, numberOfHoles: 1, allPlayersJoined: true);
+      await roomController.resetRoom(state.room.id, resetRoomDetails);
     } catch (error) {
       logger.e("Reset Game Error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
@@ -214,6 +224,9 @@ class GameStateNotifier extends StateNotifier<GameState> {
     } on RoomNotFoundError catch (error) {
       logger.e(error.toString());
       ExceptionHandler.handleInvalidRoomCode();
+    } on DuplicateNameError catch (error) {
+      logger.e(error.toString());
+      ExceptionHandler.handleDuplicateNameException();
     } catch (error) {
       logger.e("Join Room error - ${error.toString()}");
       ErrorHandler.handleAddPlayerError();

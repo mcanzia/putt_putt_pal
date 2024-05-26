@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/pages/FullScoresPage.dart';
 import 'package:putt_putt_pal/pages/WaitingRoom.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
@@ -12,9 +13,9 @@ class FinalScoreButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Player? currentUser = ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
     void playAgain() async {
       await ref.read(gameStateProvider.notifier).resetGameSamePlayers();
-      RouterHelper.handleRouteChange(const WaitingRoom());
     }
 
     return Container(
@@ -32,14 +33,15 @@ class FinalScoreButtons extends ConsumerWidget {
               RouterHelper.handleRouteChangeWithBack(const FullScoresPage())
             },
           ),
-          BasicButton(
-            text: 'Play Again?',
-            color: CustomColors.offWhite,
-            textColor: Colors.black,
-            onPressed: () => {
-              playAgain(),
-            },
-          )
+          if (currentUser?.isHost ?? false)
+            BasicButton(
+              text: 'Play Again?',
+              color: CustomColors.offWhite,
+              textColor: Colors.black,
+              onPressed: () => {
+                playAgain(),
+              },
+            )
         ],
       ),
     );
