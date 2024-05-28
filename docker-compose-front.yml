@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  app:
+    container_name: puttputtpal-front
+    image: index.docker.io/mcanziani1/puttputtpal-front:latest
+    networks:
+      - puttputtpal_net
+    ports:
+      - "3000:80"
+networks:
+  puttputtpal_net:
+    name: puttputtpal_net
+    driver: bridge
