@@ -1,4 +1,5 @@
 FROM instrumentisto/flutter as build-stage
+RUN apt-get update && apt-get install -y vim
 WORKDIR /app
 COPY pubspec.* ./
 RUN flutter pub get
@@ -7,6 +8,7 @@ ARG API_HOST
 RUN flutter build web --dart-define=API_HOST=$API_HOST
 
 FROM nginx:stable as production-stage
+RUN apt-get update && apt-get install -y vim
 RUN mkdir /app
 COPY --from=build-stage /app/build/web /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
