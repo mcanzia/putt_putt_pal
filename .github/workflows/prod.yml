@@ -27,7 +27,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          buildArgs:
+          buildArgs: |
             API_HOST: https://puttputtpal.com 
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/puttputtpal-front:latest
