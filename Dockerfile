@@ -3,7 +3,8 @@ WORKDIR /app
 COPY pubspec.* ./
 RUN flutter pub get
 COPY . .
-RUN flutter build web
+ARG API_HOST
+RUN flutter build web --dart-define=API_HOST=$API_HOST
 
 FROM nginx:stable as production-stage
 RUN mkdir /app

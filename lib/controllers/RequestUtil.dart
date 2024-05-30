@@ -11,7 +11,8 @@ class RequestUtil {
   }
 
   static String getAPIHost() {
-    return 'http://localhost:7500';
+    const String apiHost = String.fromEnvironment('API_HOST', defaultValue: 'http://localhost:7500');
+    return apiHost;
   }
 
    static GETRequestParams(String? roomToken) {
