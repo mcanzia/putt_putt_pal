@@ -26,7 +26,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile 
+          file: Dockerfile
+          args:
+            API_HOST: https://puttputtpal.com 
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/puttputtpal-front:latest
       - name: Set up SSH
