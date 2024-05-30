@@ -28,7 +28,7 @@ jobs:
           context: .
           file: Dockerfile
           buildArgs: |
-            API_HOST: https://puttputtpal.com 
+            API_HOST: http://puttputtpal.com 
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/puttputtpal-front:latest
       - name: Set up SSH
