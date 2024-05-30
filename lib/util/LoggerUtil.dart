@@ -2,12 +2,17 @@ import 'dart:io';
 import 'package:logger/logger.dart';
 
 class LoggerUtil {
+  // static final Logger _logger = Logger(
+  //   printer: PrettyPrinter(),
+  //   output: MultiOutput([
+  //     ConsoleOutput(),
+  //     FileOutput(File('/app/logs/app.log')),
+  //   ]),
+  // );
+
   static final Logger _logger = Logger(
     printer: PrettyPrinter(),
-    output: MultiOutput([
-      ConsoleOutput(),
-      FileOutput(File('/app/logs/app.log')),
-    ]),
+    output: ConsoleOutput()
   );
 
   static void debug(String message) {
@@ -32,9 +37,13 @@ class FileOutput extends LogOutput {
   IOSink? sink;
 
   FileOutput(this.file) {
+    try {
     print('Initializing FileOutput with file: ${file.path}');
     file.parent.createSync(recursive: true);
     sink = file.openWrite(mode: FileMode.writeOnlyAppend);
+    } catch(error) {
+      print('error ${error.toString()}');
+    }
   }
 
   @override

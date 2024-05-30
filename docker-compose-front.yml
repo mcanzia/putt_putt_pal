@@ -10,7 +10,12 @@ services:
     ports:
       - "3000:80"
     volumes:
-      - ./logs/app/:/app/logs/
+      - /var/log/puttputtpal-front:/var/log/puttputtpal-front
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 networks:
   puttputtpal_net:
     name: puttputtpal_net
