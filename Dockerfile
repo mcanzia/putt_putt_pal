@@ -10,4 +10,5 @@ FROM nginx:stable as production-stage
 RUN mkdir /app
 COPY --from=build-stage /app/build/web /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
+RUN mkdir -p /app/logs
 EXPOSE 80

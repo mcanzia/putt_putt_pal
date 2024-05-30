@@ -9,6 +9,8 @@ services:
       - puttputtpal_net
     ports:
       - "3000:80"
+    volumes:
+      - ./logs/app/:/app/logs/
 networks:
   puttputtpal_net:
     name: puttputtpal_net
