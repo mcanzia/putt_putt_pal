@@ -3,6 +3,8 @@ services:
   app:
     container_name: puttputtpal-front
     image: index.docker.io/mcanziani1/puttputtpal-front:latest
+    environment:
+      - API_HOST=https://puttputtpal.com
     networks:
       - puttputtpal_net
     ports:
