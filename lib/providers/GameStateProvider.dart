@@ -17,6 +17,7 @@ import 'package:putt_putt_pal/pages/WaitingRoom.dart';
 import 'package:putt_putt_pal/services/SocketService.dart';
 import 'package:putt_putt_pal/util/ErrorHandler.dart';
 import 'package:putt_putt_pal/util/ExceptionHandler.dart';
+import 'package:putt_putt_pal/util/LoggerUtil.dart';
 import 'package:putt_putt_pal/util/RouterHelper.dart';
 import 'package:putt_putt_pal/widgets/scoring/ScoringPageView.dart';
 import 'package:logger/logger.dart';
@@ -57,7 +58,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
         Room updatedRoom = Room.fromJson(data);
         state = state.copyWith(room: updatedRoom);
       } catch (error) {
-        logger.e("Room Updated Error - ${error.toString()}");
+        LoggerUtil.error("Room Updated Error - ${error.toString()}");
       }
     });
 
@@ -73,7 +74,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
             colorPickerMode: false,
             editPlayer: null);
       } catch (error) {
-        logger.e("Player List Updated Error - ${error.toString()}");
+        LoggerUtil.error("Player List Updated Error - ${error.toString()}");
       }
     });
 
@@ -85,7 +86,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
         Room updatedRoom = state.room.copyWith(holes: updatedHoles);
         state = state.copyWith(room: updatedRoom);
       } catch (error) {
-        logger.e("Room Updated Error - ${error.toString()}");
+        LoggerUtil.error("Room Updated Error - ${error.toString()}");
       }
     });
 
@@ -93,7 +94,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       try {
         RouterHelper.handleRouteChange(const ScoringPageView());
       } catch (error) {
-        logger.e("Start Game Error - ${error.toString()}");
+        LoggerUtil.error("Start Game Error - ${error.toString()}");
       }
     });
 
@@ -101,7 +102,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       try {
         RouterHelper.handleRouteChangeWithBack(const FinalScorePage());
       } catch (error) {
-        logger.e("End Game Error - ${error.toString()}");
+        LoggerUtil.error("End Game Error - ${error.toString()}");
       }
     });
 
@@ -111,7 +112,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
         state = state.copyWith(room: updatedRoom);
         RouterHelper.handleRouteChange(const WaitingRoom());
       } catch (error) {
-        logger.e("Play Again Error - ${error.toString()}");
+        LoggerUtil.error("Play Again Error - ${error.toString()}");
       }
     });
   }
@@ -123,7 +124,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       state = state.copyWith(room: newRoom, currentUser: tempHost);
       socketService.joinRoom(state.room.id);
     } catch (error) {
-      logger.e("End Game Error - ${error.toString()}");
+      LoggerUtil.error("End Game Error - ${error.toString()}");
       ErrorHandler.handleCreateRoomError();
     }
   }
@@ -134,7 +135,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       Room startDetails = state.room.copyWith(numberOfHoles: numberOfHoles);
       await roomController.startGame(state.room.id, startDetails);
     } catch (error) {
-      logger.e("Start Game Error - ${error.toString()}");
+      LoggerUtil.error("Start Game Error - ${error.toString()}");
       ErrorHandler.handleStartGameError();
     }
   }
@@ -146,7 +147,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       });
       RouterHelper.handleRouteChangeWithBack(const FinalScorePage());
     } catch (error) {
-      logger.e("End Game Error - ${error.toString()}");
+      LoggerUtil.error("End Game Error - ${error.toString()}");
       ErrorHandler.handleEndGameError();
     }
   }
@@ -155,7 +156,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     try {
       await roomController.updateRoom(state.room.id, const Room());
     } catch (error) {
-      logger.e("Reset State Error - ${error.toString()}");
+      LoggerUtil.error("Reset State Error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
   }
@@ -165,7 +166,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       Room resetRoomDetails = state.room.copyWith(holes: {}, numberOfHoles: 1, allPlayersJoined: true);
       await roomController.resetRoom(state.room.id, resetRoomDetails);
     } catch (error) {
-      logger.e("Reset Game Error - ${error.toString()}");
+      LoggerUtil.error("Reset Game Error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
   }
@@ -176,7 +177,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       Room roomDetails = state.room.copyWith(allPlayersJoined: joined);
       await roomController.updateRoom(state.room.id, roomDetails);
     } catch (error) {
-      logger.e("Set AllPlayersJoined error - ${error.toString()}");
+      LoggerUtil.error("Set AllPlayersJoined error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
   }
@@ -186,7 +187,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       Room roomDetails = state.room.copyWith(numberOfHoles: holes);
       await roomController.updateRoom(state.room.id, roomDetails);
     } catch (error) {
-      logger.e("Set NumberOfHoles error - ${error.toString()}");
+      LoggerUtil.error("Set NumberOfHoles error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
   }
@@ -207,7 +208,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
         await holeController.updateHole(state.room.id, updatedHole);
       }
     } catch (error) {
-      logger.e("Update PlayerScore error - ${error.toString()}");
+      LoggerUtil.error("Update PlayerScore error - ${error.toString()}");
       ErrorHandler.handleUpdatePlayerScoreError();
     }
   }
@@ -222,13 +223,13 @@ class GameStateNotifier extends StateNotifier<GameState> {
       socketService.joinRoom(updatedRoom.id);
       RouterHelper.handleRouteChange(const WaitingRoom());
     } on RoomNotFoundError catch (error) {
-      logger.e(error.toString());
+      LoggerUtil.error(error.toString());
       ExceptionHandler.handleInvalidRoomCode();
     } on DuplicateNameError catch (error) {
-      logger.e(error.toString());
+      LoggerUtil.error(error.toString());
       ExceptionHandler.handleDuplicateNameException();
     } catch (error) {
-      logger.e("Join Room error - ${error.toString()}");
+      LoggerUtil.error("Join Room error - ${error.toString()}");
       ErrorHandler.handleAddPlayerError();
     }
   }
@@ -247,7 +248,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
         state = state.copyWith(currentUser: addedPlayer);
       }
     } catch (error) {
-      logger.e("Add Player error - ${error.toString()}");
+      LoggerUtil.error("Add Player error - ${error.toString()}");
       ErrorHandler.handleAddPlayerError();
     }
   }
@@ -261,7 +262,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
         ExceptionHandler.handleDeleteLastPlayerException();
       }
     } catch (error) {
-      logger.e("Remove Player error - ${error.toString()}");
+      LoggerUtil.error("Remove Player error - ${error.toString()}");
       ErrorHandler.handleRemovePlayerError();
     }
   }
@@ -271,7 +272,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       state = state.copyWith(editPlayer: player);
       setColorMode(false);
     } catch (error) {
-      logger.e("Toggle Edit Player error - ${error.toString()}");
+      LoggerUtil.error("Toggle Edit Player error - ${error.toString()}");
       ErrorHandler.handleUpdatePlayerError();
     }
   }
@@ -281,7 +282,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       await playerController.updatePlayer(state.room.id, player);
       toggleEditPlayer(null);
     } catch (error) {
-      logger.e("Edit Player error - ${error.toString()}");
+      LoggerUtil.error("Edit Player error - ${error.toString()}");
       ErrorHandler.handleUpdatePlayerError();
     }
   }
@@ -290,7 +291,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     try {
       state = state.copyWith(colorPickerMode: !state.colorPickerMode);
     } catch (error) {
-      logger.e("Toggle ColorMode error - ${error.toString()}");
+      LoggerUtil.error("Toggle ColorMode error - ${error.toString()}");
       ErrorHandler.handleToggleColorModeError();
     }
   }
@@ -299,7 +300,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     try {
       state = state.copyWith(colorPickerMode: updatedColorMode);
     } catch (error) {
-      logger.e("Set ColorMode error - ${error.toString()}");
+      LoggerUtil.error("Set ColorMode error - ${error.toString()}");
       ErrorHandler.handleToggleColorModeError();
     }
   }
@@ -314,7 +315,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
         state = state.copyWith(currentColor: color);
       }
     } catch (error) {
-      logger.e("Set PlayerColor error - ${error.toString()}");
+      LoggerUtil.error("Set PlayerColor error - ${error.toString()}");
       ErrorHandler.handleUpdatePlayerError();
     }
   }
@@ -325,7 +326,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
           await playerColorController.getPlayerColors();
       state = state.copyWith(playerColors: playerColors);
     } catch (error) {
-      logger.e("Get PlayerColors error - ${error.toString()}");
+      LoggerUtil.error("Get PlayerColors error - ${error.toString()}");
       ErrorHandler.handleCreateRoomError();
     }
   }
