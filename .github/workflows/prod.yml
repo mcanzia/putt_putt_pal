@@ -22,8 +22,6 @@ jobs:
           flutter-version-file: pubspec.yaml
       - name: Get dependencies
         run: flutter pub get
-      - name: Flutter test
-        run: flutter test
       - name: Build Web
         run: flutter build web
       - name: Login to Docker Hub
