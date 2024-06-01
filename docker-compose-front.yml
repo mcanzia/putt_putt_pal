@@ -18,5 +18,5 @@ services:
         max-file: "3"
 networks:
   puttputtpal_net:
-    name: puttputtpal_net
-    driver: bridge
+    external: true
+# create network externally with docker network create puttputtpal_net
