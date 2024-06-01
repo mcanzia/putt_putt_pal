@@ -7,14 +7,20 @@ class JoinRoom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+      ),
+      body: const Column(
         children: [
             ExpandedCard(
               content: JoinRoomSettings(),
               backgroundColor: Colors.black,
             ),
         ],
+      ),
+      bottomNavigationBar: const BottomAppBar(
+        color: Colors.black
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
+import 'package:putt_putt_pal/styles/colors.dart';
 import 'package:putt_putt_pal/widgets/full_scores/HolesDataTableSource.dart';
 
 class FullScoresPage extends ConsumerWidget {
@@ -79,6 +80,7 @@ class FullScoresPage extends ConsumerWidget {
             Navigator.of(context).pop();
           },
         ),
+        backgroundColor: CustomColors.offWhite,
       ),
       body: Center(
         child: ConstrainedBox(
@@ -102,6 +104,9 @@ class FullScoresPage extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: const BottomAppBar(
+        color: CustomColors.offWhite
       ),
     );
   }

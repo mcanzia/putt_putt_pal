@@ -50,6 +50,9 @@ class ScoringPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: CustomColors.offWhite,
+      appBar: AppBar(
+        backgroundColor: CustomColors.offWhite,
+      ),
       body: SingleChildScrollView(
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: screenHeight),

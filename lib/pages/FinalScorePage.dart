@@ -15,6 +15,9 @@ class FinalScorePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final rankings = ref.watch(gameStateProvider.select((state) => state.getRankings()));
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: CustomColors.offWhite,
+      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -39,6 +42,9 @@ class FinalScorePage extends ConsumerWidget {
             ],
           ),
         ],
+      ),
+      bottomNavigationBar: const BottomAppBar(
+        color: Colors.black
       ),
     );
   }

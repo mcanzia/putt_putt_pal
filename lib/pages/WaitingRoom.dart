@@ -28,13 +28,16 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
     final currentUser = ref.watch(gameStateProvider.select((state) => state.currentUser));
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: CustomColors.offWhite,
+      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
           Column(
             children: <Widget>[
               ExpandedCard(
-                content: isColorPickerMode ? ColorCircle() : GuestCircle(),
+                content: isColorPickerMode ? const ColorCircle() : const GuestCircle(),
                 backgroundColor: CustomColors.offWhite,
               ),
               ExpandedCard(
@@ -44,6 +47,9 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
             ],
           ),
         ],
+      ),
+      bottomNavigationBar: const BottomAppBar(
+        color: CustomColors.offWhite
       ),
     );
   }

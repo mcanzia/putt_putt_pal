@@ -24,6 +24,9 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: CustomColors.offWhite,
+      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -44,6 +47,9 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
           const CircleArc(radius: 200, startAngle: 0.25),
         ],
+      ),
+      bottomNavigationBar: const BottomAppBar(
+        color: Colors.black
       ),
     );
   }
