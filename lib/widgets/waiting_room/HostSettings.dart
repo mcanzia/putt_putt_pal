@@ -7,7 +7,7 @@ class HostSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double buttonWidth = screenWidth * 0.4;
+    double buttonWidth = screenWidth * 0.7;
 
     return Container(
       alignment: Alignment.center,

@@ -49,7 +49,7 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double buttonWidth = screenWidth * 0.4;
+    double buttonWidth = screenWidth * 0.7;
 
     final PlayerColor playerColor = ref.watch(gameStateProvider).currentColor;
 
