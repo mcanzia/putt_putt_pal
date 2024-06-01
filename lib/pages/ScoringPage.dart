@@ -34,7 +34,9 @@ class ScoringPage extends ConsumerWidget {
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: CustomColors.offWhite,
+      statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: CustomColors.offWhite,
+      systemNavigationBarIconBrightness: Brightness.light
     ));
 
     void onScoreChanged(Player player, int newScore) {

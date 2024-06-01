@@ -17,7 +17,9 @@ class FinalScorePage extends ConsumerWidget {
     final rankings = ref.watch(gameStateProvider.select((state) => state.getRankings()));
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: CustomColors.offWhite,
+      statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.black,
+      systemNavigationBarIconBrightness: Brightness.dark
     ));
     return Scaffold(
       appBar: AppBar(
