@@ -12,22 +12,43 @@ class JoinRoom extends StatelessWidget {
       statusBarColor: Colors.black,
       statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.black,
-      systemNavigationBarIconBrightness: Brightness.light
+      systemNavigationBarIconBrightness: Brightness.light,
     ));
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            border: Border(
+              bottom: BorderSide(color: Colors.black),
+            ),
+          ),
+          child: AppBar(
+            backgroundColor: Colors.black,
+            elevation: 0,
+          ),
+        ),
       ),
       body: const Column(
         children: [
-            ExpandedCard(
-              content: JoinRoomSettings(),
-              backgroundColor: Colors.black,
-            ),
+          ExpandedCard(
+            content: JoinRoomSettings(),
+            backgroundColor: Colors.black,
+            borderColor: Colors.black,
+          ),
         ],
       ),
-      bottomNavigationBar: const BottomAppBar(
-        color: Colors.black
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          border: Border(
+            top: BorderSide(color: Colors.black),
+          ),
+        ),
+        child: const BottomAppBar(
+          color: Colors.black,
+        ),
       ),
     );
   }
