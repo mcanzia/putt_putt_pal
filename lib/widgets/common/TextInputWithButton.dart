@@ -45,11 +45,12 @@ class TextInputWithButton extends StatefulWidget {
 class _TextInputWithButtonState extends State<TextInputWithButton> {
   void _buttonReturnValueEvent() {
     if (widget.controller.text.isEmpty) {
-      ExceptionHandler.handleTextFieldIsEmptyException(widget.textFieldHintText);
+      ExceptionHandler.handleTextFieldIsEmptyException(
+          widget.textFieldHintText);
       return;
     }
     if (widget.onButtonPressed != null) {
-        widget.onButtonPressed!(widget.controller.text);
+      widget.onButtonPressed!(widget.controller.text);
     }
   }
 
@@ -79,50 +80,42 @@ class _TextInputWithButtonState extends State<TextInputWithButton> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ConstrainedBox(
-          constraints:
-              BoxConstraints(minWidth: buttonWidth, maxWidth: buttonWidth),
-          child: widget.textFieldBasic
-              ? BasicTextInput(
-                  controller: widget.controller,
-                  hintText: widget.textFieldHintText,
-                  textColor: widget.textFieldTextColor,
-                  backgroundColor: widget.textFieldBackgroundColor,
-                  borderColor: widget.textFieldBorderColor,
-                  maxLength: widget.textFieldMaxLength,
-                  isNumberInput: widget.isNumberInput,
-                  connectedWithButton: true,
-                  onSubmitted: (value) {
-                    _buttonReturnValueEvent();
-                    _buttonGoToPage();
-                  })
-              : UppercaseTextField(
-                  controller: widget.controller,
-                  hintText: widget.textFieldHintText,
-                  textColor: widget.textFieldTextColor,
-                  backgroundColor: widget.textFieldBackgroundColor,
-                  borderColor: widget.textFieldBorderColor,
-                  maxLength: widget.textFieldMaxLength,
-                  connectedWithButton: true,
-                  onSubmitted: (value) {
-                    _buttonReturnValueEvent();
-                    _buttonGoToPage();
-                  },
-                ),
-        ),
-        ConstrainedBox(
-          constraints:
-              BoxConstraints(minWidth: buttonWidth, maxWidth: buttonWidth),
-          child: BasicButton(
-            text: widget.buttonText,
-            textColor: widget.buttonTextColor,
-            color: widget.buttonColor,
-            connectedWithInput: true,
-            onPressed: () {
-              _buttonReturnValueEvent();
-              _buttonGoToPage();
-            },
-          ),
+        widget.textFieldBasic
+            ? BasicTextInput(
+                controller: widget.controller,
+                hintText: widget.textFieldHintText,
+                textColor: widget.textFieldTextColor,
+                backgroundColor: widget.textFieldBackgroundColor,
+                borderColor: widget.textFieldBorderColor,
+                maxLength: widget.textFieldMaxLength,
+                isNumberInput: widget.isNumberInput,
+                connectedWithButton: true,
+                onSubmitted: (value) {
+                  _buttonReturnValueEvent();
+                  _buttonGoToPage();
+                })
+            : UppercaseTextField(
+                controller: widget.controller,
+                hintText: widget.textFieldHintText,
+                textColor: widget.textFieldTextColor,
+                backgroundColor: widget.textFieldBackgroundColor,
+                borderColor: widget.textFieldBorderColor,
+                maxLength: widget.textFieldMaxLength,
+                connectedWithButton: true,
+                onSubmitted: (value) {
+                  _buttonReturnValueEvent();
+                  _buttonGoToPage();
+                },
+              ),
+        BasicButton(
+          text: widget.buttonText,
+          textColor: widget.buttonTextColor,
+          color: widget.buttonColor,
+          connectedWithInput: true,
+          onPressed: () {
+            _buttonReturnValueEvent();
+            _buttonGoToPage();
+          },
         ),
       ],
     );
