@@ -48,7 +48,7 @@ class _ColorGridState extends ConsumerState<ColorGrid>
       child: CanvasTouchDetector(
         gesturesToOverride: const [GestureType.onTapDown],
         builder: (context) => CustomPaint(
-          size: const Size(225, 225),
+          size: const Size(350, 350),
           painter: ColorGridPainter(
             context: context,
             colors: playerColors,
