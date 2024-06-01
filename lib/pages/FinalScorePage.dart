@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/GameState.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
@@ -14,6 +15,10 @@ class FinalScorePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rankings = ref.watch(gameStateProvider.select((state) => state.getRankings()));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: CustomColors.offWhite,
+      systemNavigationBarColor: Colors.black,
+    ));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,

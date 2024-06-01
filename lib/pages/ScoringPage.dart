@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/GameState.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
@@ -30,6 +31,11 @@ class ScoringPage extends ConsumerWidget {
     final Map<String, Player> players = ref.watch(gameStateProvider.select((gsp) => gsp.room.players));
     Player? currentUser = ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
     final screenHeight = MediaQuery.of(context).size.height;
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: CustomColors.offWhite,
+      systemNavigationBarColor: CustomColors.offWhite,
+    ));
 
     void onScoreChanged(Player player, int newScore) {
       _debouncer.run(() {

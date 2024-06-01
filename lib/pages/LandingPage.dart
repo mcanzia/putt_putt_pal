@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/pages/JoinRoom.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
@@ -23,6 +24,10 @@ class _LandingPageState extends ConsumerState<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: CustomColors.offWhite,
+      systemNavigationBarColor: Colors.black,
+    ));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,
