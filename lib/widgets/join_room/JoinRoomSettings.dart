@@ -82,7 +82,7 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
             constraints:
                 BoxConstraints(minWidth: buttonWidth, maxWidth: buttonWidth),
             child: TextInputWithButton(
-              buttonText: 'Join Room',
+              buttonText: 'Join Roo',
               buttonColor: getFillColor(),
               buttonTextColor: Colors.black,
               textFieldHintText: 'Enter Name',
