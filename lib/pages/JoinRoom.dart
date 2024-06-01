@@ -10,9 +10,9 @@ class JoinRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
-      statusBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.black,
-      systemNavigationBarIconBrightness: Brightness.dark
+      systemNavigationBarIconBrightness: Brightness.light
     ));
     return Scaffold(
       appBar: AppBar(

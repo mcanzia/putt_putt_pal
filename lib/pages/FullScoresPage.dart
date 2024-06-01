@@ -75,9 +75,9 @@ class FullScoresPage extends ConsumerWidget {
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: CustomColors.offWhite,
-      statusBarIconBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: CustomColors.offWhite,
-      systemNavigationBarIconBrightness: Brightness.light
+      systemNavigationBarIconBrightness: Brightness.dark
     ));
 
     return Scaffold(
