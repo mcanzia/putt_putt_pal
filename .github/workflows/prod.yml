@@ -49,7 +49,7 @@ jobs:
           scp ./docker-compose-front.yml root@${{ secrets.DIGITAL_OCEAN_IP }}:/root/devops/docker-compose-front.yml
       - name: SSH and Docker Compose Up frontend
         run: |
-          ssh root@${{ secrets.DIGITAL_OCEAN_IP }} 'cd /root/devops && docker compose -f docker-compose-front.yml pull && docker compose -f docker-compose-front.yml up -d'
+          ssh root@${{ secrets.DIGITAL_OCEAN_IP }} 'cd /root/devops && docker compose -f docker-compose-front.yml down && docker compose -f docker-compose-front.yml pull && docker compose -f docker-compose-front.yml up -d'
       - name: SSH and Docker Compose Up proxy
         run: |
-          ssh root@${{ secrets.DIGITAL_OCEAN_IP }} 'cd /root/devops && docker compose -f docker-compose-proxy.yml pull && docker compose -f docker-compose-proxy.yml up -d'
+          ssh root@${{ secrets.DIGITAL_OCEAN_IP }} 'cd /root/devops && docker compose -f docker-compose-proxy.yml down && docker compose -f docker-compose-proxy.yml up -d'
