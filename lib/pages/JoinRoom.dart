@@ -18,7 +18,7 @@ class JoinRoom extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.black,
             border: Border(
               bottom: BorderSide(color: Colors.black),
@@ -30,13 +30,9 @@ class JoinRoom extends StatelessWidget {
           ),
         ),
       ),
-      body: const Column(
-        children: [
-          ExpandedCard(
-            content: JoinRoomSettings(),
-            backgroundColor: Colors.black,
-          ),
-        ],
+      body: const ExpandedCard(
+        content: JoinRoomSettings(),
+        backgroundColor: Colors.black,
       ),
     );
   }

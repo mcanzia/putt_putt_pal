@@ -23,7 +23,7 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: CustomColors.offWhite,
-      statusBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: CustomColors.offWhite,
       systemNavigationBarIconBrightness: Brightness.dark
     ));
