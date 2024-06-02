@@ -35,7 +35,6 @@ class JoinRoom extends StatelessWidget {
           ExpandedCard(
             content: JoinRoomSettings(),
             backgroundColor: Colors.black,
-            borderColor: Colors.black,
           ),
         ],
       ),
