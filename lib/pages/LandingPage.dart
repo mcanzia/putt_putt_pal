@@ -26,14 +26,11 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: CustomColors.offWhite,
-      statusBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.black,
-      systemNavigationBarIconBrightness: Brightness.light
+      systemNavigationBarIconBrightness: Brightness.dark
     ));
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: CustomColors.offWhite,
-      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -54,9 +51,6 @@ class _LandingPageState extends ConsumerState<LandingPage> {
           ),
           const CircleArc(radius: 200, startAngle: 0.25),
         ],
-      ),
-      bottomNavigationBar: const BottomAppBar(
-        color: Colors.black
       ),
     );
   }
