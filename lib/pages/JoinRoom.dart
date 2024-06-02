@@ -38,17 +38,6 @@ class JoinRoom extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          border: Border(
-            top: BorderSide(color: Colors.black),
-          ),
-        ),
-        child: const BottomAppBar(
-          color: Colors.black,
-        ),
-      ),
     );
   }
 }
