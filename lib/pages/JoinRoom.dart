@@ -30,13 +30,19 @@ class JoinRoom extends StatelessWidget {
           ),
         ),
       ),
-      body: const Column(
-        children: [
-          ExpandedCard(
-            content: JoinRoomSettings(),
-            backgroundColor: Colors.black,
-          ),
-        ],
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          border: Border.all(color: Colors.black),
+        ),
+        child: const Column(
+          children: [
+            ExpandedCard(
+              content: JoinRoomSettings(),
+              backgroundColor: Colors.black,
+            ),
+          ],
+        ),
       ),
     );
   }

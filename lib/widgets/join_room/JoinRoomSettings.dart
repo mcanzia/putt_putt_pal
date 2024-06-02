@@ -63,7 +63,7 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
     return Container(
       alignment: Alignment.center,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ConstrainedBox(
