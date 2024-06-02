@@ -63,7 +63,7 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
     return Container(
       alignment: Alignment.center,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ConstrainedBox(
@@ -78,7 +78,6 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
               controller: roomCodeController,
             ),
           ),
-          SizedBox(height: 20), // Add space between the widgets
           ConstrainedBox(
             constraints:
                 BoxConstraints(minWidth: buttonWidth, maxWidth: buttonWidth),
@@ -98,7 +97,6 @@ class _JoinRoomSettingsState extends ConsumerState<JoinRoomSettings> {
               },
             ),
           ),
-          SizedBox(height: 20), // Add space between the widgets
           const ColorGrid(),
         ],
       ),
