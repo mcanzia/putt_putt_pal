@@ -27,7 +27,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: CustomColors.offWhite,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.black,
+      systemNavigationBarColor: CustomColors.offWhite,
       systemNavigationBarIconBrightness: Brightness.dark
     ));
     return Scaffold(
