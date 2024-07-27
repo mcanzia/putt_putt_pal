@@ -80,42 +80,48 @@ class _TextInputWithButtonState extends State<TextInputWithButton> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        widget.textFieldBasic
-            ? BasicTextInput(
-                controller: widget.controller,
-                hintText: widget.textFieldHintText,
-                textColor: widget.textFieldTextColor,
-                backgroundColor: widget.textFieldBackgroundColor,
-                borderColor: widget.textFieldBorderColor,
-                maxLength: widget.textFieldMaxLength,
-                isNumberInput: widget.isNumberInput,
-                connectedWithButton: true,
-                onSubmitted: (value) {
-                  _buttonReturnValueEvent();
-                  _buttonGoToPage();
-                })
-            : UppercaseTextField(
-                controller: widget.controller,
-                hintText: widget.textFieldHintText,
-                textColor: widget.textFieldTextColor,
-                backgroundColor: widget.textFieldBackgroundColor,
-                borderColor: widget.textFieldBorderColor,
-                maxLength: widget.textFieldMaxLength,
-                connectedWithButton: true,
-                onSubmitted: (value) {
-                  _buttonReturnValueEvent();
-                  _buttonGoToPage();
-                },
-              ),
-        BasicButton(
-          text: widget.buttonText,
-          textColor: widget.buttonTextColor,
-          color: widget.buttonColor,
-          connectedWithInput: true,
-          onPressed: () {
-            _buttonReturnValueEvent();
-            _buttonGoToPage();
-          },
+        SizedBox(
+          width: buttonWidth,
+          child: widget.textFieldBasic
+              ? BasicTextInput(
+                  controller: widget.controller,
+                  hintText: widget.textFieldHintText,
+                  textColor: widget.textFieldTextColor,
+                  backgroundColor: widget.textFieldBackgroundColor,
+                  borderColor: widget.textFieldBorderColor,
+                  maxLength: widget.textFieldMaxLength,
+                  isNumberInput: widget.isNumberInput,
+                  connectedWithButton: true,
+                  onSubmitted: (value) {
+                    _buttonReturnValueEvent();
+                    _buttonGoToPage();
+                  })
+              : UppercaseTextField(
+                  controller: widget.controller,
+                  hintText: widget.textFieldHintText,
+                  textColor: widget.textFieldTextColor,
+                  backgroundColor: widget.textFieldBackgroundColor,
+                  borderColor: widget.textFieldBorderColor,
+                  maxLength: widget.textFieldMaxLength,
+                  connectedWithButton: true,
+                  onSubmitted: (value) {
+                    _buttonReturnValueEvent();
+                    _buttonGoToPage();
+                  },
+                ),
+        ),
+        SizedBox(
+          width: buttonWidth,
+          child: BasicButton(
+            text: widget.buttonText,
+            textColor: widget.buttonTextColor,
+            color: widget.buttonColor,
+            connectedWithInput: true,
+            onPressed: () {
+              _buttonReturnValueEvent();
+              _buttonGoToPage();
+            },
+          ),
         ),
       ],
     );

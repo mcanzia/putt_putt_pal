@@ -17,48 +17,53 @@ class WaitingRoom extends ConsumerStatefulWidget {
 }
 
 class _WaitingRoomState extends ConsumerState<WaitingRoom> {
-
   @override
   void initState() {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: CustomColors.offWhite,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: CustomColors.offWhite,
-      systemNavigationBarIconBrightness: Brightness.light
-    ));
+        statusBarColor: CustomColors.offWhite,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: CustomColors.offWhite,
+        systemNavigationBarIconBrightness: Brightness.light));
   }
 
   @override
   Widget build(BuildContext context) {
-    final isColorPickerMode = ref.watch(gameStateProvider.select((state) => state.colorPickerMode));
-    final currentUser = ref.watch(gameStateProvider.select((state) => state.currentUser));
+    final isColorPickerMode =
+        ref.watch(gameStateProvider.select((state) => state.colorPickerMode));
+    final currentUser =
+        ref.watch(gameStateProvider.select((state) => state.currentUser));
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,
       ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Column(
-            children: <Widget>[
-              ExpandedCard(
-                content: isColorPickerMode ? const ColorCircle() : const GuestCircle(),
-                backgroundColor: CustomColors.offWhite,
-              ),
-              ExpandedCard(
-                content: (currentUser != null && currentUser.isHost) ? const HostSettings() : const GuestSettings(),
-                backgroundColor: CustomColors.offWhite,
-              ),
-            ],
-          ),
-        ],
+      body: SingleChildScrollView(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Column(
+              children: <Widget>[
+                ExpandedCard(
+                  content: isColorPickerMode
+                      ? const ColorCircle()
+                      : const GuestCircle(),
+                  backgroundColor: CustomColors.offWhite,
+                ),
+                ExpandedCard(
+                  content: (currentUser != null && currentUser.isHost)
+                      ? const HostSettings()
+                      : const GuestSettings(),
+                  backgroundColor: CustomColors.offWhite,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-      bottomNavigationBar: const BottomAppBar(
-        color: CustomColors.offWhite
-      ),
+      bottomNavigationBar: const BottomAppBar(color: CustomColors.offWhite),
     );
   }
 }
