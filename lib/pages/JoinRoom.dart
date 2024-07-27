@@ -15,6 +15,7 @@ class JoinRoom extends StatelessWidget {
       systemNavigationBarIconBrightness: Brightness.light,
     ));
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(

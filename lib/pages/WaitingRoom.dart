@@ -25,7 +25,7 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
       statusBarColor: CustomColors.offWhite,
       statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: CustomColors.offWhite,
-      systemNavigationBarIconBrightness: Brightness.dark
+      systemNavigationBarIconBrightness: Brightness.light
     ));
   }
 
@@ -35,6 +35,7 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
     final currentUser = ref.watch(gameStateProvider.select((state) => state.currentUser));
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,
       ),

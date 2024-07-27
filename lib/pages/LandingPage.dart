@@ -31,6 +31,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       systemNavigationBarIconBrightness: Brightness.dark
     ));
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         alignment: Alignment.center,
         children: [

@@ -81,6 +81,7 @@ class FullScoresPage extends ConsumerWidget {
     ));
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

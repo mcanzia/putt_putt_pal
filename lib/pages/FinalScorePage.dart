@@ -22,6 +22,7 @@ class FinalScorePage extends ConsumerWidget {
       systemNavigationBarIconBrightness: Brightness.light
     ));
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,
       ),

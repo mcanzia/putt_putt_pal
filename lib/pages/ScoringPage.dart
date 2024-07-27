@@ -57,6 +57,7 @@ class ScoringPage extends ConsumerWidget {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.offWhite,
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,
