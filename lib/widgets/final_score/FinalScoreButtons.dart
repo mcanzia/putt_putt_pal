@@ -30,7 +30,7 @@ class FinalScoreButtons extends ConsumerWidget {
             color: CustomColors.offWhite,
             textColor: Colors.black,
             onPressed: () => {
-              RouterHelper.handleRouteChangeWithBack(const FullScoresPage())
+              RouterHelper.handleRouteChangeWithBack('/full-scores')
             },
           ),
           if (currentUser?.isHost ?? false)

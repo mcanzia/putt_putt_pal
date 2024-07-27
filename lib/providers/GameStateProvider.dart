@@ -92,7 +92,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
 
     socketService.on('startGame', (data) {
       try {
-        RouterHelper.handleRouteChange(const ScoringPageView());
+        RouterHelper.handleRouteChange('/scoring');
       } catch (error) {
         LoggerUtil.error("Start Game Error - ${error.toString()}");
       }
@@ -100,7 +100,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
 
     socketService.on('endGame', (data) {
       try {
-        RouterHelper.handleRouteChangeWithBack(const FinalScorePage());
+        RouterHelper.handleRouteChangeWithBack('/final-scores');
       } catch (error) {
         LoggerUtil.error("End Game Error - ${error.toString()}");
       }
@@ -110,7 +110,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       try {
         Room updatedRoom = Room.fromJson(data);
         state = state.copyWith(room: updatedRoom);
-        RouterHelper.handleRouteChange(const WaitingRoom());
+        RouterHelper.handleRouteChange('/waiting-room');
       } catch (error) {
         LoggerUtil.error("Play Again Error - ${error.toString()}");
       }
@@ -145,7 +145,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       socketService.emit('callEndGame', {
         'roomId': state.room.id,
       });
-      RouterHelper.handleRouteChangeWithBack(const FinalScorePage());
+      RouterHelper.handleRouteChangeWithBack('/final-scores');
     } catch (error) {
       LoggerUtil.error("End Game Error - ${error.toString()}");
       ErrorHandler.handleEndGameError();
@@ -221,7 +221,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
           .firstWhere((player) => player.name == playerName);
       state = state.copyWith(room: updatedRoom, currentUser: currentUser);
       socketService.joinRoom(updatedRoom.id);
-      RouterHelper.handleRouteChange(const WaitingRoom());
+      RouterHelper.handleRouteChange('/waiting-room');
     } on RoomNotFoundError catch (error) {
       LoggerUtil.error(error.toString());
       ExceptionHandler.handleInvalidRoomCode();

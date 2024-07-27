@@ -20,8 +20,8 @@ class TextInputWithDoubleButton extends StatefulWidget {
   final bool isNumberInput;
   final TextEditingController controller;
   final int? textFieldMaxLength;
-  final Widget? toPageOne;
-  final Widget? toPageTwo;
+  final String? toPageOne;
+  final String? toPageTwo;
   final Function(String text)? onButtonOnePressed;
   final VoidCallback? onButtonTwoPressed;
   final FocusNode? focusNode;

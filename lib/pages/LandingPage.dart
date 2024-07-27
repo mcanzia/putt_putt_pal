@@ -19,7 +19,7 @@ class LandingPage extends ConsumerStatefulWidget {
 class _LandingPageState extends ConsumerState<LandingPage> {
   void createRoom() async {
     await ref.read(gameStateProvider.notifier).createRoom();
-    RouterHelper.handleRouteChange(const WaitingRoom());
+    RouterHelper.handleRouteChange('/waiting-room');
   }
 
   @override
@@ -46,7 +46,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                 text: 'Join Room',
                 textColor: CustomColors.offWhite,
                 backgroundColor: Colors.black,
-                toPage: JoinRoom(),
+                toPage: '/join-room',
               ),
             ],
           ),

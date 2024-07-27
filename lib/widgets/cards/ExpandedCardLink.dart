@@ -14,7 +14,7 @@ class ExpandedCardLink extends StatelessWidget {
   final Color textColor;
   final Color backgroundColor;
   final VoidCallback? onPressed;
-  final Widget? toPage;
+  final String? toPage;
 
   @override
   Widget build(BuildContext context) {
