@@ -21,10 +21,11 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
   void initState() {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: CustomColors.offWhite,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: CustomColors.offWhite,
-        systemNavigationBarIconBrightness: Brightness.light));
+      statusBarColor: CustomColors.offWhite,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: CustomColors.offWhite,
+      systemNavigationBarIconBrightness: Brightness.light,
+    ));
   }
 
   @override
@@ -38,30 +39,33 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,
       ),
-      body: SingleChildScrollView(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Column(
-              children: <Widget>[
-                ExpandedCard(
-                  content: isColorPickerMode
-                      ? const ColorCircle()
-                      : const GuestCircle(),
-                  backgroundColor: CustomColors.offWhite,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: <Widget>[
+                    ExpandedCard(
+                      content: isColorPickerMode
+                          ? const ColorCircle()
+                          : const GuestCircle(),
+                      backgroundColor: CustomColors.offWhite,
+                    ),
+                    ExpandedCard(
+                      content: (currentUser != null && currentUser.isHost)
+                          ? const HostSettings()
+                          : const GuestSettings(),
+                      backgroundColor: CustomColors.offWhite,
+                    ),
+                    SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+                  ],
                 ),
-                ExpandedCard(
-                  content: (currentUser != null && currentUser.isHost)
-                      ? const HostSettings()
-                      : const GuestSettings(),
-                  backgroundColor: CustomColors.offWhite,
-                ),
-              ],
+              ),
             ),
-          ],
-        ),
+          );
+        },
       ),
       bottomNavigationBar: const BottomAppBar(color: CustomColors.offWhite),
     );
