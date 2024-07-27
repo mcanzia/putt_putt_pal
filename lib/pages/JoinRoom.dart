@@ -36,13 +36,22 @@ class JoinRoom extends StatelessWidget {
           color: Colors.black,
           border: Border.all(color: Colors.black),
         ),
-        child: const Column(
-          children: [
-            ExpandedCard(
-              content: JoinRoomSettings(),
-              backgroundColor: Colors.black,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
             ),
-          ],
+            child: const IntrinsicHeight(
+              child: Column(
+                children: [
+                  ExpandedCard(
+                    content: JoinRoomSettings(),
+                    backgroundColor: Colors.black,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
