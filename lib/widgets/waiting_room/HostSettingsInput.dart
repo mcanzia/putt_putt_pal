@@ -207,6 +207,7 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
 
     return Column(
       children: [
+        inputWidget,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -226,7 +227,6 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
             ),
           ],
         ),
-        inputWidget,
       ],
     );
   }
