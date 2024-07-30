@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+GameState _$GameStateFromJson(Map<String, dynamic> json) {
+  return _GameState.fromJson(json);
+}
+
 /// @nodoc
 mixin _$GameState {
   Room get room => throw _privateConstructorUsedError;
@@ -23,6 +27,7 @@ mixin _$GameState {
   PlayerColor get currentColor => throw _privateConstructorUsedError;
   List<PlayerColor> get playerColors => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $GameStateCopyWith<GameState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -210,7 +215,7 @@ class __$$GameStateImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$GameStateImpl implements _GameState {
   const _$GameStateImpl(
       {this.room = const Room(),
@@ -220,6 +225,9 @@ class _$GameStateImpl implements _GameState {
       this.currentColor = const PlayerColor(),
       final List<PlayerColor> playerColors = const []})
       : _playerColors = playerColors;
+
+  factory _$GameStateImpl.fromJson(Map<String, dynamic> json) =>
+      _$$GameStateImplFromJson(json);
 
   @override
   @JsonKey()
@@ -268,6 +276,7 @@ class _$GameStateImpl implements _GameState {
                 .equals(other._playerColors, _playerColors));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -283,6 +292,13 @@ class _$GameStateImpl implements _GameState {
   @pragma('vm:prefer-inline')
   _$$GameStateImplCopyWith<_$GameStateImpl> get copyWith =>
       __$$GameStateImplCopyWithImpl<_$GameStateImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$GameStateImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _GameState implements GameState {
@@ -293,6 +309,9 @@ abstract class _GameState implements GameState {
       final bool colorPickerMode,
       final PlayerColor currentColor,
       final List<PlayerColor> playerColors}) = _$GameStateImpl;
+
+  factory _GameState.fromJson(Map<String, dynamic> json) =
+      _$GameStateImpl.fromJson;
 
   @override
   Room get room;

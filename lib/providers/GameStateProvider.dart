@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/controllers/HoleController.dart';
@@ -20,6 +21,7 @@ import 'package:putt_putt_pal/util/ExceptionHandler.dart';
 import 'package:putt_putt_pal/util/LoggerUtil.dart';
 import 'package:putt_putt_pal/util/RouterHelper.dart';
 import 'package:putt_putt_pal/widgets/scoring/ScoringPageView.dart';
+import 'package:putt_putt_pal/util/StatePersistence.dart';
 import 'package:logger/logger.dart';
 
 final socketServiceProvider = ChangeNotifierProvider((ref) => SocketService());
@@ -35,6 +37,7 @@ final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState>(
 );
 
 class GameStateNotifier extends StateNotifier<GameState> {
+  static const String _storageKey = 'puttPuttGameState';
   final RoomController roomController;
   final PlayerController playerController;
   final HoleController holeController;
@@ -50,6 +53,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     required this.socketService,
   }) : super(const GameState()) {
     _initSocketListeners();
+    _loadState();
   }
 
   void _initSocketListeners() {
@@ -117,6 +121,23 @@ class GameStateNotifier extends StateNotifier<GameState> {
     });
   }
 
+  void _loadState() async {
+    final savedState = await StatePersistence.loadState(_storageKey);
+    if (savedState != null) {
+      state = GameState.fromJson(jsonDecode(savedState));
+    }
+  }
+
+  void _saveState() {
+    StatePersistence.saveState(_storageKey, jsonEncode(state.toJson()));
+  }
+
+  @override
+  set state(GameState value) {
+    super.state = value;
+    _saveState();
+  }
+  
   Future<void> createRoom() async {
     try {
       Room newRoom = await roomController.createRoom();

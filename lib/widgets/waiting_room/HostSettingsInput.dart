@@ -24,7 +24,7 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
 
   void addPlayer(String playerName, bool isHost, PlayerColor color) async {
     if (checkDuplicateName(playerName)) {
-        return;
+      return;
     }
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     await gameStateNotifier.addPlayerToRoom(playerName, isHost, color);
@@ -32,11 +32,10 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   }
 
   void updatePlayer(String playerName) async {
-    
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     final Player? editPlayer = ref.read(gameStateProvider).editPlayer;
     if (editPlayer!.name != playerName && checkDuplicateName(playerName)) {
-        return;
+      return;
     }
     Player updatePlayer = Player(
         id: editPlayer!.id,
@@ -48,13 +47,14 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   }
 
   bool checkDuplicateName(String playerName) {
-    final bool duplicateName = ref.read(gameStateProvider.select((gsp) => gsp.room.duplicateName(playerName)));
+    final bool duplicateName = ref.read(
+        gameStateProvider.select((gsp) => gsp.room.duplicateName(playerName)));
     if (duplicateName) {
       ExceptionHandler.handleDuplicateNameException();
       return true;
     }
     return false;
-  } 
+  }
 
   void everyoneIn(bool allPlayersJoined) async {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
@@ -71,7 +71,8 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   }
 
   void startGame(int numHoles) async {
-    final hostPlayerJoined = ref.read(gameStateProvider.select((gsp) => gsp.room.hostPresent()));
+    final hostPlayerJoined =
+        ref.read(gameStateProvider.select((gsp) => gsp.room.hostPresent()));
     if (!hostPlayerJoined) {
       ExceptionHandler.handleHostPlayerMustBePresentException();
       return;

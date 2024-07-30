@@ -7,6 +7,7 @@ import 'package:putt_putt_pal/models/PlayerScore.dart';
 import 'package:putt_putt_pal/models/Room.dart';
 
 part 'GameState.freezed.dart';
+part 'GameState.g.dart';
 
 @freezed
 class GameState with _$GameState {
@@ -18,6 +19,8 @@ class GameState with _$GameState {
     @Default(PlayerColor()) PlayerColor currentColor,
     @Default([]) List<PlayerColor> playerColors,
   }) = _GameState;
+
+  factory GameState.fromJson(Map<String, dynamic> json) => _$GameStateFromJson(json);  
 }
 
 extension GameStateExtension on GameState {
