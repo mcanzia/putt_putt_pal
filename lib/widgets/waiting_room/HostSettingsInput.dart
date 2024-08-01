@@ -207,6 +207,7 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
     );
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         inputWidget,
         Row(

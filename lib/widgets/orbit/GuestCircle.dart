@@ -86,7 +86,7 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
       child: CanvasTouchDetector(
         gesturesToOverride: const [GestureType.onTapDown],
         builder: (context) => CustomPaint(
-          size: const Size(225, 225),
+          size: const Size(275, 275),
           painter: GuestCirclePainter(
             context: context,
             animation: _controller,

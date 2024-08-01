@@ -98,7 +98,7 @@ class _TextInputWithDoubleButtonState extends State<TextInputWithDoubleButton> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double buttonWidth = screenWidth * 0.7;
+    double buttonWidth = screenWidth * 0.8;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

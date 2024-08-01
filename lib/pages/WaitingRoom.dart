@@ -7,6 +7,7 @@ import 'package:putt_putt_pal/widgets/orbit/ColorCircle.dart';
 import 'package:putt_putt_pal/widgets/orbit/GuestCircle.dart';
 import 'package:putt_putt_pal/widgets/waiting_room/GuestSettings.dart';
 import 'package:putt_putt_pal/widgets/waiting_room/HostSettings.dart';
+import 'package:putt_putt_pal/widgets/common/CustomAppBar.dart';
 import '../styles/colors.dart';
 
 class WaitingRoom extends ConsumerStatefulWidget {
@@ -36,31 +37,28 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: CustomColors.offWhite,
+      backgroundColor: CustomColors.offWhite,
+      appBar: CustomAppBar(
+        title: 'Room',
+        showBackButton: true,
+        backgroundColor: CustomColors.offWhite
       ),
       body: Stack(
         alignment: Alignment.center,
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              ExpandedCard(
-                content: (currentUser != null && currentUser.isHost)
+              (currentUser != null && currentUser.isHost)
                     ? const HostSettings()
                     : const GuestSettings(),
-                backgroundColor: CustomColors.offWhite,
-              ),
-              ExpandedCard(
-                content: isColorPickerMode
+              isColorPickerMode
                     ? const ColorCircle()
                     : const GuestCircle(),
-                backgroundColor: CustomColors.offWhite,
-              ),
             ],
           ),
         ],
       ),
-      bottomNavigationBar: const BottomAppBar(color: CustomColors.offWhite),
     );
   }
 }

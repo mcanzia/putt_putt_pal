@@ -62,7 +62,7 @@ class GuestCirclePainter extends CustomPainter {
     var touchableCanvas = TouchyCanvas(context, canvas);
     final center = Offset(size.width / 2, size.height / 2);
     final bigCircleRadius = size.width / 2;
-    double smallCircleRadius = size.width / 15;
+    double smallCircleRadius = size.width / 10;
 
     final bigCirclePaint = Paint()
       ..color = Colors.black
