@@ -16,6 +16,7 @@ class GameState with _$GameState {
     @Default(null) Player? editPlayer,
     @Default(null) Player? currentUser,
     @Default(false) bool colorPickerMode,
+    @Default(false) bool circlePaused,
     @Default(PlayerColor()) PlayerColor currentColor,
     @Default([]) List<PlayerColor> playerColors,
   }) = _GameState;

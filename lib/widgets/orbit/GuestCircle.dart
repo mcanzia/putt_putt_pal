@@ -79,8 +79,10 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
         ref.watch(gameStateProvider.select((gsp) => gsp.room.roomCode));
     final editPlayer =
         ref.watch(gameStateProvider.select((gsp) => gsp.editPlayer));
-    final currentUser = 
+    final currentUser =
         ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
+    final isPaused =
+        ref.watch(gameStateProvider.select((gsp) => gsp.circlePaused));
 
     return Center(
       child: CanvasTouchDetector(
@@ -88,14 +90,14 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
         builder: (context) => CustomPaint(
           size: const Size(275, 275),
           painter: GuestCirclePainter(
-            context: context,
-            animation: _controller,
-            guests: guests,
-            roomCode: roomCode,
-            editPlayer: editPlayer,
-            currentUser: currentUser,
-            onTap: (player) => _handleTap(player),
-          ),
+              context: context,
+              animation: _controller,
+              guests: guests,
+              roomCode: roomCode,
+              editPlayer: editPlayer,
+              currentUser: currentUser,
+              onTap: (player) => _handleTap(player),
+              isPaused: isPaused),
         ),
       ),
     );

@@ -13,6 +13,7 @@ class GuestCirclePainter extends CustomPainter {
   final Player? editPlayer;
   final Player? currentUser;
   final Function(Player) onTap;
+  final bool isPaused;
 
   GuestCirclePainter({
     required this.context,
@@ -22,13 +23,14 @@ class GuestCirclePainter extends CustomPainter {
     required this.onTap,
     this.currentUser,
     this.editPlayer,
+    required this.isPaused,
   }) : super(repaint: animation);
 
   Color getPlayerColor(Player? player) {
     if (editPlayer != null) {
       return player!.id == editPlayer!.id
           ? player.getPlayerBackgroundColor()
-          : player.getPlayerBackgroundColor().withOpacity(0.3);
+          : player.getPlayerBackgroundColor().withOpacity(0.5);
     }
     return player!.getPlayerBackgroundColor();
   }
@@ -104,7 +106,7 @@ class GuestCirclePainter extends CustomPainter {
     // Draw
     for (int i = 0; i < guests.length; i++) {
       var guest = guests[i];
-      double updatedAngle = guest.angle + (2 * pi * animation!.value);
+      double updatedAngle = guest.angle + (2 * pi * (!isPaused ? animation!.value : 1));
       Offset orbOffset = Offset(
         center.dx + bigCircleRadius * cos(updatedAngle),
         center.dy + bigCircleRadius * sin(updatedAngle),

@@ -38,11 +38,10 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
         double orbAngle = 2 * pi + (i * pi / 6);
         ColorOrb colorOrb = ColorOrb(
           angle: orbAngle,
-          color: playerColors[i].getColorObject(),
+          color: playerColors[i],
         );
         colors.add(colorOrb);
       }
-
     });
   }
 
@@ -53,23 +52,34 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
   }
 
   void _handleTap(PlayerColor playerColor) {
-      ref.read(gameStateProvider.notifier).setPlayerColor(playerColor);
+    ref.read(gameStateProvider.notifier).setPlayerColor(playerColor);
+  }
+
+  void _handleClear() {
+    final gameStateNotifier = ref.read(gameStateProvider.notifier);
+    gameStateNotifier.setPlayerColor(PlayerColor());
   }
 
   @override
   Widget build(BuildContext context) {
-
     // // listen for updates
     // ref.listen<List<PlayerColor>>(gameStateProvider.select((gsp) => gsp.playerColors), (previous, next) {
     //   updateColorList(next);
     // });
 
     // Initialize color list
-    final playerColors = ref.watch(gameStateProvider.select((gsp) => gsp.playerColors));
+    final playerColors =
+        ref.watch(gameStateProvider.select((gsp) => gsp.playerColors));
     updateColorList(playerColors);
 
+    final selectedColor =
+        ref.watch(gameStateProvider.select((gsp) => gsp.currentColor));
+
     // Get Room Code
-    final roomCode = ref.watch(gameStateProvider.select((gsp) => gsp.room.roomCode));
+    final roomCode =
+        ref.watch(gameStateProvider.select((gsp) => gsp.room.roomCode));
+
+    final isPaused = ref.watch(gameStateProvider.select((gsp) => gsp.circlePaused));
 
     return Center(
       child: CanvasTouchDetector(
@@ -81,10 +91,13 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
             animation: _controller,
             colors: colors,
             roomCode: roomCode,
-            onTap: (index) => _handleTap(playerColors[index])),
+            onTap: (index) => _handleTap(playerColors[index]),
+            onClear: _handleClear,
+            selectedColor: selectedColor,
+            isPaused: isPaused
           ),
         ),
+      ),
     );
-      
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:putt_putt_pal/models/PlayerColor.dart';
+
 class ColorOrb {
   final double angle;
-  final Color color;
+  final PlayerColor color;
 
   ColorOrb({required this.angle, required this.color});
 

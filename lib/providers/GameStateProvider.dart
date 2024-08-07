@@ -56,6 +56,12 @@ class GameStateNotifier extends StateNotifier<GameState> {
     _loadState();
   }
 
+  @override
+  void dispose() {
+    _saveState();
+    super.dispose();
+  }
+
   void _initSocketListeners() {
     socketService.on('roomUpdated', (data) {
       try {
@@ -77,6 +83,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
             currentColor: const PlayerColor(),
             colorPickerMode: false,
             editPlayer: null);
+            print('HEYYY BUDDDDY');
       } catch (error) {
         LoggerUtil.error("Player List Updated Error - ${error.toString()}");
       }
@@ -125,6 +132,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     final savedState = await StatePersistence.loadState(_storageKey);
     if (savedState != null) {
       state = GameState.fromJson(jsonDecode(savedState));
+      socketService.joinRoom(state.room.id);
     }
   }
 
@@ -349,6 +357,15 @@ class GameStateNotifier extends StateNotifier<GameState> {
     } catch (error) {
       LoggerUtil.error("Get PlayerColors error - ${error.toString()}");
       ErrorHandler.handleCreateRoomError();
+    }
+  }
+
+  void toggleCirclePaused() {
+    try {
+      state = state.copyWith(circlePaused: !state.circlePaused);
+    } catch (error) {
+      LoggerUtil.error("Toggle Circle Paused error - ${error.toString()}");
+      ErrorHandler.handleToggleCirclePaused();
     }
   }
 

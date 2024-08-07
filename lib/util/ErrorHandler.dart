@@ -74,4 +74,8 @@ class ErrorHandler {
     static handleEndGameError() {
       showErrorToast('Error ending game. Please try again');
     }
+
+    static handleToggleCirclePaused() {
+      showErrorToast('Error pausing/unpausing circle');
+    }
 }

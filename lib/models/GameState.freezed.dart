@@ -24,6 +24,7 @@ mixin _$GameState {
   Player? get editPlayer => throw _privateConstructorUsedError;
   Player? get currentUser => throw _privateConstructorUsedError;
   bool get colorPickerMode => throw _privateConstructorUsedError;
+  bool get circlePaused => throw _privateConstructorUsedError;
   PlayerColor get currentColor => throw _privateConstructorUsedError;
   List<PlayerColor> get playerColors => throw _privateConstructorUsedError;
 
@@ -43,6 +44,7 @@ abstract class $GameStateCopyWith<$Res> {
       Player? editPlayer,
       Player? currentUser,
       bool colorPickerMode,
+      bool circlePaused,
       PlayerColor currentColor,
       List<PlayerColor> playerColors});
 
@@ -69,6 +71,7 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? editPlayer = freezed,
     Object? currentUser = freezed,
     Object? colorPickerMode = null,
+    Object? circlePaused = null,
     Object? currentColor = null,
     Object? playerColors = null,
   }) {
@@ -88,6 +91,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
       colorPickerMode: null == colorPickerMode
           ? _value.colorPickerMode
           : colorPickerMode // ignore: cast_nullable_to_non_nullable
+              as bool,
+      circlePaused: null == circlePaused
+          ? _value.circlePaused
+          : circlePaused // ignore: cast_nullable_to_non_nullable
               as bool,
       currentColor: null == currentColor
           ? _value.currentColor
@@ -154,6 +161,7 @@ abstract class _$$GameStateImplCopyWith<$Res>
       Player? editPlayer,
       Player? currentUser,
       bool colorPickerMode,
+      bool circlePaused,
       PlayerColor currentColor,
       List<PlayerColor> playerColors});
 
@@ -182,6 +190,7 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? editPlayer = freezed,
     Object? currentUser = freezed,
     Object? colorPickerMode = null,
+    Object? circlePaused = null,
     Object? currentColor = null,
     Object? playerColors = null,
   }) {
@@ -201,6 +210,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
       colorPickerMode: null == colorPickerMode
           ? _value.colorPickerMode
           : colorPickerMode // ignore: cast_nullable_to_non_nullable
+              as bool,
+      circlePaused: null == circlePaused
+          ? _value.circlePaused
+          : circlePaused // ignore: cast_nullable_to_non_nullable
               as bool,
       currentColor: null == currentColor
           ? _value.currentColor
@@ -222,6 +235,7 @@ class _$GameStateImpl implements _GameState {
       this.editPlayer = null,
       this.currentUser = null,
       this.colorPickerMode = false,
+      this.circlePaused = false,
       this.currentColor = const PlayerColor(),
       final List<PlayerColor> playerColors = const []})
       : _playerColors = playerColors;
@@ -243,6 +257,9 @@ class _$GameStateImpl implements _GameState {
   final bool colorPickerMode;
   @override
   @JsonKey()
+  final bool circlePaused;
+  @override
+  @JsonKey()
   final PlayerColor currentColor;
   final List<PlayerColor> _playerColors;
   @override
@@ -255,7 +272,7 @@ class _$GameStateImpl implements _GameState {
 
   @override
   String toString() {
-    return 'GameState(room: $room, editPlayer: $editPlayer, currentUser: $currentUser, colorPickerMode: $colorPickerMode, currentColor: $currentColor, playerColors: $playerColors)';
+    return 'GameState(room: $room, editPlayer: $editPlayer, currentUser: $currentUser, colorPickerMode: $colorPickerMode, circlePaused: $circlePaused, currentColor: $currentColor, playerColors: $playerColors)';
   }
 
   @override
@@ -270,6 +287,8 @@ class _$GameStateImpl implements _GameState {
                 other.currentUser == currentUser) &&
             (identical(other.colorPickerMode, colorPickerMode) ||
                 other.colorPickerMode == colorPickerMode) &&
+            (identical(other.circlePaused, circlePaused) ||
+                other.circlePaused == circlePaused) &&
             (identical(other.currentColor, currentColor) ||
                 other.currentColor == currentColor) &&
             const DeepCollectionEquality()
@@ -284,6 +303,7 @@ class _$GameStateImpl implements _GameState {
       editPlayer,
       currentUser,
       colorPickerMode,
+      circlePaused,
       currentColor,
       const DeepCollectionEquality().hash(_playerColors));
 
@@ -307,6 +327,7 @@ abstract class _GameState implements GameState {
       final Player? editPlayer,
       final Player? currentUser,
       final bool colorPickerMode,
+      final bool circlePaused,
       final PlayerColor currentColor,
       final List<PlayerColor> playerColors}) = _$GameStateImpl;
 
@@ -321,6 +342,8 @@ abstract class _GameState implements GameState {
   Player? get currentUser;
   @override
   bool get colorPickerMode;
+  @override
+  bool get circlePaused;
   @override
   PlayerColor get currentColor;
   @override

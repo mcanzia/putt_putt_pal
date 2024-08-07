@@ -26,9 +26,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: CustomColors.offWhite,
-      statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: CustomColors.offWhite,
-      systemNavigationBarIconBrightness: Brightness.dark
     ));
     return Scaffold(
       resizeToAvoidBottomInset: false,

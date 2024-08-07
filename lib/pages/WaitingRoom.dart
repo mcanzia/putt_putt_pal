@@ -21,15 +21,14 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: CustomColors.offWhite,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: CustomColors.offWhite,
-        systemNavigationBarIconBrightness: Brightness.light));
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: CustomColors.offWhite,
+      systemNavigationBarColor: CustomColors.offWhite,
+    ));
     final isColorPickerMode =
         ref.watch(gameStateProvider.select((state) => state.colorPickerMode));
     final currentUser =
@@ -38,10 +37,11 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.offWhite,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Room',
         showBackButton: true,
-        backgroundColor: CustomColors.offWhite
+        backgroundColor: CustomColors.offWhite,
+        showPauseButton: true,
       ),
       body: Stack(
         alignment: Alignment.center,

@@ -28,16 +28,17 @@ class ScoringPage extends ConsumerWidget {
     final List<PlayerScore> playerScores = hole.playerScores;
     final int totalHoles =
         ref.watch(gameStateProvider.select((gsp) => gsp.room.numberOfHoles));
-    final Map<String, Player> players = ref.watch(gameStateProvider.select((gsp) => gsp.room.players));
-    Player? currentUser = ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
+    final Map<String, Player> players =
+        ref.watch(gameStateProvider.select((gsp) => gsp.room.players));
+    Player? currentUser =
+        ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
     final screenHeight = MediaQuery.of(context).size.height;
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: CustomColors.offWhite,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: CustomColors.offWhite,
-      systemNavigationBarIconBrightness: Brightness.dark
-    ));
+        statusBarColor: CustomColors.offWhite,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: CustomColors.offWhite,
+        systemNavigationBarIconBrightness: Brightness.dark));
 
     void onScoreChanged(Player player, int newScore) {
       _debouncer.run(() {
@@ -50,10 +51,8 @@ class ScoringPage extends ConsumerWidget {
     }
 
     int getCurrentScore(String playerId) {
-      return ref.read(
-                            gameStateProvider.select((state) =>
-                                state.getPlayerScore(
-                                    hole, players[playerId]!)));
+      return ref.read(gameStateProvider
+          .select((state) => state.getPlayerScore(hole, players[playerId]!)));
     }
 
     return Scaffold(
@@ -61,6 +60,30 @@ class ScoringPage extends ConsumerWidget {
       backgroundColor: CustomColors.offWhite,
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,
+        title: Text(
+          'Hole ${hole.holeNumber}',
+          style: const TextStyle(fontFamily: 'Lobster', fontSize: 30),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: hole.holeNumber > 1
+              ? () => pageController.previousPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  )
+              : null,
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_forward),
+            onPressed: hole.holeNumber <= totalHoles
+                ? () => pageController.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    )
+                : null,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: ConstrainedBox(
@@ -68,45 +91,13 @@ class ScoringPage extends ConsumerWidget {
           child: IntrinsicHeight(
             child: Column(
               children: [
-                SizedBox(
-                  height: screenHeight * 0.2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: hole.holeNumber > 1
-                            ? () => pageController.previousPage(
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                )
-                            : null,
-                      ),
-                      TitleCard(
-                        backgroundColor: CustomColors.offWhite,
-                        textColor: Colors.black,
-                        text: 'Hole ${hole.holeNumber}',
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.arrow_forward),
-                        onPressed: hole.holeNumber <= totalHoles
-                            ? () => pageController.nextPage(
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                )
-                            : null,
-                      ),
-                    ],
-                  ),
-                ),
                 Flexible(
                   child: Column(
                     children: playerScores.map((entry) {
                       final playerScore = entry.score;
                       return ExpandedCard(
                         content: PersonalScore(
-                          key: ValueKey(
-                              '${entry.playerId}_${hole.id}'),
+                          key: ValueKey('${entry.playerId}_${hole.id}'),
                           player: players[entry.playerId]!,
                           currentUser: currentUser!,
                           currentScore: getCurrentScore(entry.playerId),

@@ -210,13 +210,14 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         inputWidget,
+        SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'All Players Joined: ',
+              'All Players Joined ',
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 20,
                 color: Colors.black,
               ),
             ),

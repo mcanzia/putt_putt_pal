@@ -6,6 +6,7 @@ import 'package:putt_putt_pal/pages/JoinRoom.dart';
 import 'package:putt_putt_pal/pages/LandingPage.dart';
 import 'package:putt_putt_pal/pages/ScoringPage.dart';
 import 'package:putt_putt_pal/pages/WaitingRoom.dart';
+import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/widgets/scoring/ScoringPageView.dart';
 
 final GoRouter router = GoRouter(

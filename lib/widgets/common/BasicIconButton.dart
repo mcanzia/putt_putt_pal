@@ -38,9 +38,9 @@ class BasicIconButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
-          elevation: MaterialStateProperty.all(0),
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          padding: WidgetStateProperty.all(const EdgeInsets.all(20)),
+          elevation: WidgetStateProperty.all(0),
+          shadowColor: WidgetStateProperty.all(Colors.transparent),
         ),
         child: Icon(
           icon,

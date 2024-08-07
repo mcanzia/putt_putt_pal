@@ -18,6 +18,7 @@ _$GameStateImpl _$$GameStateImplFromJson(Map<String, dynamic> json) =>
           ? null
           : Player.fromJson(json['currentUser'] as Map<String, dynamic>),
       colorPickerMode: json['colorPickerMode'] as bool? ?? false,
+      circlePaused: json['circlePaused'] as bool? ?? false,
       currentColor: json['currentColor'] == null
           ? const PlayerColor()
           : PlayerColor.fromJson(json['currentColor'] as Map<String, dynamic>),
@@ -33,6 +34,7 @@ Map<String, dynamic> _$$GameStateImplToJson(_$GameStateImpl instance) =>
       'editPlayer': instance.editPlayer,
       'currentUser': instance.currentUser,
       'colorPickerMode': instance.colorPickerMode,
+      'circlePaused': instance.circlePaused,
       'currentColor': instance.currentColor,
       'playerColors': instance.playerColors,
     };
