@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
+import 'package:putt_putt_pal/widgets/common/CustomAppBar.dart';
 import 'package:putt_putt_pal/widgets/full_scores/HolesDataTableSource.dart';
 
 class FullScoresPage extends ConsumerWidget {
@@ -80,15 +82,14 @@ class FullScoresPage extends ConsumerWidget {
       systemNavigationBarIconBrightness: Brightness.dark
     ));
 
+    void goBackToFinalScorePage() {
+      RouterHelper.handleRouteChange('/final-scores');
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+      appBar: CustomAppBar(
+        backButtonCallback: goBackToFinalScorePage,
         backgroundColor: CustomColors.offWhite,
       ),
       body: Center(
@@ -113,9 +114,6 @@ class FullScoresPage extends ConsumerWidget {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: const BottomAppBar(
-        color: CustomColors.offWhite
       ),
     );
   }

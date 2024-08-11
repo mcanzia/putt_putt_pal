@@ -20,6 +20,13 @@ class RouterHelper {
     goRouter.go(route);
   }
 
+  static void handleScorePageChange(int index) {
+    final goRouter = _container.read(goRouterProvider);
+    print('SCORE PAGE ROUTE: NUMBER  + ${index}');
+    goRouter.go(Uri(path: '/scoring/${index}').toString());
+
+  }
+
   // static void handleRouteChange(Widget target) {
   //   navigatorKey.currentState?.pushAndRemoveUntil(
   //     MaterialPageRoute(builder: (context) => target),

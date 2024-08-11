@@ -103,6 +103,7 @@ class ScoringPage extends ConsumerWidget {
                           currentScore: getCurrentScore(entry.playerId),
                           onScoreChanged: onScoreChanged,
                         ),
+                        maxHeight: screenHeight / 5,
                         backgroundColor:
                             players[entry.playerId]!.getPlayerBackgroundColor(),
                       );

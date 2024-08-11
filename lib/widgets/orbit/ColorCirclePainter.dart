@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:putt_putt_pal/models/ColorOrb.dart';
+import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/models/PlayerColor.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
 import 'dart:math';
@@ -14,6 +15,7 @@ class ColorCirclePainter extends CustomPainter {
   final Function(int) onTap;
   final Function onClear;
   final PlayerColor? selectedColor;
+  final Player? editPlayer;
   final bool isPaused;
 
   ColorCirclePainter({
@@ -23,15 +25,19 @@ class ColorCirclePainter extends CustomPainter {
     required this.roomCode,
     required this.onTap,
     required this.onClear,
+    this.editPlayer,
     this.selectedColor,
     required this.isPaused,
   }) : super(repaint: animation);
 
-  Color getFillColor(PlayerColor color) {
-    if (selectedColor != null && selectedColor!.id == color.id) {
+  Color getFillColor(ColorOrb color) {
+    if (color.isTaken) {
+      return Colors.black.withOpacity(0);
+    }
+    if (selectedColor != null && selectedColor!.id == color.color.id || (editPlayer != null && editPlayer!.color.id == color.color.id)) {
       return Colors.black.withOpacity(0.6);
     }
-    return color.getColorObject();
+    return color.color.getColorObject();
   }
 
   Paint getFillPaint(Color color) {
@@ -129,7 +135,8 @@ class ColorCirclePainter extends CustomPainter {
     // Draw
     for (int i = 0; i < colors.length; i++) {
       var color = colors[i];
-      double updatedAngle = color.angle + (2 * pi * (!isPaused ? animation!.value : 1));
+      double updatedAngle =
+          color.angle + (2 * pi * (!isPaused ? animation!.value : 1));
       Offset orbOffset = Offset(
         center.dx + bigCircleRadius * cos(updatedAngle),
         center.dy + bigCircleRadius * sin(updatedAngle),
@@ -143,9 +150,11 @@ class ColorCirclePainter extends CustomPainter {
       touchableCanvas.drawCircle(
         orbOffset,
         smallCircleRadius,
-        getFillPaint(getFillColor(color.color)),
+        getFillPaint(getFillColor(color)),
         onTapDown: (tapDetail) {
-          onTap(i);
+          if (!color.isTaken) {
+            onTap(i);
+          }
         },
       );
       touchableCanvas.drawCircle(

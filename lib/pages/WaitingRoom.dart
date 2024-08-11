@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
 import 'package:putt_putt_pal/widgets/cards/ExpandedCard.dart';
 import 'package:putt_putt_pal/widgets/orbit/ColorCircle.dart';
 import 'package:putt_putt_pal/widgets/orbit/GuestCircle.dart';
@@ -34,12 +35,19 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
     final currentUser =
         ref.watch(gameStateProvider.select((state) => state.currentUser));
 
+    void goBackToLandingPage() async {
+      if (currentUser != null && !currentUser.isHost) {
+        await ref.read(gameStateProvider.notifier).removePlayerFromRoom(currentUser);
+      }
+      ref.read(gameStateProvider.notifier).resetFullState();
+      RouterHelper.handleRouteChange('/');
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.offWhite,
-      appBar: const CustomAppBar(
-        title: 'Room',
-        showBackButton: true,
+      appBar: CustomAppBar(
+        backButtonCallback: goBackToLandingPage,
         backgroundColor: CustomColors.offWhite,
         showPauseButton: true,
       ),

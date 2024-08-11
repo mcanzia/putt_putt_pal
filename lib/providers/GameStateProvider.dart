@@ -83,9 +83,31 @@ class GameStateNotifier extends StateNotifier<GameState> {
             currentColor: const PlayerColor(),
             colorPickerMode: false,
             editPlayer: null);
-            print('HEYYY BUDDDDY');
       } catch (error) {
         LoggerUtil.error("Player List Updated Error - ${error.toString()}");
+      }
+    });
+
+    socketService.on('playerJoined', (data) {
+      try {
+        PlayerColor playerColor = PlayerColor.fromJson(data);
+        if (state.currentColor.id == playerColor.id) {
+          setPlayerColor(PlayerColor());
+        }
+      } catch (error) {
+        LoggerUtil.error("Player Join error - ${error.toString()}");
+      }
+    });
+
+    socketService.on('playerDeleted', (data) {
+      try {
+        Player player = Player.fromJson(data);
+        if (state.currentUser != null && state.currentUser!.id == player.id) {
+          resetFullState();
+          RouterHelper.handleRouteChange('/');
+        }
+      } catch (error) {
+        LoggerUtil.error("Player Delete error - ${error.toString()}");
       }
     });
 
@@ -103,7 +125,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
 
     socketService.on('startGame', (data) {
       try {
-        RouterHelper.handleRouteChange('/scoring');
+        RouterHelper.handleScorePageChange(0);
       } catch (error) {
         LoggerUtil.error("Start Game Error - ${error.toString()}");
       }
@@ -145,7 +167,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     super.state = value;
     _saveState();
   }
-  
+
   Future<void> createRoom() async {
     try {
       Room newRoom = await roomController.createRoom();
@@ -192,12 +214,18 @@ class GameStateNotifier extends StateNotifier<GameState> {
 
   Future<void> resetGameSamePlayers() async {
     try {
-      Room resetRoomDetails = state.room.copyWith(holes: {}, numberOfHoles: 1, allPlayersJoined: true);
+      Room resetRoomDetails = state.room
+          .copyWith(holes: {}, numberOfHoles: 1, allPlayersJoined: true);
       await roomController.resetRoom(state.room.id, resetRoomDetails);
     } catch (error) {
       LoggerUtil.error("Reset Game Error - ${error.toString()}");
       ErrorHandler.handleUpdateError('room');
     }
+  }
+
+  void resetFullState() {
+    socketService.leaveRoom(state.room.id);
+    state = const GameState();
   }
 
   Future<void> setAllPlayersJoined(bool joined) async {
@@ -233,7 +261,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
           return playerScore;
         }).toList();
 
-        Hole updatedHole = holeToUpdate.copyWith(playerScores: updatedPlayerScores);
+        Hole updatedHole =
+            holeToUpdate.copyWith(playerScores: updatedPlayerScores);
         await holeController.updateHole(state.room.id, updatedHole);
       }
     } catch (error) {
@@ -254,6 +283,9 @@ class GameStateNotifier extends StateNotifier<GameState> {
     } on RoomNotFoundError catch (error) {
       LoggerUtil.error(error.toString());
       ExceptionHandler.handleInvalidRoomCode();
+    } on DuplicateColorError catch (error) {
+      LoggerUtil.error(error.toString());
+      ExceptionHandler.handleDuplicateColorException();
     } on DuplicateNameError catch (error) {
       LoggerUtil.error(error.toString());
       ExceptionHandler.handleDuplicateNameException();
@@ -369,4 +401,17 @@ class GameStateNotifier extends StateNotifier<GameState> {
     }
   }
 
+  void goBackToLandingPage() {
+    RouterHelper.handleRouteChange('/');
+    resetFullState();
+  }
+
+  bool isColorTaken(PlayerColor color) {
+    Player? editPlayerObject = state.editPlayer != null ? state.room.players[state.editPlayer!.id] : null;
+    if (editPlayerObject != null && editPlayerObject.color.id == color.id) {
+      return false;
+    }
+
+    return state.getTakenColors().contains(color.id);
+  }
 }

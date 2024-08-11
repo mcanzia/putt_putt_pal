@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/models/ColorOrb.dart';
+import 'package:putt_putt_pal/models/Player.dart';
 import 'package:putt_putt_pal/models/PlayerColor.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/widgets/orbit/ColorCirclePainter.dart';
@@ -29,6 +30,7 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
       vsync: this,
       duration: const Duration(seconds: 30),
     )..repeat();
+
   }
 
   void updateColorList(List<PlayerColor> playerColors) {
@@ -39,6 +41,7 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
         ColorOrb colorOrb = ColorOrb(
           angle: orbAngle,
           color: playerColors[i],
+          isTaken: ref.read(gameStateProvider.notifier).isColorTaken(playerColors[i])
         );
         colors.add(colorOrb);
       }
@@ -62,18 +65,20 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
 
   @override
   Widget build(BuildContext context) {
-    // // listen for updates
-    // ref.listen<List<PlayerColor>>(gameStateProvider.select((gsp) => gsp.playerColors), (previous, next) {
-    //   updateColorList(next);
-    // });
 
     // Initialize color list
     final playerColors =
         ref.watch(gameStateProvider.select((gsp) => gsp.playerColors));
     updateColorList(playerColors);
 
+    ref.listen<Map<String,Player>>(gameStateProvider.select((gsp) => gsp.room.players), (previous, next) {
+      updateColorList(playerColors);
+    });
+
     final selectedColor =
         ref.watch(gameStateProvider.select((gsp) => gsp.currentColor));
+
+    final editPlayer = ref.watch(gameStateProvider.select((gsp) => gsp.editPlayer));
 
     // Get Room Code
     final roomCode =
@@ -94,6 +99,7 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
             onTap: (index) => _handleTap(playerColors[index]),
             onClear: _handleClear,
             selectedColor: selectedColor,
+            editPlayer: editPlayer,
             isPaused: isPaused
           ),
         ),

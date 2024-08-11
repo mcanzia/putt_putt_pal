@@ -2,32 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
+import 'package:putt_putt_pal/util/RouterHelper.dart';
 
-class CustomAppBar extends ConsumerStatefulWidget implements PreferredSizeWidget {
-  final String title;
-  final bool showBackButton;
+class CustomAppBar extends ConsumerStatefulWidget
+    implements PreferredSizeWidget {
+  final String? title;
+  final VoidCallback? backButtonCallback;
+  final bool showHomeButton;
   final bool showPauseButton;
   final Color backgroundColor;
+  final Color textColor;
 
   const CustomAppBar(
       {Key? key,
-        required this.title,
-        this.showBackButton = false,
-        this.showPauseButton = false,
-        required this.backgroundColor}) : super(key: key);
+      this.title,
+      this.backButtonCallback,
+      this.showHomeButton = false,
+      this.showPauseButton = false,
+      required this.backgroundColor,
+      this.textColor = Colors.black})
+      : super(key: key);
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
-  
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class _CustomAppBarState extends ConsumerState<CustomAppBar> {
-
   void togglePaused() {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     gameStateNotifier.toggleCirclePaused();
+  }
+
+  void goHome() {
+    final gameStateNotifier = ref.read(gameStateProvider.notifier);
+    gameStateNotifier.resetFullState();
+    RouterHelper.handleRouteChange('/');
   }
 
   List<Widget> buildActions() {
@@ -35,11 +47,23 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
     List<Widget> actions = [];
     if (widget.showPauseButton) {
       actions.add(IconButton(
+        color: widget.textColor,
         icon: !isPaused ? Icon(Icons.pause) : Icon(Icons.play_arrow),
         onPressed: () {
           togglePaused();
         },
       ));
+    }
+    if (widget.showHomeButton) {
+      actions.add(
+        IconButton(
+          color: widget.textColor,
+          icon: Icon(Icons.home),
+          onPressed: () {
+            goHome();
+          },
+        ),
+      );
     }
     return actions;
   }
@@ -47,13 +71,14 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        title: Text(widget.title),
+        title: widget.title != null ? Text(widget.title!, style: TextStyle(color: widget.textColor)) : null,
         backgroundColor: widget.backgroundColor,
-        leading: widget.showBackButton
+        leading: widget.backButtonCallback != null
             ? IconButton(
+                color: widget.textColor,
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  context.pop();
+                  widget.backButtonCallback!();
                 },
               )
             : null,

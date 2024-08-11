@@ -41,6 +41,7 @@ class BasicIconButton extends StatelessWidget {
           padding: WidgetStateProperty.all(const EdgeInsets.all(20)),
           elevation: WidgetStateProperty.all(0),
           shadowColor: WidgetStateProperty.all(Colors.transparent),
+          overlayColor: WidgetStateProperty.all(Colors.transparent)
         ),
         child: Icon(
           icon,

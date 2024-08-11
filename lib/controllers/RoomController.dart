@@ -134,6 +134,9 @@ class RoomController {
         case 303: {
           throw DuplicateNameError(message: response.body, statusCode: response.statusCode);
         }
+        case 313: {
+          throw DuplicateColorError(message: response.body, statusCode: response.statusCode);
+        }
         default: {
           throw CustomError(message: response.body, statusCode: response.statusCode);
         }

@@ -20,11 +20,11 @@ class Player with _$Player {
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
   Color getPlayerTextColor() {
-    return color.id <= 7 ? CustomColors.offWhite : Colors.black;
+    return color.getTextColorObject();
   }
 
   Color getPlayerBackgroundColor() {
-    return Color(int.parse(color.color));
+    return color.getColorObject();
   }
 
   String getFirstInitial() {

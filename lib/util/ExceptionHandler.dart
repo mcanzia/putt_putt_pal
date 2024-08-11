@@ -20,7 +20,11 @@ class ExceptionHandler {
   }
 
   static handleInvalidRoomCode() {
-    showExceptionToast('The Provided Room Code Is Not Valid');
+    showExceptionToast('The Provided Room Code Is Not Valid.');
+  }
+
+  static handleDuplicateColorException() {
+    showExceptionToast('The Selected Color Is Already Taken By Another Player.');
   }
 
   static handleTextFieldIsEmptyException(String textField) {

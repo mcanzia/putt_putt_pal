@@ -48,6 +48,12 @@ class SocketService extends ChangeNotifier {
       });
   }
 
+  void leaveRoom(String roomId) {
+    emit('leaveRoom', {
+        'roomId': roomId,
+      });
+  }
+
   @override
   void dispose() {
     _socket.dispose();

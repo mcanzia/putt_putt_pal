@@ -92,8 +92,13 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   }
 
   Color getCurrentColor(PlayerColor currentColor) {
-    return Color(int.parse(currentColor.color));
+    return currentColor.getColorObject();
   }
+
+  Color getCurrentTextColor(PlayerColor currentColor) {
+    return currentColor.getTextColorObject();
+  }
+
 
   @override
   void initState() {
@@ -109,9 +114,10 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   }
 
   Widget _buildInputWidget(HostInputType inputType) {
-    final bool hostPresent = ref.read(gameStateProvider).room.hostPresent();
-    final Player? editPlayer = ref.read(gameStateProvider).editPlayer;
-    final PlayerColor playerColor = ref.read(gameStateProvider).currentColor;
+    final bool hostPresent = ref.watch(gameStateProvider).room.hostPresent();
+    final Player? editPlayer = ref.watch(gameStateProvider).editPlayer;
+    final PlayerColor playerColor = ref.watch(gameStateProvider).currentColor;
+    print('Current PlayerColor: ${playerColor.color}');
     switch (inputType) {
       case HostInputType.StartGame:
         return TextInputWithButton(
@@ -135,7 +141,7 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
           buttonOneText: !hostPresent ? 'Add Host' : 'Add Other Player',
           buttonOneTextIcon: !hostPresent ? Icons.stars_rounded : null,
           buttonOneColor: getCurrentColor(playerColor),
-          buttonOneTextColor: CustomColors.offWhite,
+          buttonOneTextColor: getCurrentTextColor(playerColor),
           buttonTwoIcon: Icons.color_lens_outlined,
           buttonTwoColor: CustomColors.offWhite,
           buttonTwoIconColor: getCurrentColor(playerColor),

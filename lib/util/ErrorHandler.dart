@@ -78,4 +78,5 @@ class ErrorHandler {
     static handleToggleCirclePaused() {
       showErrorToast('Error pausing/unpausing circle');
     }
+
 }

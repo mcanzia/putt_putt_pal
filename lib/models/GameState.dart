@@ -31,11 +31,11 @@ extension GameStateExtension on GameState {
     return playerScore.score;
   }
 
-  List<PlayerColor> getTakenColors() {
-    List<PlayerColor> takenColors = [];
+  List<int> getTakenColors() {
+    List<int> takenColors = [];
 
     for (Player player in room.players.values) {
-      takenColors.add(player.color);
+      takenColors.add(player.color.id);
     }
     return takenColors;
   }
