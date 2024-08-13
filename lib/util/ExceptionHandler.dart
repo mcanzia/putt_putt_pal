@@ -1,19 +1,46 @@
+import "package:another_flushbar/flushbar.dart";
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
+import "package:putt_putt_pal/router.dart";
 
 class ExceptionHandler {
-
   static void showExceptionToast(String message) {
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 2,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webBgColor: "linear-gradient(to right, #8e7cc3, #8e7cc3)",
-      );
-    }
+    Flushbar(
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.blue,
+      flushbarPosition: FlushbarPosition.TOP,
+      margin: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+      borderRadius: BorderRadius.circular(15.0),
+      padding: const EdgeInsets.all(10.0),
+      messageText: Center(
+        child: Container(
+          width: MediaQuery.of(navigatorKey.currentState!.overlay!.context)
+                  .size
+                  .width /
+              2,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.warning_amber_rounded,
+                size: 28.0,
+                color: Colors.black,
+              ),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.black, fontSize: 18.0),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ).show(navigatorKey.currentState!.overlay!.context);
+  }
 
   static handleDeleteLastPlayerException() {
     showExceptionToast('There Must Be At Least One Player In The Room.');
@@ -24,7 +51,8 @@ class ExceptionHandler {
   }
 
   static handleDuplicateColorException() {
-    showExceptionToast('The Selected Color Is Already Taken By Another Player.');
+    showExceptionToast(
+        'The Selected Color Is Already Taken By Another Player.');
   }
 
   static handleTextFieldIsEmptyException(String textField) {

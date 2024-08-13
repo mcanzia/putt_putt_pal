@@ -1,19 +1,47 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
+import 'package:putt_putt_pal/router.dart';
 
 class ErrorHandler {
 
     static void showErrorToast(String message) {
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        webBgColor: "linear-gradient(to right, #990000, #990000)",
-      );
-    }
+    Flushbar(
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.redAccent,
+      flushbarPosition: FlushbarPosition.TOP,
+      margin: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+      borderRadius: BorderRadius.circular(15.0),
+      padding: const EdgeInsets.all(10.0),
+      messageText: Center(
+        child: Container(
+          width: MediaQuery.of(navigatorKey.currentState!.overlay!.context)
+                  .size
+                  .width /
+              2,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.warning_amber_rounded,
+                size: 28.0,
+                color: Colors.black,
+              ),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white, fontSize: 18.0),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ).show(navigatorKey.currentState!.overlay!.context);
+  }
 
     static displayGenericError() {
         showErrorToast("Error occurred. Please try again.");

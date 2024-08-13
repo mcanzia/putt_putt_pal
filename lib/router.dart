@@ -12,7 +12,10 @@ import 'package:putt_putt_pal/styles/colors.dart';
 import 'package:putt_putt_pal/transitions/CircularRevealPageRoute.dart';
 import 'package:putt_putt_pal/widgets/scoring/ScoringPageView.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 final GoRouter router = GoRouter(
+  navigatorKey: navigatorKey,
   initialLocation: '/',
   routes: [
     GoRoute(
@@ -59,19 +62,39 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/scoring/:pageIndex',
-      builder: (context, state) {
-        final pageIndex =
-            int.tryParse(state.pathParameters["pageIndex"] ?? '0') ?? 0;
-        return ScoringPageView(pageIndex: pageIndex);
-      },
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: ScoringPageView(
+          pageIndex: int.tryParse(state.pathParameters['pageIndex'] ?? '0') ?? 0,
+        ),
+        transitionDuration: Duration.zero,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return child;
+        },
+      ),
     ),
     GoRoute(
       path: '/final-scores',
-      builder: (context, state) => FinalScorePage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: FinalScorePage(),
+        transitionDuration: Duration.zero,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return child;
+        },
+      ),
     ),
     GoRoute(
       path: '/full-scores',
-      builder: (context, state) => FullScoresPagePaginated(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: FullScoresPagePaginated(),
+        transitionDuration: Duration.zero,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return child;
+        },
+      ),
     ),
+    
   ],
 );

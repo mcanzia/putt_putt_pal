@@ -23,41 +23,37 @@ class EndGame extends ConsumerWidget {
       body: SingleChildScrollView(
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: screenHeight),
-          child: IntrinsicHeight(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: screenHeight * 0.2,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () => pageController.previousPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        ),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: ExpandedCard(
-                            backgroundColor: CustomColors.offWhite,
-                            content: BasicButton(
-                              color: Colors.black,
-                              textColor: CustomColors.offWhite,
-                              text: "End Game",
-                              onPressed: () {
-                                endGame();
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 48),
-                    ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () => pageController.previousPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                  Expanded(
+                    child: Center(
+                      child: ExpandedCard(
+                        backgroundColor: CustomColors.offWhite,
+                        content: BasicButton(
+                          color: Colors.black,
+                          textColor: CustomColors.offWhite,
+                          text: "End Game",
+                          onPressed: () {
+                            endGame();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 48),
+                ],
+              ),
+            ],
           ),
         ),
       ),

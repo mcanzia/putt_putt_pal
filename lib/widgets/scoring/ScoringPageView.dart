@@ -34,7 +34,8 @@ class _ScoringPageViewState extends ConsumerState<ScoringPageView> {
   @override
   Widget build(BuildContext context) {
     final room = ref.watch(gameStateProvider.select((gsp) => gsp.room));
-    final currentUser = ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
+    final currentUser =
+        ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
     List<Hole> sortedHoles = room.holes.values.toList()
       ..sort((a, b) => a.holeNumber.compareTo(b.holeNumber));
 
@@ -42,7 +43,8 @@ class _ScoringPageViewState extends ConsumerState<ScoringPageView> {
       body: PageView.builder(
         controller: _controller,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: currentUser!.isHost ? room.numberOfHoles + 1 : room.numberOfHoles,
+        itemCount:
+            currentUser!.isHost ? room.numberOfHoles + 1 : room.numberOfHoles,
         onPageChanged: (index) {
           RouterHelper.handleScorePageChange(index);
         },

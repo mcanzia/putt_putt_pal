@@ -5,8 +5,6 @@ import 'package:putt_putt_pal/util/LoggerUtil.dart';
 import 'pages/LandingPage.dart';
 import 'package:putt_putt_pal/router.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 void main() {
   LoggerUtil.info('Application started');
   runApp(
@@ -25,8 +23,6 @@ class PuttPuttPal extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
-      // navigatorKey: navigatorKey,
-      // home: const LandingPage(),
     );
   }
 }

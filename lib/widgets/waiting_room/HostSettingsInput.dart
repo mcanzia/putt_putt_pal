@@ -131,7 +131,7 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
           isNumberInput: true,
           textFieldMaxLength: 2,
           focusNode: _focusNode,
-          controller: TextEditingController(),
+          controller: _nameController,
           onButtonPressed: (numHoles) {
             startGame(int.parse(numHoles));
           },
