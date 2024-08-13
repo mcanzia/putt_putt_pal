@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:putt_putt_pal/models/GameState.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
+import 'package:putt_putt_pal/models/Player.dart';
+import 'package:putt_putt_pal/models/PlayerScore.dart';
 
 class HolesDataTableSource extends DataTableSource {
   final Map<String, Hole> holes;
+  final Map<String, Player> players;
 
-  HolesDataTableSource(this.holes);
+  HolesDataTableSource(this.holes, this.players);
 
   @override
   DataRow? getRow(int index) {
-    final holeNumber = index + 1;
-    Hole? hole = holes.values.firstWhere((value) => value.holeNumber == holeNumber);
+    final playerId = players.keys.elementAt(index);
+    final player = players[playerId];
     
     List<DataCell> cells = [
       DataCell(
         Text(
-          hole.holeNumber.toString(),
+          player!.name,
         ),
       ),
     ];
 
-    cells.addAll(hole.playerScores.map((playerScore) {
+    cells.addAll(holes.values.map((hole) {
+      final playerScore = hole.playerScores.firstWhere(
+        (score) => score.playerId == player.id,
+        orElse: () => PlayerScore(id: '0', playerId: player.id, score: 0),
+      );
       return DataCell(
         Text(
           playerScore.score.toString(),

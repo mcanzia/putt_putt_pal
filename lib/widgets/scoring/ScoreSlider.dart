@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:putt_putt_pal/models/Player.dart';
 
@@ -55,7 +56,10 @@ class _ScoreSliderState extends State<ScoreSlider> {
         step: 1,
         onChanged: (value) {
           if (isEnabled) {
-            setState(() => _currentValue = value);
+            setState(() {
+              _currentValue = value;
+              HapticFeedback.selectionClick();
+            });
             widget.onScoreChanged(widget.player, value);
           }
         },

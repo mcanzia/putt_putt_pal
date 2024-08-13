@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
@@ -71,6 +72,10 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: widget.backgroundColor,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         title: widget.title != null ? Text(widget.title!, style: TextStyle(color: widget.textColor)) : null,
         backgroundColor: widget.backgroundColor,
         leading: widget.backButtonCallback != null

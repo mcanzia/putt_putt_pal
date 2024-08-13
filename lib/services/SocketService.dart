@@ -43,6 +43,7 @@ class SocketService extends ChangeNotifier {
   }
 
   void joinRoom(String roomId) {
+    _socket.connect();
     emit('joinRoom', {
         'roomId': roomId,
       });

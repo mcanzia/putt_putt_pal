@@ -7,6 +7,7 @@ import 'package:putt_putt_pal/styles/colors.dart';
 import 'package:putt_putt_pal/util/RouterHelper.dart';
 import 'package:putt_putt_pal/widgets/common/CustomAppBar.dart';
 import 'package:putt_putt_pal/widgets/full_scores/HolesDataTableSource.dart';
+import 'package:putt_putt_pal/widgets/full_scores/HoleScoreListItem.dart';
 
 class FullScoresPagePaginated extends ConsumerWidget {
   const FullScoresPagePaginated({super.key});
@@ -15,54 +16,69 @@ class FullScoresPagePaginated extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final holes =
         ref.watch(gameStateProvider.select((state) => state.room.holes));
-    final players = ref.watch(gameStateProvider.select((state) => state.room.players));
-
+    final players =
+        ref.watch(gameStateProvider.select((state) => state.room.players));
 
     List<DataColumn> createColumns() {
       List<DataColumn> columns = [];
 
-      columns.add(const DataColumn(label: Text('Hole')));
+      columns.add(const DataColumn(label: Text('Player')));
 
-      Hole? tempHole = holes.values.first;
-
-      columns.addAll(tempHole!.playerScores.map((playerScore) {
-        return DataColumn(label: Text(players[playerScore.playerId]!.name));
+      columns.addAll(holes.values.map((hole) {
+        return DataColumn(label: Text('Hole ${hole.holeNumber}'));
       }).toList());
 
       return columns;
     }
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: CustomColors.offWhite,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: CustomColors.offWhite,
-      systemNavigationBarIconBrightness: Brightness.dark
-    ));
+        statusBarColor: CustomColors.offWhite,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: CustomColors.offWhite,
+        systemNavigationBarIconBrightness: Brightness.dark));
 
     void goBackToFinalScorePage() {
       RouterHelper.handleRouteChange('/final-scores');
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         backButtonCallback: goBackToFinalScorePage,
         backgroundColor: CustomColors.offWhite,
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints:
-              BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-          child: SingleChildScrollView(
-            child: PaginatedDataTable(
-              columns: createColumns(),
-              source: HolesDataTableSource(holes),
-              rowsPerPage: 6,
-              header: Text('Full Scores'),
-            ),
-          ),
-        ),
+      body: ListView.builder(
+        itemCount: holes.length,
+        itemBuilder: (context, index) {
+          final hole = holes.values.elementAt(index);
+          return HoleScoreListItem(hole: hole, players: players);
+        },
       ),
     );
+
+    // return Scaffold(
+    //   resizeToAvoidBottomInset: false,
+    //   appBar: CustomAppBar(
+    //     backButtonCallback: goBackToFinalScorePage,
+    //     backgroundColor: CustomColors.offWhite,
+    //   ),
+    //   body: Center(
+    //     child: ConstrainedBox(
+    //       constraints:
+    //           BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+    //       child: SingleChildScrollView(
+    //         child: PaginatedDataTable(
+    //           columns: createColumns(),
+    //           headingRowColor: const WSCOffWhite(),
+    //           arrowHeadColor: Colors.black,
+    //           source: HolesDataTableSource(holes, players),
+    //           rowsPerPage: 6,
+    //           header: const Text('Full Scores',
+    //               style: TextStyle(decorationThickness: 10)),
+    //           showEmptyRows: false,
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

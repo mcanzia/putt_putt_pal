@@ -29,7 +29,6 @@ class EndGame extends ConsumerWidget {
                 SizedBox(
                   height: screenHeight * 0.2,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
                         icon: const Icon(Icons.arrow_back),
@@ -38,17 +37,22 @@ class EndGame extends ConsumerWidget {
                           curve: Curves.easeInOut,
                         ),
                       ),
-                      ExpandedCard(
-                        backgroundColor: CustomColors.offWhite,
-                        content: BasicButton(
-                          color: Colors.black,
-                          textColor: CustomColors.offWhite,
-                          text: "End Game",
-                          onPressed: () {
-                            endGame();
-                          },
+                      Expanded(
+                        child: Center(
+                          child: ExpandedCard(
+                            backgroundColor: CustomColors.offWhite,
+                            content: BasicButton(
+                              color: Colors.black,
+                              textColor: CustomColors.offWhite,
+                              text: "End Game",
+                              onPressed: () {
+                                endGame();
+                              },
+                            ),
+                          ),
                         ),
                       ),
+                      SizedBox(width: 48),
                     ],
                   ),
                 ),

@@ -34,12 +34,6 @@ class ScoringPage extends ConsumerWidget {
         ref.watch(gameStateProvider.select((gsp) => gsp.currentUser));
     final screenHeight = MediaQuery.of(context).size.height;
 
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: CustomColors.offWhite,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: CustomColors.offWhite,
-        systemNavigationBarIconBrightness: Brightness.dark));
-
     void onScoreChanged(Player player, int newScore) {
       _debouncer.run(() {
         ref.read(gameStateProvider.notifier).updatePlayerScore(
@@ -60,6 +54,10 @@ class ScoringPage extends ConsumerWidget {
       backgroundColor: CustomColors.offWhite,
       appBar: AppBar(
         backgroundColor: CustomColors.offWhite,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: CustomColors.offWhite,
+          statusBarIconBrightness: Brightness.dark,
+        ),
         title: Text(
           'Hole ${hole.holeNumber}',
           style: const TextStyle(fontFamily: 'Lobster', fontSize: 30),
@@ -95,17 +93,20 @@ class ScoringPage extends ConsumerWidget {
                   child: Column(
                     children: playerScores.map((entry) {
                       final playerScore = entry.score;
-                      return ExpandedCard(
-                        content: PersonalScore(
+                      return Card(
+                        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        color:
+                            players[entry.playerId]!.getPlayerBackgroundColor(),
+                        child: PersonalScore(
                           key: ValueKey('${entry.playerId}_${hole.id}'),
                           player: players[entry.playerId]!,
                           currentUser: currentUser!,
                           currentScore: getCurrentScore(entry.playerId),
                           onScoreChanged: onScoreChanged,
                         ),
-                        maxHeight: screenHeight / 5,
-                        backgroundColor:
-                            players[entry.playerId]!.getPlayerBackgroundColor(),
                       );
                     }).toList(),
                   ),
@@ -118,3 +119,17 @@ class ScoringPage extends ConsumerWidget {
     );
   }
 }
+
+
+// return ExpandedCard(
+//                         content: PersonalScore(
+//                           key: ValueKey('${entry.playerId}_${hole.id}'),
+//                           player: players[entry.playerId]!,
+//                           currentUser: currentUser!,
+//                           currentScore: getCurrentScore(entry.playerId),
+//                           onScoreChanged: onScoreChanged,
+//                         ),
+//                         maxHeight: screenHeight / 5,
+//                         backgroundColor:
+//                             players[entry.playerId]!.getPlayerBackgroundColor(),
+//                       );

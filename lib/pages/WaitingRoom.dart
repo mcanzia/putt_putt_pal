@@ -28,7 +28,12 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: CustomColors.offWhite,
-      systemNavigationBarColor: CustomColors.offWhite,
+      statusBarIconBrightness:
+          Brightness.dark,
+      systemNavigationBarColor:
+          CustomColors.offWhite,
+      systemNavigationBarIconBrightness:
+          Brightness.dark,
     ));
     final isColorPickerMode =
         ref.watch(gameStateProvider.select((state) => state.colorPickerMode));
