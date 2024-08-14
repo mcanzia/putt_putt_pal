@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
@@ -20,24 +21,32 @@ class EndGame extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: CustomColors.offWhite,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => pageController.previousPage(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          ),
+        ),
+        backgroundColor: CustomColors.offWhite,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: CustomColors.offWhite,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+      ),
       body: SingleChildScrollView(
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: screenHeight),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => pageController.previousPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    ),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: ExpandedCard(
+          child: IntrinsicHeight(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: screenHeight * 0.2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ExpandedCard(
                         backgroundColor: CustomColors.offWhite,
                         content: BasicButton(
                           color: Colors.black,
@@ -48,12 +57,11 @@ class EndGame extends ConsumerWidget {
                           },
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  SizedBox(width: 48),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
