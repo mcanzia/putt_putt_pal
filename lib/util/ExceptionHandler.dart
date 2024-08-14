@@ -7,13 +7,14 @@ class ExceptionHandler {
   static void showExceptionToast(String message) {
     Flushbar(
       duration: const Duration(seconds: 2),
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.yellow[100]!,
       flushbarPosition: FlushbarPosition.TOP,
       margin: const EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
       borderRadius: BorderRadius.circular(15.0),
       padding: const EdgeInsets.all(10.0),
-      messageText: Center(
-        child: Container(
+      borderColor: Colors.yellow[900],
+      borderWidth: 2,
+      messageText: Container(
           width: MediaQuery.of(navigatorKey.currentState!.overlay!.context)
                   .size
                   .width /
@@ -22,37 +23,36 @@ class ExceptionHandler {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.warning_amber_rounded,
                 size: 28.0,
-                color: Colors.black,
+                color: Colors.yellow[900],
               ),
               const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
                   message,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.black, fontSize: 18.0),
+                  style: TextStyle(color: Colors.yellow[900], fontSize: 18.0),
                 ),
               ),
             ],
           ),
         ),
-      ),
     ).show(navigatorKey.currentState!.overlay!.context);
   }
 
   static handleDeleteLastPlayerException() {
-    showExceptionToast('There Must Be At Least One Player In The Room.');
+    showExceptionToast('There Must Be At Least One Player In The Room');
   }
 
   static handleInvalidRoomCode() {
-    showExceptionToast('The Provided Room Code Is Not Valid.');
+    showExceptionToast('The Provided Room Code Is Not Valid');
   }
 
   static handleDuplicateColorException() {
     showExceptionToast(
-        'The Selected Color Is Already Taken By Another Player.');
+        'The Selected Color Is Already Taken By Another Player');
   }
 
   static handleTextFieldIsEmptyException(String textField) {
@@ -60,7 +60,7 @@ class ExceptionHandler {
   }
 
   static handleHostPlayerMustBePresentException() {
-    showExceptionToast('Host Player Must Be Added Before Starting Game.');
+    showExceptionToast('Host Player Must Be Added Before Starting Game');
   }
 
   static handleNumHolesMustBeGreaterThanZeroException() {

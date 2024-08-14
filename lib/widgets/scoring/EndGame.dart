@@ -15,8 +15,43 @@ class EndGame extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    void endGame() {
-      ref.read(gameStateProvider.notifier).endGame();
+    void confirmEndGame() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: const Text(
+              "Have all scores been entered?",
+              style: TextStyle(fontSize: 24),
+              textAlign: TextAlign.center,
+            ),
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              TextButton(
+                onPressed: () {
+                  ref.read(gameStateProvider.notifier).endGame();
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Yes"),
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("No"),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  side: const BorderSide(color: Colors.black, width: 2.0),
+                ),
+              ),
+            ],
+          );
+        },
+      );
     }
 
     return Scaffold(
@@ -53,7 +88,7 @@ class EndGame extends ConsumerWidget {
                           textColor: CustomColors.offWhite,
                           text: "End Game",
                           onPressed: () {
-                            endGame();
+                            confirmEndGame();
                           },
                         ),
                       ),

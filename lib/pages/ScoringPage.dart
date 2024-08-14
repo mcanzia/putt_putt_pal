@@ -17,7 +17,7 @@ class ScoringPage extends ConsumerWidget {
     super.key,
     required this.hole,
     required this.pageController,
-  }) : _debouncer = Debouncer(delay: Duration(milliseconds: 300));
+  }) : _debouncer = Debouncer(delay: Duration(milliseconds: 100));
 
   final Hole hole;
   final PageController pageController;
