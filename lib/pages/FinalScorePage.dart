@@ -29,17 +29,17 @@ class FinalScorePage extends ConsumerWidget {
         backgroundColor: CustomColors.offWhite,
       ),
       body: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         children: [
           Column(
             children: <Widget>[
-              ExpandedCard(
-                content: TitleCard(
+              Container(
+                child: TitleCard(
                   backgroundColor: CustomColors.offWhite,
                   textColor: Colors.black,
                   text: "The winner is...\n${rankings.isNotEmpty ? rankings[0].player.name : '' }",
                 ),
-                backgroundColor: CustomColors.offWhite,
+                color: CustomColors.offWhite,
               ),
               const ExpandedCard(
                 content: FinalScoreRankings(),

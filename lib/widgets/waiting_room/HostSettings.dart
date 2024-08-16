@@ -10,7 +10,7 @@ class HostSettings extends StatelessWidget {
     double buttonWidth = screenWidth * 0.8;
 
     return Container(
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

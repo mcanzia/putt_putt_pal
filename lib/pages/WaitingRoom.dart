@@ -57,14 +57,15 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
         showPauseButton: true,
       ),
       body: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               (currentUser != null && currentUser.isHost)
                     ? const HostSettings()
                     : const GuestSettings(),
+              SizedBox(height: 35),
               isColorPickerMode
                     ? const ColorCircle()
                     : const GuestCircle(),

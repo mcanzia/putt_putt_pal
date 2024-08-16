@@ -14,9 +14,16 @@ class HoleScoreListItem extends StatelessWidget {
     final sortedScores = hole.playerScores.toList()
       ..sort((a, b) => a.score.compareTo(b.score));
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      color: CustomColors.offWhite,
+      decoration: BoxDecoration(
+        color: CustomColors.offWhite,
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: Colors.black,
+          width: 2.0,
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

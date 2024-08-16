@@ -20,9 +20,9 @@ class FinalScoreButtons extends ConsumerWidget {
 
     return Container(
       color: Colors.black,
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           BasicButton(
@@ -33,6 +33,7 @@ class FinalScoreButtons extends ConsumerWidget {
               RouterHelper.handleRouteChangeWithBack('/full-scores')
             },
           ),
+          const SizedBox(height: 16),
           if (currentUser?.isHost ?? false)
             BasicButton(
               text: 'Play Again?',

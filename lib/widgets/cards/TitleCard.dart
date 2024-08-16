@@ -11,7 +11,8 @@ class TitleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
-      alignment: Alignment.center,
+      padding: const EdgeInsets.only(bottom: 8),
+      alignment: Alignment.topCenter,
       child: Text(
         text,
         style: TextStyle(

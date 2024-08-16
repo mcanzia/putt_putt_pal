@@ -70,4 +70,8 @@ class ExceptionHandler {
   static handleDuplicateNameException() {
     showExceptionToast('A Player With This Name Already Exists');
   }
+
+  static handleNotANumberException() {
+    showExceptionToast('Entry Must Be A Number');
+  }
 }

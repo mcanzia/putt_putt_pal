@@ -20,6 +20,7 @@ class HostSettingsInput extends ConsumerStatefulWidget {
 class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
   late FocusNode _focusNode;
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _startGameController = TextEditingController();
   final HostInputType _hostInputType = HostInputType.AddPlayer;
 
   void addPlayer(String playerName, bool isHost, PlayerColor color) async {
@@ -77,6 +78,10 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
       ExceptionHandler.handleHostPlayerMustBePresentException();
       return;
     }
+    if (numHoles.runtimeType != int) {
+      ExceptionHandler.handleNotANumberException();
+      return;
+    }
     if (numHoles <= 0) {
       ExceptionHandler.handleNumHolesMustBeGreaterThanZeroException();
       return;
@@ -131,7 +136,7 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
           isNumberInput: true,
           textFieldMaxLength: 2,
           focusNode: _focusNode,
-          controller: _nameController,
+          controller: _startGameController,
           onButtonPressed: (numHoles) {
             startGame(int.parse(numHoles));
           },
