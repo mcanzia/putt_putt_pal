@@ -1,4 +1,4 @@
-name: Build Containers for Prod & Push to Dockerhub
+name: Build and Deploy FrontEnd
 
 on:
   pull_request:
@@ -53,45 +53,3 @@ jobs:
       - name: SSH and Docker Compose Up proxy
         run: |
           ssh root@${{ secrets.DIGITAL_OCEAN_IP }} 'cd /root/devops && docker compose -f docker-compose-proxy.yml down && docker compose -f docker-compose-proxy.yml up -d'
-  build-and-deploy-ios:
-    name: Build and Deploy iOS
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version-file: pubspec.yaml
-
-      - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Build iOS
-        run: flutter build ios --release --no-codesign --dart-define=API_HOST=${{ secrets.API_HOST }}
-
-      - name: Install Fastlane
-        run: sudo gem install fastlane -NV
-
-      - name: Set up Keychain
-        run: |
-          security create-keychain -p "temp" build.keychain
-          security set-keychain-settings -lut 21600 build.keychain
-          security unlock-keychain -p "temp" build.keychain
-          security import ./ios/Certificates.p12 -k build.keychain -P ${{ secrets.P12_PASSWORD }} -T /usr/bin/codesign
-          security list-keychains -d user -s build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k temp build.keychain
-
-      - name: Build and Deploy to TestFlight
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-        run: |
-          cd ios
-          fastlane beta
-
-      - name: Clean Up Keychain
-        run: security delete-keychain build.keychain
