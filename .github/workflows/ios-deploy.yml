@@ -25,18 +25,18 @@ jobs:
         run: bundle install
         working-directory: ios
 
-      - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Install CocoaPods
-        run: bundle exec pod install --project-directory=ios
-
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2.16.0
         with:
           flutter-version-file: 'pubspec.yaml'
           channel: ${{ env.FLUTTER_CHANNEL }}
           cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Install CocoaPods
+        run: bundle exec pod install --project-directory=ios
 
       - name: Run Fastlane
         run: bundle exec fastlane release_app_store
