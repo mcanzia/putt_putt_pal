@@ -21,7 +21,7 @@ platform :ios do
 
     dart_define = "API_HOST=#{ENV['API_HOST']}"
 
-    sh "cd ios && pod install"
+    sh "pod install"
     
     build_flutter_app(
       type: "ipa",
