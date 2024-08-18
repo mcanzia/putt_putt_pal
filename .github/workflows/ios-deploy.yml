@@ -25,6 +25,9 @@ jobs:
         run: bundle install
         working-directory: ios
 
+      - name: Install Dependencies
+        run: flutter pub get
+
       - name: Install CocoaPods
         run: bundle exec pod install --project-directory=ios
 
@@ -34,9 +37,6 @@ jobs:
           flutter-version-file: 'pubspec.yaml'
           channel: ${{ env.FLUTTER_CHANNEL }}
           cache: true
-
-      - name: Install Dependencies
-        run: flutter pub get
 
       - name: Run Fastlane
         run: bundle exec fastlane release_app_store
