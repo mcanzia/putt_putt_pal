@@ -29,7 +29,9 @@ jobs:
           working-directory: 'ios'
       
       - name: Install CocoaPods
-        run: sudo gem install cocoapods
+        run: |
+            sudo gem install cocoapods
+            pod repo update
 
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2.16.0
