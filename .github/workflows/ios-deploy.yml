@@ -32,6 +32,9 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           cache: true
 
+      - name: Install Dependencies
+        run: flutter pub get
+
       - name: Run Fastlane
         run: bundle exec fastlane release_app_store
         working-directory: ios
