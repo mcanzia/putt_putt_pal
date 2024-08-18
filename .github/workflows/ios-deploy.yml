@@ -36,7 +36,10 @@ jobs:
           cache: true
 
       - name: Increment version number
-        run: fastlane increment_version
+        uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: 'increment_version'
+          subdirectory: ios
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
