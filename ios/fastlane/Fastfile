@@ -29,7 +29,7 @@ platform :ios do
     new_version = "#{version_name}+#{new_build_number}"
   
     # Update pubspec.yaml
-    update_version_number(version: new_version)
+    sh("sed -i '' 's/^version: .*/version: #{new_version}/' pubspec.yaml")
   end
   
 
