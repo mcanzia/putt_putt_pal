@@ -35,12 +35,6 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           cache: true
 
-      - name: Increment version number
-        uses: maierj/fastlane-action@v3.1.0
-        with:
-          lane: 'increment_version'
-          subdirectory: ios
-
       - uses: maierj/fastlane-action@v3.1.0
         with:
           lane: 'release_app_store'
