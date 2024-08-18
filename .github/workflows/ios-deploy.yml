@@ -45,6 +45,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+          API_HOST: ${{ secrets.API_HOST }}
 
       # - uses: maierj/fastlane-action@v3.1.0
       #   with:
