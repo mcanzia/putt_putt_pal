@@ -32,6 +32,9 @@ jobs:
         run: |
             sudo gem install cocoapods
             pod repo update
+      
+      - name: Install Fastlane
+        run: sudo gem install fastlane -NV
 
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2.16.0
