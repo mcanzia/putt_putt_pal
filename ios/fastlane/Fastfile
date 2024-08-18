@@ -18,6 +18,8 @@ platform :ios do
   # Build iOS app
   lane :build_ipa do |options|
     authenticate_apple_store
+
+    dart_define = "API_HOST=#{ENV['API_HOST']}"
     
     build_flutter_app(
       type: "ipa",
@@ -25,7 +27,8 @@ platform :ios do
       config_only: options[:config_only] || false,
       build_number: options[:build_number] || get_build_number('appstore'),
       version_number: options[:version_number] || get_version_from_pubspec(),
-      store: "appstore"
+      store: "appstore",
+      flutter_args: "--dart-define=#{dart_define}"
     )
   end
 
