@@ -20,8 +20,6 @@ platform :ios do
     authenticate_apple_store
 
     dart_define = "API_HOST=#{ENV['API_HOST']}"
-
-    sh "pod install"
     
     build_flutter_app(
       type: "ipa",
