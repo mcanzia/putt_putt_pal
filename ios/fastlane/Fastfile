@@ -15,6 +15,24 @@ platform :ios do
     )
   end
 
+  lane :increment_version do
+    # Read the current version from pubspec.yaml
+    version = get_version_from_pubspec()
+  
+    # Split the version into components (e.g., "1.0.0+1")
+    version_name, build_number = version.split('+')
+  
+    # Increment the build number
+    new_build_number = build_number.to_i + 1
+  
+    # Set the new version number
+    new_version = "#{version_name}+#{new_build_number}"
+  
+    # Update pubspec.yaml
+    update_version_number(version: new_version)
+  end
+  
+
   # Build iOS app
   lane :build_ipa do |options|
     authenticate_apple_store

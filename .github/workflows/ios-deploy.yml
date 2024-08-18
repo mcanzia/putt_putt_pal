@@ -35,11 +35,13 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           cache: true
 
+      - name: Increment version number
+        run: fastlane increment_version
+
       - uses: maierj/fastlane-action@v3.1.0
         with:
           lane: 'release_app_store'
           subdirectory: ios
-          options: '{ "version_number": "${{ github.ref_name }}" }'
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
