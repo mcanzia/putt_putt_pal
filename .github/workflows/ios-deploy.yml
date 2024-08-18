@@ -25,6 +25,9 @@ jobs:
         run: bundle install
         working-directory: ios
 
+      - name: Install CocoaPods
+        run: bundle exec pod install --project-directory=ios
+
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2.16.0
         with:
@@ -46,8 +49,3 @@ jobs:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
           API_HOST: ${{ secrets.API_HOST }}
-
-      # - uses: maierj/fastlane-action@v3.1.0
-      #   with:
-      #     lane: 'release_app_store'
-      #     subdirectory: ios
