@@ -24,17 +24,12 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
-          working-directory: 'ios'
-      
-      - name: Install CocoaPods
+  
+      - name: Install dependencies
         run: |
-            sudo gem install cocoapods
-            pod repo update
-      
-      - name: Install Fastlane
-        run: sudo gem install fastlane -NV
+          bundle install
+          bundle exec pod install
 
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2.16.0
@@ -43,10 +38,13 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           cache: true
 
-      - uses: maierj/fastlane-action@v3.1.0
-        with:
-          lane: 'release_app_store'
-          subdirectory: ios
+      - name: Run Fastlane
+        run: bundle exec fastlane release_app_store
+
+      # - uses: maierj/fastlane-action@v3.1.0
+      #   with:
+      #     lane: 'release_app_store'
+      #     subdirectory: ios
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
