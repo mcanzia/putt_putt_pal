@@ -31,26 +31,15 @@ jobs:
       - name: Install Fastlane
         run: sudo gem install fastlane -NV
 
-      - name: Decode the certificate
-        run: echo "${{ secrets.P12_BASE64 }}" | base64 --decode > ./ios/Certificates.p12
-      
-      - name: Set up Keychain
-        run: |
-          security create-keychain -p "temp" build.keychain
-          security set-keychain-settings -lut 21600 build.keychain
-          security unlock-keychain -p "temp" build.keychain
-          security import ./ios/Certificates.p12 -k build.keychain -P ${{ secrets.P12_PASSWORD }} -T /usr/bin/codesign
-          security list-keychains -d user -s build.keychain
-          security set-key-partition-list -S apple-tool:,apple: -s -k temp build.keychain
-
-      - name: Build and Deploy to TestFlight
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: 'release_app_store'
+          subdirectory: ios
+          options: '{ "version_number": "${{ github.ref_name }}" }'
         env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
-        run: |
-          cd ios
-          fastlane beta
-
-      - name: Clean Up Keychain
-        run: security delete-keychain build.keychain
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
