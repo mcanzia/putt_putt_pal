@@ -31,6 +31,7 @@ jobs:
 
       - name: Run Fastlane
         run: bundle exec fastlane release_app_store
+        working-directory: ios
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
