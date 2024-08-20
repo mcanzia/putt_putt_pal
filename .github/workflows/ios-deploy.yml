@@ -8,10 +8,6 @@ on:
     branches:
       - main
 
-env:
-  FLUTTER_CHANNEL: "stable"
-  RUBY_VERSION: "3.3.4"
-
 jobs:
   build_ios:
     name: Build iOS
@@ -25,11 +21,15 @@ jobs:
         run: bundle install
         working-directory: ios
 
+      - name: Check installed CocoaPods version
+        run: bundle exec pod --version
+        working-directory: ios
+
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2.16.0
         with:
           flutter-version-file: 'pubspec.yaml'
-          channel: ${{ env.FLUTTER_CHANNEL }}
+          channel: 'stable'
           cache: true
 
       - name: Install Dependencies
