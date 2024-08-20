@@ -36,7 +36,11 @@ jobs:
         run: flutter pub get
 
       - name: Install CocoaPods
-        run: bundle exec pod install --project-directory=ios
+        run: gem install cocoapods
+
+      - name: Run pod install
+        run: pod install
+        working-directory: ios
 
       - name: Run Fastlane
         run: bundle exec fastlane release_app_store
