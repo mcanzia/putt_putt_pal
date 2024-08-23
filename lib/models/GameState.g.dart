@@ -26,6 +26,7 @@ _$GameStateImpl _$$GameStateImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => PlayerColor.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      currentRoute: json['currentRoute'] as String? ?? "/",
     );
 
 Map<String, dynamic> _$$GameStateImplToJson(_$GameStateImpl instance) =>
@@ -37,4 +38,5 @@ Map<String, dynamic> _$$GameStateImplToJson(_$GameStateImpl instance) =>
       'circlePaused': instance.circlePaused,
       'currentColor': instance.currentColor,
       'playerColors': instance.playerColors,
+      'currentRoute': instance.currentRoute,
     };

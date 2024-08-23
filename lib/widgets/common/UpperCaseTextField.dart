@@ -63,7 +63,6 @@ class _UppercaseTextFieldState extends State<UppercaseTextField> {
       child: TextField(
         controller: _controller,
         focusNode: widget.focusNode,
-        autofocus: true,
         textAlign: TextAlign.center,
         onSubmitted: widget.onSubmitted,
         style: TextStyle(

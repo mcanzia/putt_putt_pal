@@ -19,6 +19,7 @@ class GameState with _$GameState {
     @Default(false) bool circlePaused,
     @Default(PlayerColor()) PlayerColor currentColor,
     @Default([]) List<PlayerColor> playerColors,
+    @Default("/") String currentRoute
   }) = _GameState;
 
   factory GameState.fromJson(Map<String, dynamic> json) => _$GameStateFromJson(json);  

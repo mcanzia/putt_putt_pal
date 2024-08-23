@@ -34,7 +34,6 @@ class BasicTextInput extends StatelessWidget {
       child: TextField(
           controller: controller,
           focusNode: focusNode,
-          autofocus: true,
           textAlign: TextAlign.center,
           onSubmitted: onSubmitted,
           style: TextStyle(

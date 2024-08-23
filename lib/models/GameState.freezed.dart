@@ -27,6 +27,7 @@ mixin _$GameState {
   bool get circlePaused => throw _privateConstructorUsedError;
   PlayerColor get currentColor => throw _privateConstructorUsedError;
   List<PlayerColor> get playerColors => throw _privateConstructorUsedError;
+  String get currentRoute => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,7 +47,8 @@ abstract class $GameStateCopyWith<$Res> {
       bool colorPickerMode,
       bool circlePaused,
       PlayerColor currentColor,
-      List<PlayerColor> playerColors});
+      List<PlayerColor> playerColors,
+      String currentRoute});
 
   $RoomCopyWith<$Res> get room;
   $PlayerCopyWith<$Res>? get editPlayer;
@@ -74,6 +76,7 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? circlePaused = null,
     Object? currentColor = null,
     Object? playerColors = null,
+    Object? currentRoute = null,
   }) {
     return _then(_value.copyWith(
       room: null == room
@@ -104,6 +107,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.playerColors
           : playerColors // ignore: cast_nullable_to_non_nullable
               as List<PlayerColor>,
+      currentRoute: null == currentRoute
+          ? _value.currentRoute
+          : currentRoute // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -163,7 +170,8 @@ abstract class _$$GameStateImplCopyWith<$Res>
       bool colorPickerMode,
       bool circlePaused,
       PlayerColor currentColor,
-      List<PlayerColor> playerColors});
+      List<PlayerColor> playerColors,
+      String currentRoute});
 
   @override
   $RoomCopyWith<$Res> get room;
@@ -193,6 +201,7 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? circlePaused = null,
     Object? currentColor = null,
     Object? playerColors = null,
+    Object? currentRoute = null,
   }) {
     return _then(_$GameStateImpl(
       room: null == room
@@ -223,6 +232,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value._playerColors
           : playerColors // ignore: cast_nullable_to_non_nullable
               as List<PlayerColor>,
+      currentRoute: null == currentRoute
+          ? _value.currentRoute
+          : currentRoute // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -237,7 +250,8 @@ class _$GameStateImpl implements _GameState {
       this.colorPickerMode = false,
       this.circlePaused = false,
       this.currentColor = const PlayerColor(),
-      final List<PlayerColor> playerColors = const []})
+      final List<PlayerColor> playerColors = const [],
+      this.currentRoute = "/"})
       : _playerColors = playerColors;
 
   factory _$GameStateImpl.fromJson(Map<String, dynamic> json) =>
@@ -271,8 +285,12 @@ class _$GameStateImpl implements _GameState {
   }
 
   @override
+  @JsonKey()
+  final String currentRoute;
+
+  @override
   String toString() {
-    return 'GameState(room: $room, editPlayer: $editPlayer, currentUser: $currentUser, colorPickerMode: $colorPickerMode, circlePaused: $circlePaused, currentColor: $currentColor, playerColors: $playerColors)';
+    return 'GameState(room: $room, editPlayer: $editPlayer, currentUser: $currentUser, colorPickerMode: $colorPickerMode, circlePaused: $circlePaused, currentColor: $currentColor, playerColors: $playerColors, currentRoute: $currentRoute)';
   }
 
   @override
@@ -292,7 +310,9 @@ class _$GameStateImpl implements _GameState {
             (identical(other.currentColor, currentColor) ||
                 other.currentColor == currentColor) &&
             const DeepCollectionEquality()
-                .equals(other._playerColors, _playerColors));
+                .equals(other._playerColors, _playerColors) &&
+            (identical(other.currentRoute, currentRoute) ||
+                other.currentRoute == currentRoute));
   }
 
   @JsonKey(ignore: true)
@@ -305,7 +325,8 @@ class _$GameStateImpl implements _GameState {
       colorPickerMode,
       circlePaused,
       currentColor,
-      const DeepCollectionEquality().hash(_playerColors));
+      const DeepCollectionEquality().hash(_playerColors),
+      currentRoute);
 
   @JsonKey(ignore: true)
   @override
@@ -329,7 +350,8 @@ abstract class _GameState implements GameState {
       final bool colorPickerMode,
       final bool circlePaused,
       final PlayerColor currentColor,
-      final List<PlayerColor> playerColors}) = _$GameStateImpl;
+      final List<PlayerColor> playerColors,
+      final String currentRoute}) = _$GameStateImpl;
 
   factory _GameState.fromJson(Map<String, dynamic> json) =
       _$GameStateImpl.fromJson;
@@ -348,6 +370,8 @@ abstract class _GameState implements GameState {
   PlayerColor get currentColor;
   @override
   List<PlayerColor> get playerColors;
+  @override
+  String get currentRoute;
   @override
   @JsonKey(ignore: true)
   _$$GameStateImplCopyWith<_$GameStateImpl> get copyWith =>
