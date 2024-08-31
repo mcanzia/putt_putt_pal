@@ -6,6 +6,7 @@ import 'package:putt_putt_pal/controllers/HoleController.dart';
 import 'package:putt_putt_pal/controllers/PlayerColorController.dart';
 import 'package:putt_putt_pal/controllers/RoomController.dart';
 import 'package:putt_putt_pal/controllers/PlayerController.dart';
+import 'package:putt_putt_pal/controllers/SocketController.dart';
 import 'package:putt_putt_pal/models/CustomError.dart';
 import 'package:putt_putt_pal/models/Hole.dart';
 import 'package:putt_putt_pal/models/Player.dart';
@@ -13,16 +14,14 @@ import 'package:putt_putt_pal/models/GameState.dart';
 import 'package:putt_putt_pal/models/PlayerColor.dart';
 import 'package:putt_putt_pal/models/PlayerScore.dart';
 import 'package:putt_putt_pal/models/Room.dart';
-import 'package:putt_putt_pal/pages/FinalScorePage.dart';
-import 'package:putt_putt_pal/pages/WaitingRoom.dart';
 import 'package:putt_putt_pal/services/SocketService.dart';
 import 'package:putt_putt_pal/util/ErrorHandler.dart';
 import 'package:putt_putt_pal/util/ExceptionHandler.dart';
 import 'package:putt_putt_pal/util/LoggerUtil.dart';
 import 'package:putt_putt_pal/util/RouterHelper.dart';
-import 'package:putt_putt_pal/widgets/scoring/ScoringPageView.dart';
 import 'package:putt_putt_pal/util/StatePersistence.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final socketServiceProvider = ChangeNotifierProvider((ref) => SocketService());
 
@@ -32,16 +31,19 @@ final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState>(
     playerController: PlayerController(),
     holeController: HoleController(),
     playerColorController: PlayerColorController(),
+    socketController: SocketController(),
     socketService: ref.read(socketServiceProvider),
   ),
 );
 
 class GameStateNotifier extends StateNotifier<GameState> {
   static const String _storageKey = 'puttPuttGameState';
+  static const String _socketId = 'socket_id';
   final RoomController roomController;
   final PlayerController playerController;
   final HoleController holeController;
   final PlayerColorController playerColorController;
+  final SocketController socketController;
   final SocketService socketService;
   final Logger logger = Logger();
 
@@ -50,6 +52,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     required this.playerController,
     required this.holeController,
     required this.playerColorController,
+    required this.socketController,
     required this.socketService,
   }) : super(const GameState()) {
     _initSocketListeners();
@@ -59,10 +62,19 @@ class GameStateNotifier extends StateNotifier<GameState> {
   @override
   void dispose() {
     _saveState();
+    socketService.leaveRoom(state.room.id);
     super.dispose();
   }
 
   void _initSocketListeners() {
+    socketService.on('setSocketId', (data) {
+      LoggerUtil.info("Saving socket id - ${data}");
+      saveSocketId(data);
+    });
+    socketService.on('clearSocketId', (data) {
+      LoggerUtil.info("Clearing socket id");
+      clearSocketId();
+    });
     socketService.on('roomUpdated', (data) {
       try {
         Room updatedRoom = Room.fromJson(data);
@@ -148,18 +160,47 @@ class GameStateNotifier extends StateNotifier<GameState> {
         LoggerUtil.error("Play Again Error - ${error.toString()}");
       }
     });
+
+    socketService.on('roomDeleted', (data) {
+      try {
+        state = const GameState();
+        RouterHelper.handleRouteChange('/');
+      } catch (error) {
+        LoggerUtil.error("Room Deleted Error - ${error.toString()}");
+      }
+    });
   }
 
   void _loadState() async {
     final savedState = await StatePersistence.loadState(_storageKey);
     if (savedState != null) {
       state = GameState.fromJson(jsonDecode(savedState));
-      socketService.joinRoom(state.room.id);
+      rejoinRoomSocket();
     }
   }
 
   void _saveState() {
     StatePersistence.saveState(_storageKey, jsonEncode(state.toJson()));
+  }
+
+  void rejoinRoomSocket() async {
+    String? oldSocketId = await getSocketId();
+    socketService.rejoinRoom(oldSocketId!, state.room.id, state.currentUser!.id);
+  }
+
+  Future<void> saveSocketId(String socketId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_socketId, socketId);
+  }
+
+  Future<void> clearSocketId() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_socketId);
+  }
+
+  Future<String?> getSocketId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_socketId);
   }
 
   @override
@@ -168,14 +209,29 @@ class GameStateNotifier extends StateNotifier<GameState> {
     _saveState();
   }
 
+  Future<void> checkSocketConnectionStatus() async {
+    String? socketId = await getSocketId();
+    if (socketId != null) {
+      GameState? previousGameState = await socketController.checkSocketConnectionStatus(socketId);
+      if (previousGameState != null) {
+        state = previousGameState;
+      }
+      
+    }
+  }
+
   Future<void> createRoom() async {
     try {
       Room newRoom = await roomController.createRoom();
       Player tempHost = const Player(isHost: true);
       state = state.copyWith(room: newRoom, currentUser: tempHost);
-      socketService.joinRoom(state.room.id);
+            String? socketId = await getSocketId();
+      if (socketId != null) {
+        await socketController.checkSocketConnectionStatus(socketId);
+      }
+      socketService.joinRoom(state.room.id, 'host');
     } catch (error) {
-      LoggerUtil.error("End Game Error - ${error.toString()}");
+      LoggerUtil.error("Create Room Error - ${error.toString()}");
       ErrorHandler.handleCreateRoomError();
     }
   }
@@ -193,9 +249,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
 
   Future<void> endGame() async {
     try {
-      socketService.emit('callEndGame', {
-        'roomId': state.room.id,
-      });
+      Room endDetails = state.room.copyWith(isFinished: true);
+      await roomController.endGame(state.room.id, endDetails);
       RouterHelper.handleRouteChangeWithBack('/final-scores');
     } catch (error) {
       LoggerUtil.error("End Game Error - ${error.toString()}");
@@ -215,7 +270,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
   Future<void> resetGameSamePlayers() async {
     try {
       Room resetRoomDetails = state.room
-          .copyWith(holes: {}, numberOfHoles: 1, allPlayersJoined: true);
+          .copyWith(holes: {}, numberOfHoles: 1, allPlayersJoined: true, isFinished: false);
       await roomController.resetRoom(state.room.id, resetRoomDetails);
     } catch (error) {
       LoggerUtil.error("Reset Game Error - ${error.toString()}");
@@ -278,7 +333,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       Player currentUser = updatedRoom.players.values
           .firstWhere((player) => player.name == playerName);
       state = state.copyWith(room: updatedRoom, currentUser: currentUser);
-      socketService.joinRoom(updatedRoom.id);
+      socketService.joinRoom(updatedRoom.id, currentUser.id);
       RouterHelper.handleRouteChange('/waiting-room');
     } on RoomNotFoundError catch (error) {
       LoggerUtil.error(error.toString());
@@ -289,6 +344,9 @@ class GameStateNotifier extends StateNotifier<GameState> {
     } on DuplicateNameError catch (error) {
       LoggerUtil.error(error.toString());
       ExceptionHandler.handleDuplicateNameException();
+    } on TooManyPlayersError catch (error) {
+      LoggerUtil.error(error.toString());
+      ExceptionHandler.handleTooManyPlayersException();
     } catch (error) {
       LoggerUtil.error("Join Room error - ${error.toString()}");
       ErrorHandler.handleAddPlayerError();
@@ -392,6 +450,15 @@ class GameStateNotifier extends StateNotifier<GameState> {
     }
   }
 
+  Future<void> deleteRoom() async {
+    try {
+      await roomController.deleteRoom(state.room);
+    } catch (error) {
+      LoggerUtil.error("Delete room error - ${error.toString()}");
+      ErrorHandler.handleDeleteRoomError();
+    }
+  }
+
   void toggleCirclePaused() {
     try {
       state = state.copyWith(circlePaused: !state.circlePaused);
@@ -407,7 +474,9 @@ class GameStateNotifier extends StateNotifier<GameState> {
   }
 
   bool isColorTaken(PlayerColor color) {
-    Player? editPlayerObject = state.editPlayer != null ? state.room.players[state.editPlayer!.id] : null;
+    Player? editPlayerObject = state.editPlayer != null
+        ? state.room.players[state.editPlayer!.id]
+        : null;
     if (editPlayerObject != null && editPlayerObject.color.id == color.id) {
       return false;
     }

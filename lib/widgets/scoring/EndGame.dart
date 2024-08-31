@@ -5,6 +5,7 @@ import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
 import 'package:putt_putt_pal/widgets/cards/ExpandedCard.dart';
 import 'package:putt_putt_pal/widgets/common/BasicButton.dart';
+import 'package:putt_putt_pal/widgets/common/ConfirmationDialog.dart';
 
 class EndGame extends ConsumerWidget {
   const EndGame({super.key, required this.pageController});
@@ -15,41 +16,21 @@ class EndGame extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenHeight = MediaQuery.of(context).size.height;
 
+    void triggerEndGame() {
+      ref.read(gameStateProvider.notifier).endGame();
+      Navigator.of(context).pop();
+    }
+
+    void cancelEndGame() {
+      Navigator.of(context).pop();
+    }
+
     void confirmEndGame() {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            content: const Text(
-              "Have all scores been entered?",
-              style: TextStyle(fontSize: 24),
-              textAlign: TextAlign.center,
-            ),
-            actionsAlignment: MainAxisAlignment.center,
-            actions: [
-              TextButton(
-                onPressed: () {
-                  ref.read(gameStateProvider.notifier).endGame();
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Yes"),
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("No"),
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  side: const BorderSide(color: Colors.black, width: 2.0),
-                ),
-              ),
-            ],
-          );
+          return ConfirmationDialog(
+              "Have all scores been entered?", triggerEndGame, cancelEndGame);
         },
       );
     }

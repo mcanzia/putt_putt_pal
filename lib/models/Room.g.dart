@@ -19,6 +19,7 @@ _$RoomImpl _$$RoomImplFromJson(Map<String, dynamic> json) => _$RoomImpl(
           const {},
       allPlayersJoined: json['allPlayersJoined'] as bool? ?? false,
       numberOfHoles: (json['numberOfHoles'] as num?)?.toInt() ?? 1,
+      isFinished: json['isFinished'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
@@ -29,4 +30,5 @@ Map<String, dynamic> _$$RoomImplToJson(_$RoomImpl instance) =>
       'holes': instance.holes,
       'allPlayersJoined': instance.allPlayersJoined,
       'numberOfHoles': instance.numberOfHoles,
+      'isFinished': instance.isFinished,
     };

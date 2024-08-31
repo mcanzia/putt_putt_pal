@@ -63,8 +63,10 @@ class ColorCirclePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    size = Size(275, 275);
+    final canvasSize = Size(350, 350);
     var touchableCanvas = TouchyCanvas(context, canvas);
-    final center = Offset(size.width / 2, size.height / 2);
+    final center = Offset(canvasSize.width / 2, canvasSize.height / 2);
     final bigCircleRadius = size.width / 2;
     double smallCircleRadius = size.width / 10;
 
@@ -86,7 +88,7 @@ class ColorCirclePainter extends CustomPainter {
         textAlign: TextAlign.center,
       );
       textPainter.layout();
-      final orbOffset = Offset(size.width / 2, 5 + (smallCircleRadius * 5));
+      final orbOffset = Offset(canvasSize.width / 2, 5 + (smallCircleRadius * 6));
       final textOffset = Offset(
         orbOffset.dx - textPainter.width / 2,
         orbOffset.dy - textPainter.height / 2,
@@ -146,7 +148,7 @@ class ColorCirclePainter extends CustomPainter {
         ..color = color.color.getColorObject()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2.0;
-
+        
       touchableCanvas.drawCircle(
         orbOffset,
         smallCircleRadius,

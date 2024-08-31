@@ -104,4 +104,8 @@ class ErrorHandler {
   static handleToggleCirclePaused() {
     showErrorToast('Error pausing/unpausing circle.');
   }
+
+  static handleDeleteRoomError() {
+    showErrorToast('Error deleting room.');
+  }
 }

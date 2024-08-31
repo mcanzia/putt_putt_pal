@@ -84,11 +84,11 @@ class _GuestCircleState extends ConsumerState<GuestCircle>
     final isPaused =
         ref.watch(gameStateProvider.select((gsp) => gsp.circlePaused));
 
-    return Center(
+    return Container(
       child: CanvasTouchDetector(
         gesturesToOverride: const [GestureType.onTapDown],
         builder: (context) => CustomPaint(
-          size: const Size(275, 275),
+          size: const Size(350, 350),
           painter: GuestCirclePainter(
               context: context,
               animation: _controller,

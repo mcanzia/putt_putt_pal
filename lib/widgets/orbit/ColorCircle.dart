@@ -26,10 +26,30 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
   void initState() {
     super.initState();
     ref.read(gameStateProvider.notifier).getPlayerColors();
+    _initializeColors();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 30),
     )..repeat();
+  }
+
+  void _initializeColors() {
+    final playerColors = ref.read(gameStateProvider).playerColors;
+    _updateColorList(playerColors);
+  }
+
+  void _updateColorList(List<PlayerColor> playerColors) {
+    colors.clear();
+    for (int i = 0; i < playerColors.length; i++) {
+      double orbAngle = 2 * pi + (i * pi / 6);
+      ColorOrb colorOrb = ColorOrb(
+          angle: orbAngle,
+          color: playerColors[i],
+          isTaken: ref
+              .read(gameStateProvider.notifier)
+              .isColorTaken(playerColors[i]));
+      colors.add(colorOrb);
+    }
   }
 
   void updateColorList(List<PlayerColor> playerColors) {
@@ -65,14 +85,9 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
 
   @override
   Widget build(BuildContext context) {
-    // Initialize color list
-    final playerColors =
-        ref.watch(gameStateProvider.select((gsp) => gsp.playerColors));
-    updateColorList(playerColors);
-
-    ref.listen<Map<String, Player>>(
-        gameStateProvider.select((gsp) => gsp.room.players), (previous, next) {
-      updateColorList(playerColors);
+    ref.listen<List<PlayerColor>>(
+        gameStateProvider.select((gsp) => gsp.playerColors), (previous, next) {
+      _updateColorList(next);
     });
 
     final selectedColor =
@@ -81,7 +96,6 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
     final editPlayer =
         ref.watch(gameStateProvider.select((gsp) => gsp.editPlayer));
 
-    // Get Room Code
     final roomCode =
         ref.watch(gameStateProvider.select((gsp) => gsp.room.roomCode));
 
@@ -92,17 +106,18 @@ class _ColorCircleState extends ConsumerState<ColorCircle>
       child: CanvasTouchDetector(
         gesturesToOverride: const [GestureType.onTapDown],
         builder: (context) => CustomPaint(
-          size: const Size(275, 275),
+          size: const Size(350, 350),
           painter: ColorCirclePainter(
-              context: context,
-              animation: _controller,
-              colors: colors,
-              roomCode: roomCode,
-              onTap: (index) => _handleTap(playerColors[index]),
-              onClear: _handleClear,
-              selectedColor: selectedColor,
-              editPlayer: editPlayer,
-              isPaused: isPaused),
+            context: context,
+            animation: _controller,
+            colors: colors,
+            roomCode: roomCode,
+            onTap: (index) => _handleTap(colors[index].color),
+            onClear: _handleClear,
+            selectedColor: selectedColor,
+            editPlayer: editPlayer,
+            isPaused: isPaused,
+          ),
         ),
       ),
     );

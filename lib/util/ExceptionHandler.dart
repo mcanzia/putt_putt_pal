@@ -73,4 +73,8 @@ class ExceptionHandler {
   static handleNotANumberException() {
     showExceptionToast('Entry Must Be A Number');
   }
+
+  static handleTooManyPlayersException() {
+    showExceptionToast('The Room Has Reached Player Capacity');
+  }
 }

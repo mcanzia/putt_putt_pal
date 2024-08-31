@@ -24,7 +24,7 @@ class BasicButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all(color),
-        padding: WidgetStateProperty.all(const EdgeInsets.all(21)),
+        padding: WidgetStateProperty.all(const EdgeInsets.all(20)),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: connectedWithInput

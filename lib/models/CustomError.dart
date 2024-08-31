@@ -24,3 +24,7 @@ class DuplicateColorError extends CustomError {
 class DuplicateNameError extends CustomError {
   DuplicateNameError({required super.message, required super.statusCode});
 }
+
+class TooManyPlayersError extends CustomError {
+  TooManyPlayersError({required super.message, required super.statusCode});
+}

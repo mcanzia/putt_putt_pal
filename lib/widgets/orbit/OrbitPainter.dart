@@ -26,7 +26,6 @@ class OrbitPainter extends CustomPainter {
     final currentSmallCirclePosition = Offset(smallCircleX, smallCircleY);
 
     Color circleColor;
-    // debugPrint('angle: ${angle}');
     if (angle >= 0 && angle < (pi / 2)) {
       circleColor = CustomColors.offWhite;
       smallCircleRadius = smallCircleRadius * cos(angle);

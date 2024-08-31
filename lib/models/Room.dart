@@ -16,6 +16,7 @@ class Room with _$Room {
     @Default({}) Map<String, Hole> holes,
     @Default(false) bool allPlayersJoined,
     @Default(1) int numberOfHoles,
+    @Default(false) bool isFinished,
   }) = _Room;
 
   const Room._();

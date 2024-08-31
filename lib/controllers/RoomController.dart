@@ -48,7 +48,6 @@ class RoomController {
       }
       return Room.fromJson(jsonDecode(response.body));
     } catch (e) {
-      print(e.toString());
       rethrow;
     }
   }
@@ -58,6 +57,22 @@ class RoomController {
       RequestParams putRequestParams = RequestUtil.PUTRequestParams(updatedRoom, null);
       final response = await http.put(
         Uri.parse('${RequestUtil.getAPIUrl()}/room/startGame/$roomId'),
+        headers: putRequestParams.headers,
+        body: putRequestParams.body,
+      );
+      if (response.statusCode != 200) {
+        throw CustomError(message: response.body, statusCode: response.statusCode);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> endGame(String roomId, Room updatedRoom) async {
+    try {
+      RequestParams putRequestParams = RequestUtil.PUTRequestParams(updatedRoom, null);
+      final response = await http.put(
+        Uri.parse('${RequestUtil.getAPIUrl()}/room/endGame/$roomId'),
         headers: putRequestParams.headers,
         body: putRequestParams.body,
       );
@@ -101,12 +116,13 @@ class RoomController {
     }
   }
 
-  Future<void> deleteRoom(String roomId) async {
+  Future<void> deleteRoom(Room room) async {
     try {
-      RequestParams deleteRequestParams = RequestUtil.DELETERequestParams({}, null);
+      RequestParams deleteRequestParams = RequestUtil.DELETERequestParams(room, null);
       final response = await http.delete(
-        Uri.parse('${RequestUtil.getAPIUrl()}/room/$roomId'),
+        Uri.parse('${RequestUtil.getAPIUrl()}/room/'),
         headers: deleteRequestParams.headers,
+        body: deleteRequestParams.body
       );
       if (response.statusCode != 200) {
         throw CustomError(message: response.body, statusCode: response.statusCode);
@@ -136,6 +152,9 @@ class RoomController {
         }
         case 313: {
           throw DuplicateColorError(message: response.body, statusCode: response.statusCode);
+        }
+        case 323: {
+          throw TooManyPlayersError(message: response.body, statusCode: response.statusCode);
         }
         default: {
           throw CustomError(message: response.body, statusCode: response.statusCode);

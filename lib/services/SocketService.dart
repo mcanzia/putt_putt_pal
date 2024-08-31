@@ -16,14 +16,16 @@ class SocketService extends ChangeNotifier {
       'autoConnect': false,
     });
 
-    _socket.connect();
-
     _socket.on('connect', (_) {
       print('Connected to socket server');
     });
 
     _socket.on('disconnect', (_) {
       print('Disconnected from socket server');
+    });
+
+    _socket.on('reconnect', (_) {
+      print('Reconnected to socket server');
     });
 
     // _socket.onAny((event, data) {
@@ -42,11 +44,21 @@ class SocketService extends ChangeNotifier {
     });
   }
 
-  void joinRoom(String roomId) {
+  void joinRoom(String roomId, String playerId) async {
     _socket.connect();
     emit('joinRoom', {
         'roomId': roomId,
+        'playerId': playerId
       });
+  }
+
+  void rejoinRoom(String oldSocketId, String roomId, String playerId) async {
+    _socket.connect();
+    emit('rejoinRoom', {
+      'roomId': roomId,
+      'playerId': playerId,
+      'oldSocketId': oldSocketId
+    });
   }
 
   void leaveRoom(String roomId) {

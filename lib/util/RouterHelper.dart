@@ -10,19 +10,16 @@ class RouterHelper {
 
   static void handleRouteChange(String route) {
     final goRouter = _container.read(goRouterProvider);
-    print('ROUTE: ' + route);
     goRouter.go(route);
   }
 
   static void handleRouteChangeWithBack(String route) {
     final goRouter = _container.read(goRouterProvider);
-    print('ROUTE WITH BACK: ' + route);
     goRouter.go(route);
   }
 
   static void handleScorePageChange(int index) {
     final goRouter = _container.read(goRouterProvider);
-    print('SCORE PAGE ROUTE: NUMBER  + ${index}');
     goRouter.go(Uri(path: '/scoring/${index}').toString());
 
   }

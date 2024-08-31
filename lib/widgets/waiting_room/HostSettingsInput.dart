@@ -122,7 +122,6 @@ class _HostSettingsInputState extends ConsumerState<HostSettingsInput> {
     final bool hostPresent = ref.watch(gameStateProvider).room.hostPresent();
     final Player? editPlayer = ref.watch(gameStateProvider).editPlayer;
     final PlayerColor playerColor = ref.watch(gameStateProvider).currentColor;
-    print('Current PlayerColor: ${playerColor.color}');
     switch (inputType) {
       case HostInputType.StartGame:
         return TextInputWithButton(
