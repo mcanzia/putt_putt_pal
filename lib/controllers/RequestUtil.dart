@@ -19,6 +19,11 @@ class RequestUtil {
     return apiHost;
   }
 
+  static String getBaseHost() {
+    const String baseHost = String.fromEnvironment('API_HOST', defaultValue: 'http://192.168.1.181:8080');
+    return baseHost;
+  }
+
    static GETRequestParams(String? roomToken) {
         String bearer = 'Bearer $roomToken';
         return RequestParams(method: RequestType.get, headers: {

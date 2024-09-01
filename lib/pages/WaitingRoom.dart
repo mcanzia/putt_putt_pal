@@ -76,6 +76,7 @@ class _WaitingRoomState extends ConsumerState<WaitingRoom> {
         backButtonCallback: goBackToLandingPage,
         backgroundColor: CustomColors.offWhite,
         showPauseButton: true,
+        showContactButton: true,
       ),
       body: Stack(
         alignment: Alignment.topCenter,

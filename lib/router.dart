@@ -6,6 +6,7 @@ import 'package:putt_putt_pal/pages/FullScoresPagePaginated.dart';
 import 'package:putt_putt_pal/pages/JoinRoom.dart';
 import 'package:putt_putt_pal/pages/LandingPage.dart';
 import 'package:putt_putt_pal/pages/ScoringPage.dart';
+import 'package:putt_putt_pal/pages/SupportPage.dart';
 import 'package:putt_putt_pal/pages/WaitingRoom.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/styles/colors.dart';
@@ -65,7 +66,8 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
         child: ScoringPageView(
-          pageIndex: int.tryParse(state.pathParameters['pageIndex'] ?? '0') ?? 0,
+          pageIndex:
+              int.tryParse(state.pathParameters['pageIndex'] ?? '0') ?? 0,
         ),
         transitionDuration: Duration.zero,
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -95,6 +97,19 @@ final GoRouter router = GoRouter(
         },
       ),
     ),
-    
+    GoRoute(
+      path: '/support',
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const SupportPage(),
+        transitionDuration: const Duration(milliseconds: 300),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    ),
   ],
 );

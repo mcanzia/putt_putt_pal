@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:putt_putt_pal/controllers/RequestUtil.dart';
 import 'package:putt_putt_pal/providers/GameStateProvider.dart';
 import 'package:putt_putt_pal/util/RouterHelper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomAppBar extends ConsumerStatefulWidget
     implements PreferredSizeWidget {
@@ -11,6 +13,7 @@ class CustomAppBar extends ConsumerStatefulWidget
   final VoidCallback? backButtonCallback;
   final bool showHomeButton;
   final bool showPauseButton;
+  final bool showContactButton;
   final Color backgroundColor;
   final Color textColor;
 
@@ -20,6 +23,7 @@ class CustomAppBar extends ConsumerStatefulWidget
       this.backButtonCallback,
       this.showHomeButton = false,
       this.showPauseButton = false,
+      this.showContactButton = false,
       required this.backgroundColor,
       this.textColor = Colors.black})
       : super(key: key);
@@ -66,6 +70,22 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
         ),
       );
     }
+    if (widget.showContactButton) {
+      actions.add(
+        IconButton(
+          color: widget.textColor,
+          icon: Icon(Icons.question_mark),
+          onPressed: () async {
+            var url = Uri.parse('${RequestUtil.getBaseHost()}/#/support');
+            if (await canLaunchUrl(url)) {
+              await launchUrl(url, mode: LaunchMode.externalApplication);
+            } else {
+              throw 'Could not launch $url';
+            }
+          },
+        ),
+      );
+    }
     return actions;
   }
 
@@ -76,7 +96,9 @@ class _CustomAppBarState extends ConsumerState<CustomAppBar> {
           statusBarColor: widget.backgroundColor,
           statusBarIconBrightness: Brightness.dark,
         ),
-        title: widget.title != null ? Text(widget.title!, style: TextStyle(color: widget.textColor)) : null,
+        title: widget.title != null
+            ? Text(widget.title!, style: TextStyle(color: widget.textColor))
+            : null,
         backgroundColor: widget.backgroundColor,
         leading: widget.backButtonCallback != null
             ? IconButton(
