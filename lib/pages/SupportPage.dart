@@ -41,7 +41,7 @@ class SupportPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  '1.0.1',
+                  '1.0.2',
                   style: TextStyle(fontSize: 16, color: CustomColors.offWhite),
                 ),
                 const SizedBox(height: 24),
