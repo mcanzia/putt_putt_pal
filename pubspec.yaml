@@ -1,7 +1,7 @@
 name: putt_putt_pal
 description: Putt putt pal
 publish_to: none
-version: 1.0.2+1
+version: 1.0.3+1
 environment:
   sdk: '>=3.2.6 <4.0.0'
   flutter: 3.22.1
@@ -22,6 +22,7 @@ dependencies:
   shared_preferences: ^2.2.3
   another_flushbar: ^1.12.30
   url_launcher: ^6.3.0
+  flutter_donation_buttons: ^0.4.10
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -36,3 +37,23 @@ flutter:
     - family: Lobster
       fonts:
         - asset: fonts/Lobster-Regular.ttf
+  assets:
+    - assets/images/confirm-end-game.png
+    - assets/images/createRoom.png
+    - assets/images/delete-player.png
+    - assets/images/end-game.png
+    - assets/images/final-page.png
+    - assets/images/full-scores.png
+    - assets/images/joinRoom.png
+    - assets/images/scoring.png
+    - assets/images/waiting-add-host.png
+    - assets/images/waiting-add-other.png
+    - assets/images/waiting-all-joined.png
+    - assets/images/waiting-color-change.png
+    - assets/images/waiting-edit-player.png
+    - assets/images/waiting-host-leave.png
+    - assets/images/waiting-pause.png
+    - assets/images/guest-join-room.PNG
+    - assets/images/guest-final-page.PNG
+    - assets/images/guest-waiting-room.PNG
+    - assets/images/guest-scoring.PNG

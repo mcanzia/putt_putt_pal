@@ -22,31 +22,34 @@ class JoinRoom extends StatelessWidget {
       RouterHelper.handleRouteChange('/');
     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-        backButtonCallback: goBackToLandingPage,
-        backgroundColor: Colors.black,
-        textColor: CustomColors.offWhite,
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          border: Border.all(color: Colors.black),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBar(
+          backButtonCallback: goBackToLandingPage,
+          backgroundColor: Colors.black,
+          textColor: CustomColors.offWhite,
         ),
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: const IntrinsicHeight(
-              child: Column(
-                children: [
-                  ExpandedCard(
-                    content: JoinRoomSettings(),
-                    backgroundColor: Colors.black,
-                  ),
-                ],
+        body: Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            border: Border.all(color: Colors.black),
+          ),
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: const IntrinsicHeight(
+                child: Column(
+                  children: [
+                    ExpandedCard(
+                      content: JoinRoomSettings(),
+                      backgroundColor: Colors.black,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

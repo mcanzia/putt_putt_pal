@@ -11,8 +11,9 @@ class RequestUtil {
   }
 
   static String getAPIHost() {
-    const String apiHost = String.fromEnvironment('API_HOST', defaultValue: 'http://localhost:7500');
-    // const String apiHost = String.fromEnvironment('API_HOST', defaultValue: 'http://192.168.1.181:7500');
+    // const String apiHost = String.fromEnvironment('API_HOST', defaultValue: 'http://localhost:7500');
+    // const String apiHost = String.fromEnvironment('API_HOST', defaultValue: 'http://192.168.86.244:7500');
+    const String apiHost = String.fromEnvironment('API_HOST', defaultValue: 'http://192.168.1.181:7500');
     // const String apiHost = String.fromEnvironment('API_HOST', defaultValue: 'http://192.168.1.161:7500');
     print('API_HOST: $apiHost');
     // const String apiHost = 'https://puttputtpal.com';
