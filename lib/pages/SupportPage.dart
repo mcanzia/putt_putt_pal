@@ -322,7 +322,7 @@ class GuestContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Image.asset('assets/images/guest-join-room.png',
+          Image.asset('assets/images/guest-join-room-page.png',
               width: 300, height: 500),
           const SizedBox(height: 8),
           const Padding(
@@ -333,7 +333,7 @@ class GuestContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Image.asset('assets/images/guest-waiting-room.png',
+          Image.asset('assets/images/guest-waiting-room-page.png',
               width: 300, height: 500),
           const SizedBox(height: 8),
           const Padding(
@@ -344,7 +344,7 @@ class GuestContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Image.asset('assets/images/guest-scoring.png',
+          Image.asset('assets/images/guest-scoring-page.png',
               width: 300, height: 500),
           const SizedBox(height: 8),
           const Padding(
@@ -355,7 +355,7 @@ class GuestContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Image.asset('assets/images/guest-final-page.png',
+          Image.asset('assets/images/guest-final.png',
               width: 300, height: 500),
           const SizedBox(height: 30),
         ],

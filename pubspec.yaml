@@ -53,7 +53,7 @@ flutter:
     - assets/images/waiting-edit-player.png
     - assets/images/waiting-host-leave.png
     - assets/images/waiting-pause.png
-    - assets/images/guest-join-room.PNG
-    - assets/images/guest-final-page.PNG
-    - assets/images/guest-waiting-room.PNG
-    - assets/images/guest-scoring.PNG
+    - assets/images/guest-join-room-page.png
+    - assets/images/guest-final.png
+    - assets/images/guest-waiting-room-page.png
+    - assets/images/guest-scoring-page.png
